@@ -4,6 +4,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadCont
 import { useChainConfig } from '../hooks/useChainConfig'
 import { REWARD_POOL_ABI } from '../config/abi'
 import { formatUnits } from 'viem'
+import { useState, useEffect } from 'react'
 
 export default function RewardsPage() {
   const { address, isConnected } = useAccount()
@@ -25,10 +26,13 @@ export default function RewardsPage() {
   })
 
   const { writeContract, data: txHash, isPending } = useWriteContract()
-  const { isLoading: isConfirming } = useWaitForTransactionReceipt({
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash: txHash,
-    query: { onSuccess: () => refetch() },
   })
+
+useEffect(() => {
+    if (isSuccess) refetch()
+  }, [isSuccess])  
 
   const handleClaim = () => {
     if (!contracts) return

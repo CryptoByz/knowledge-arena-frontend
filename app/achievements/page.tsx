@@ -4,6 +4,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagm
 import { useReadContract } from 'wagmi'
 import { useChainConfig } from '../hooks/useChainConfig'
 import { ACHIEVEMENT_ABI } from '../config/abi'
+import { useState, useEffect } from 'react'
 
 const CRITERIA_LABELS = ['Total Score', 'Streak Days', 'Games Played', 'Perfect Scores']
 
@@ -27,10 +28,13 @@ export default function AchievementsPage() {
   })
 
   const { writeContract, data: txHash, isPending } = useWriteContract()
-  const { isLoading: isConfirming } = useWaitForTransactionReceipt({
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash: txHash,
-    query: { onSuccess: () => refetch() },
   })
+
+useEffect(() => {
+    if (isSuccess) refetch()
+  }, [isSuccess]) 
 
   const handleMint = (index: number) => {
     if (!contracts) return
