@@ -135,7 +135,7 @@ export default function QuizPage() {
     }
   }
 
-  Render
+  //  Render
   if (!isConnected) {
     return <CenteredMessage title="Connect your wallet" subtitle="You need a wallet to play Knowledge Arena." />
   }
