@@ -34,7 +34,7 @@ export default function QuizPage() {
   const { writeContract, data: txHash, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash: txHash })
 
-  Ilk yüklemede durumu belirle
+ //  Ilk yüklemede durumu belirle
   useEffect(() => {
     if (!isConnected || !isSupported) return
     if (!isTodayReady) { setPhase('not_ready'); return }
