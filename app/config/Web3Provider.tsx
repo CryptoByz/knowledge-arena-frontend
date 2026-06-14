@@ -5,16 +5,16 @@ import { WagmiProvider, http } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, getDefaultConfig, darkTheme } from '@rainbow-me/rainbowkit'
 import { rabbyWallet, metaMaskWallet, walletConnectWallet, coinbaseWallet } from '@rainbow-me/rainbowkit/wallets'
-import { arcTestnet, baseSepolia } from '../config/chains'
+import { arcTestnet, baseMainnet } from '../config/chains'
 import '@rainbow-me/rainbowkit/styles.css'
 
 export const wagmiConfig = getDefaultConfig({
   appName: 'Knowledge Arena',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
-  chains: [arcTestnet, baseSepolia],
+  chains: [arcTestnet, baseMainnet],
   transports: {
     [arcTestnet.id]: http(),
-    [baseSepolia.id]: http(),
+    [baseMainnet.id]: http(),
   },
   wallets: [
     {
