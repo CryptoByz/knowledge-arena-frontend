@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi'
-import { parseUnits, keccak256, encodePacked } from 'viem'
 import { useChainConfig } from '../hooks/useChainConfig'
 import { useQuizState } from '../hooks/useQuizState'
-import { DAILY_QUIZ_ABI, ERC20_ABI } from '../config/abi'
+import { DAILY_QUIZ_ABI } from '../config/abi'
 import { API_URL } from '../config/chains'
 
 type Question = {
@@ -35,16 +34,7 @@ export default function QuizPage() {
   const { writeContract, data: txHash, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash: txHash })
 
-  // Allowance kontrolü
-  const { data: allowance } = useReadContract({
-    address: contracts?.usdc as `0x${string}`,
-    abi: ERC20_ABI,
-    functionName: 'allowance',
-    args: address && contracts ? [address, contracts.dailyQuiz as `0x${string}`] : undefined,
-    query: { enabled: !!address && !!contracts },
-  })
-
-  // İlk yüklemede durumu belirle
+  Ilk yüklemede durumu belirle
   useEffect(() => {
     if (!isConnected || !isSupported) return
     if (!isTodayReady) { setPhase('not_ready'); return }
@@ -62,17 +52,6 @@ export default function QuizPage() {
       fetchQuestions()
     }
   }, [isSuccess, txHash])
-
-  const handleApprove = async () => {
-    if (!contracts) return
-    setPhase('approving')
-    writeContract({
-      address: contracts.usdc as `0x${string}`,
-      abi: ERC20_ABI,
-      functionName: 'approve',
-      args: [contracts.dailyQuiz as `0x${string}`, entryFee],
-    })
-  }
 
   const handleEnterQuiz = async () => {
     if (!contracts) return
@@ -156,9 +135,7 @@ export default function QuizPage() {
     }
   }
 
-  const needsApproval = !allowance || allowance < entryFee
-
-  // Render
+  Render
   if (!isConnected) {
     return <CenteredMessage title="Connect your wallet" subtitle="You need a wallet to play Knowledge Arena." />
   }
@@ -191,14 +168,12 @@ export default function QuizPage() {
           <p className="text-gray-500 text-xs">Goes directly into the weekly reward pool</p>
         </div>
         <button
-          onClick={needsApproval ? handleApprove : handleEnterQuiz}
+          onClick={handleEnterQuiz}
           disabled={isPending || isConfirming}
           className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-700 disabled:cursor-not-allowed rounded-lg font-semibold transition-colors"
         >
           {isPending || isConfirming
             ? 'Confirming...'
-            : needsApproval
-            ? 'Approve USDC & Enter'
             : 'Enter Quiz (10 USDC)'}
         </button>
       </div>
