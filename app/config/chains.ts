@@ -38,16 +38,14 @@ export const SUPPORTED_CHAINS = [arcTestnet, baseSepolia] as const
 
 // Contract adresleri
 export const CONTRACTS = {
-  [arcTestnet.id]: {
-  dailyQuiz:          '0x5039Ed94d6895b6af9F17D2e8D8bc47e8B3C7505',
-  playerProfile:      '0x7c5842391cCD0FC17028710417d2D701b7d51FbC',
-  achievementManager: '0xdD87cA0A22eF2E9FfAf38f22906163bef96E54F8',
-  rewardPool:         '0x82E6969e173f3789339114F14669fC7cb98a6521',
-  badgeNFT:           '0x778599EBE8405EcE41d126B8DA591445Dc428996',
-  usdc:               '0x3600000000000000000000000000000000000000',
+[arcTestnet.id]: {
+  dailyQuiz:          '0xe68fF67a5B183D0F1A3454CEa12C741966Eb7dC2',
+  playerProfile:      '0x5cc33CEFFd7fF94092CB04A2067cB7a1b5D154e3',
+  achievementManager: '0x3d6A8C550820B68316F0990286da5b0e805dB2B4',
+  badgeNFT:           '0x8F1Ab7894DE24CD114d7CE69d557b04b1e626b2a',
 },
 
-  [baseSepolia.id]: {
+    baseSepolia.id]: {
     dailyQuiz:         '0xd88ADB6Ff6835535B97aff0765882D832c0a91F6',
     playerProfile:     '0x5744f79D84Bf0d09284dAF780aE81485C5AaD70E',
     achievementManager:'0x1031907A22bBD1CEDB12F2E45711208b3976E19a',
