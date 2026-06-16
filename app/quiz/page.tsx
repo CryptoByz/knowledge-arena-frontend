@@ -21,7 +21,7 @@ type Phase = 'loading' | 'enter' | 'approving' | 'entering' | 'playing' | 'submi
 export default function QuizPage() {
   const { address, isConnected } = useAccount()
   const { contracts, isSupported } = useChainConfig()
-  const { canPlay, isTodayReady, hasSubmitted, todayScore, entryFee, refetchCanPlay } = useQuizState(address)
+  const { canPlay, isTodayReady, hasSubmitted, todayScore, refetchCanPlay } = useQuizState(address)
 
   const [phase, setPhase] = useState<Phase>('loading')
   const [questions, setQuestions] = useState<Question[]>([])

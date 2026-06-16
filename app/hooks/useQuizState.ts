@@ -30,19 +30,11 @@ export function useQuizState(address?: `0x${string}`) {
     query: { enabled: !!address && !!contracts },
   })
 
-  const { data: entryFee } = useReadContract({
-    address: contracts?.dailyQuiz as `0x${string}`,
-    abi: DAILY_QUIZ_ABI,
-    functionName: 'entryFee',
-    query: { enabled: !!contracts },
-  })
-
   return {
     canPlay:      canPlay ?? false,
     isTodayReady: isTodayReady ?? false,
     todayScore:   todayScore?.[0] ?? 0,
     hasSubmitted: todayScore?.[1] ?? false,
-    entryFee:     entryFee ?? 10_000_000n,
     refetchCanPlay,
   }
 }
