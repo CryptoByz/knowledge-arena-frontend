@@ -83,7 +83,7 @@ export default function Home() {
         <p className="text-gray-500 text-sm uppercase tracking-wider">Available on</p>
         <div className="flex justify-center gap-4">
           <ChainBadge name="ARC Testnet" color="indigo" />
-          <ChainBadge name="Base Sepolia" color="blue" />
+          <ChainBadge name="Base Mainnet" color="blue" />
         </div>
       </div>
 
