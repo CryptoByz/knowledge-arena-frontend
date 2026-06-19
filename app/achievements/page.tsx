@@ -12,11 +12,13 @@ export default function AchievementsPage() {
   const { address, isConnected } = useAccount()
   const { contracts, isSupported } = useChainConfig()
 
+  const isDummy = !contracts?.achievementManager || contracts.achievementManager === '0x0000000000000000000000000000000000000000'
+
   const { data: allAchievements } = useReadContract({
     address: contracts?.achievementManager as `0x${string}`,
     abi: ACHIEVEMENT_ABI,
     functionName: 'getAllAchievements',
-    query: { enabled: !!contracts },
+    query: { enabled: !!contracts && !isDummy },
   })
 
   const { data: playerData, refetch } = useReadContract({
@@ -24,7 +26,7 @@ export default function AchievementsPage() {
     abi: ACHIEVEMENT_ABI,
     functionName: 'getPlayerAchievements',
     args: address ? [address] : undefined,
-    query: { enabled: !!address && !!contracts },
+    query: { enabled: !!address && !!contracts && !isDummy },
   })
 
   const { writeContract, data: txHash, isPending } = useWriteContract()
@@ -37,7 +39,7 @@ useEffect(() => {
   }, [isSuccess]) 
 
   const handleMint = (index: number) => {
-    if (!contracts) return
+    if (!contracts || isDummy) return
     writeContract({
       address: contracts.achievementManager as `0x${string}`,
       abi: ACHIEVEMENT_ABI,
@@ -52,6 +54,10 @@ useEffect(() => {
 
   if (!isSupported) {
     return <CenteredMessage title="Wrong network" subtitle="Switch to ARC Testnet or Base Sepolia." />
+  }
+
+  if (isDummy) {
+    return <CenteredMessage title="Achievements Pending" subtitle="Smart contracts are not yet deployed on this network. Try switching to ARC Testnet or Base to earn Achievements." />
   }
 
   const unlocked = playerData?.[0] ?? []
