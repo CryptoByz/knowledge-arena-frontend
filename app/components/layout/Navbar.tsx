@@ -54,7 +54,6 @@ export function Navbar() {
           <Link href="/profile" className="hover:text-white transition-colors">Profile</Link>
           <Link href="/leaderboard" className="hover:text-white transition-colors">Leaderboard</Link>
           <Link href="/achievements" className="hover:text-white transition-colors">Achievements</Link>
-          <Link href="/rewards" className="hover:text-white transition-colors">Rewards</Link>
           <Link href="/faucet" className="hover:text-white transition-colors">Faucet</Link>
         </div>
 

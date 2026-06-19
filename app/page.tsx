@@ -60,7 +60,7 @@ export default function Home() {
       )}
 
       {/* Feature cards */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         <FeatureCard
           icon="🧠"
           title="Daily Quiz"
@@ -70,11 +70,6 @@ export default function Home() {
           icon="⛓️"
           title="Onchain Reputation"
           description="Your scores, streaks, and achievements are stored on the blockchain. Build a verifiable knowledge profile over time."
-        />
-        <FeatureCard
-          icon="🏆"
-          title="Earn Rewards"
-          description="Top players on weekly, monthly, and season leaderboards earn USDC and exclusive NFT badges."
         />
       </div>
 
