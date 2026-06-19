@@ -32,11 +32,23 @@ export function useQuizState(address?: `0x${string}`) {
     query: { enabled: !!address && !!contracts && !isDummy },
   })
 
+  const { data: lastPlayedDay } = useReadContract({
+    address: contracts?.dailyQuiz as `0x${string}`,
+    abi: DAILY_QUIZ_ABI,
+    functionName: 'lastPlayedDay',
+    args: address ? [address] : undefined,
+    query: { enabled: !!address && !!contracts && !isDummy },
+  })
+
+  const today = BigInt(Math.floor(Date.now() / 86400000))
+  const hasEnteredToday = isDummy ? false : (lastPlayedDay !== undefined && lastPlayedDay === today)
+
   return {
     canPlay:      isDummy ? true : (canPlay ?? false),
     isTodayReady: isDummy ? true : (isTodayReady ?? false),
     todayScore:   isDummy ? 0 : (todayScore?.[0] ?? 0),
     hasSubmitted: isDummy ? false : (todayScore?.[1] ?? false),
+    hasEnteredToday,
     refetchCanPlay,
   }
 }

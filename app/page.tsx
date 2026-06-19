@@ -121,10 +121,10 @@ export default function Home() {
             gradient="from-emerald-950/80 via-teal-900/30 to-gray-950"
             borderHover="hover:border-emerald-500"
             bulletColor="bg-emerald-500"
-            bullets={['Available on Any Connected Network', 'General Industry Trivia', 'Web3 Fundamentals']}
-            status={isSupported ? `Playing on ${chainId === arcTestnet.id ? 'ARC' : chainId === baseMainnet.id ? 'Base' : 'Celo'}` : 'Requires Supported Network'}
+            bullets={['Base Mainnet (Chain 8453)', 'General Industry Trivia', 'Web3 Fundamentals']}
+            status={chainId === baseMainnet.id ? 'Active Network' : 'Auto-Switches Network'}
             buttonText="Enter General Arena"
-            onClick={() => handlePlayQuiz('general')}
+            onClick={() => handlePlayQuiz('general', baseMainnet.id)}
           />
         </div>
       </div>

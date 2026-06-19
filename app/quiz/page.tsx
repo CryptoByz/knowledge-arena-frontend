@@ -16,15 +16,16 @@ type Question = {
   options: { A: string; B: string; C: string; D: string }
 }
 
-type Phase = 'loading' | 'enter' | 'approving' | 'entering' | 'playing' | 'submitting' | 'completed' | 'already_played' | 'not_ready'
+type Phase = 'loading' | 'enter' | 'approving' | 'entering' | 'playing' | 'submitting' | 'completed' | 'already_played'
 
 export default function QuizPage() {
   const { address, isConnected } = useAccount()
   const chainId = useChainId()
   const { contracts, isSupported } = useChainConfig()
   const { switchChain } = useSwitchChain()
-  const { canPlay, isTodayReady, hasSubmitted, todayScore } = useQuizState(address)
+  const { canPlay, isTodayReady, hasSubmitted, todayScore, hasEnteredToday } = useQuizState(address)
 
+  const [mounted, setMounted] = useState(false)
   const [tag, setTag] = useState('general')
   const [phase, setPhase] = useState<Phase>('loading')
   const [questions, setQuestions] = useState<Question[]>([])
@@ -39,8 +40,9 @@ export default function QuizPage() {
   const { writeContract, data: txHash, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash: txHash })
 
-  // Safely parse the query parameter on client side
+  // Safely parse the query parameter on client mount to avoid hydration mismatch
   useEffect(() => {
+    setMounted(true)
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       const t = params.get('tag') || 'general'
@@ -48,21 +50,35 @@ export default function QuizPage() {
     }
   }, [])
 
-  const isDummyContract = !contracts?.dailyQuiz || contracts.dailyQuiz === '0x0000000000000000000000000000000000000000'
+  const targetChainId =
+    tag === 'arc' ? arcTestnet.id :
+    tag === 'base' ? baseMainnet.id :
+    tag === 'celo' ? celo.id :
+    baseMainnet.id // General quiz is fixed to Base Mainnet
 
-  const isWrongNetwork =
-    (tag === 'arc' && chainId !== arcTestnet.id) ||
-    (tag === 'base' && chainId !== baseMainnet.id) ||
-    (tag === 'celo' && chainId !== celo.id) ||
-    (tag === 'general' && !isSupported)
+  const isWrongNetwork = chainId !== targetChainId
+
+  const isDummyContract = !contracts?.dailyQuiz || contracts.dailyQuiz === '0x0000000000000000000000000000000000000000'
+  const isDemoMode = isDummyContract || !isTodayReady
 
   // Determine stage on initial loading or state update
   useEffect(() => {
-    if (!isConnected || isWrongNetwork) return
-    if (!isTodayReady) { setPhase('not_ready'); return }
-    if (hasSubmitted) { setPhase('already_played'); return }
+    if (!mounted || !isConnected || isWrongNetwork) return
+
+    // In production/normal mode, check if already played
+    if (!isDemoMode) {
+      if (hasSubmitted) {
+        setPhase('already_played')
+        return
+      }
+      if (!canPlay && !hasEnteredToday) {
+        setPhase('already_played')
+        return
+      }
+    }
+
     setPhase('enter')
-  }, [isConnected, isSupported, isWrongNetwork, isTodayReady, hasSubmitted, canPlay])
+  }, [mounted, isConnected, isWrongNetwork, isTodayReady, hasSubmitted, canPlay, hasEnteredToday, isDemoMode])
 
   // TX confirmation watcher for phase changes
   useEffect(() => {
@@ -75,7 +91,7 @@ export default function QuizPage() {
   }, [isSuccess, txHash])
 
   const handleEnterQuiz = async () => {
-    if (isDummyContract) {
+    if (isDemoMode || hasEnteredToday) {
       setPhase('entering')
       // Simulate confirmation time for nice UI transition
       setTimeout(() => {
@@ -211,7 +227,7 @@ export default function QuizPage() {
       const score = data.proofs.filter((p: any) => p.isCorrect).length
       setFinalScore(score)
 
-      if (isDummyContract) {
+      if (isDemoMode) {
         setPhase('completed')
         return
       }
@@ -230,78 +246,53 @@ export default function QuizPage() {
     }
   }
 
-  // Render network mismatch view
-  if (isWrongNetwork && isConnected) {
-    let title = 'Wrong Network'
-    let subtitle = 'Please switch to a supported network to take the quiz.'
-    let targetChainName = ''
-    let targetChainId: number | null = null
-
-    if (tag === 'arc') {
-      title = 'Switch to ARC Testnet'
-      subtitle = 'The ARC Network Quiz requires connection to ARC Testnet.'
-      targetChainName = 'ARC Testnet'
-      targetChainId = arcTestnet.id
-    } else if (tag === 'base') {
-      title = 'Switch to Base Mainnet'
-      subtitle = 'The Base Mainnet Quiz requires connection to Base.'
-      targetChainName = 'Base'
-      targetChainId = baseMainnet.id
-    } else if (tag === 'celo') {
-      title = 'Switch to Celo Network'
-      subtitle = 'The Celo Network Quiz requires connection to Celo.'
-      targetChainName = 'Celo'
-      targetChainId = celo.id
-    }
-
-    return (
-      <div className="max-w-md mx-auto text-center space-y-6 pt-24">
-        <div className="text-6xl animate-pulse">⛓️</div>
-        <h2 className="text-2xl font-bold text-white">{title}</h2>
-        <p className="text-gray-400 text-sm">{subtitle}</p>
-
-        {targetChainId ? (
-          <button
-            onClick={() => switchChain({ chainId: targetChainId! })}
-            className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg font-semibold transition-colors cursor-pointer shadow-lg shadow-indigo-600/20"
-          >
-            Switch to {targetChainName}
-          </button>
-        ) : (
-          <div className="space-y-4">
-            <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Select an active network to play General Quiz:</p>
-            <div className="grid grid-cols-1 gap-2.5">
-              <button
-                onClick={() => switchChain({ chainId: arcTestnet.id })}
-                className="py-2.5 bg-indigo-950/40 hover:bg-indigo-900/40 border border-indigo-800 text-indigo-300 rounded-xl font-medium transition-colors cursor-pointer text-sm"
-              >
-                Switch to ARC Testnet
-              </button>
-              <button
-                onClick={() => switchChain({ chainId: baseMainnet.id })}
-                className="py-2.5 bg-blue-950/40 hover:bg-blue-900/40 border border-blue-800 text-blue-300 rounded-xl font-medium transition-colors cursor-pointer text-sm"
-              >
-                Switch to Base Mainnet
-              </button>
-              <button
-                onClick={() => switchChain({ chainId: celo.id })}
-                className="py-2.5 bg-amber-950/40 hover:bg-amber-900/40 border border-amber-800 text-amber-300 rounded-xl font-medium transition-colors cursor-pointer text-sm"
-              >
-                Switch to Celo Network
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    )
+  // Hydration guard
+  if (!mounted) {
+    return <CenteredMessage title="Loading Arena..." subtitle="Initializing the quiz interface..." />
   }
 
   if (!isConnected) {
     return <CenteredMessage title="Connect your wallet" subtitle="You need a wallet to play Knowledge Arena." />
   }
 
-  if (phase === 'not_ready') {
-    return <CenteredMessage title="Quiz not ready yet" subtitle="Today's quiz is being prepared. Check back shortly." />
+  // Render network mismatch view
+  if (isWrongNetwork) {
+    let title = 'Wrong Network'
+    let subtitle = 'Please switch to a supported network to take the quiz.'
+    let targetChainName = ''
+
+    if (tag === 'arc') {
+      title = 'Switch to ARC Testnet'
+      subtitle = 'The ARC Network Quiz requires connection to ARC Testnet.'
+      targetChainName = 'ARC Testnet'
+    } else if (tag === 'base') {
+      title = 'Switch to Base Mainnet'
+      subtitle = 'The Base Mainnet Quiz requires connection to Base Mainnet.'
+      targetChainName = 'Base'
+    } else if (tag === 'celo') {
+      title = 'Switch to Celo Network'
+      subtitle = 'The Celo Network Quiz requires connection to Celo.'
+      targetChainName = 'Celo'
+    } else if (tag === 'general') {
+      title = 'Switch to Base Mainnet'
+      subtitle = 'The General Crypto Quiz requires connection to Base Mainnet.'
+      targetChainName = 'Base'
+    }
+
+    return (
+      <div className="max-w-md mx-auto text-center space-y-6 pt-24">
+        <div className="text-6xl animate-pulse">⛓️</div>
+        <h2 className="text-2xl font-bold text-white">{title}</h2>
+        <p className="text-gray-400 text-sm leading-relaxed">{subtitle}</p>
+
+        <button
+          onClick={() => switchChain({ chainId: targetChainId })}
+          className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg font-semibold transition-colors cursor-pointer shadow-lg shadow-indigo-600/20"
+        >
+          Switch to {targetChainName}
+        </button>
+      </div>
+    )
   }
 
   if (phase === 'already_played') {
@@ -320,9 +311,15 @@ export default function QuizPage() {
         <h1 className="text-3xl font-extrabold tracking-tight text-white">{capitalizeTag} Quiz</h1>
         <p className="text-gray-400">10 daily questions tailored for the {capitalizeTag === 'GENERAL' ? 'crypto industry' : `${capitalizeTag} network`} ecosystem.</p>
         
-        {isDummyContract && (
-          <div className="px-4 py-2 text-xs bg-amber-950/40 border border-amber-900/60 text-amber-400 rounded-xl">
-            ⚠️ Smart contracts not deployed on this network. Participating in <strong>Demo Preview</strong> mode.
+        {isDemoMode && (
+          <div className="px-4 py-2.5 text-xs bg-amber-950/40 border border-amber-900/60 text-amber-400 rounded-xl leading-relaxed">
+            ⚠️ {isDummyContract ? 'Smart contracts are not yet deployed' : 'Quiz not yet initialized onchain'} for this network. Running in <strong>Demo Preview Mode</strong>.
+          </div>
+        )}
+
+        {hasEnteredToday && !isDemoMode && (
+          <div className="px-4 py-2.5 text-xs bg-indigo-950/40 border border-indigo-900/60 text-indigo-400 rounded-xl leading-relaxed">
+            ⚡ You have already registered entry today. Click below to start playing.
           </div>
         )}
 
@@ -338,6 +335,10 @@ export default function QuizPage() {
         >
           {isPending || isConfirming
             ? 'Confirming Transaction...'
+            : isDemoMode
+            ? 'Start Quiz (Demo Mode)'
+            : hasEnteredToday
+            ? 'Start Quiz'
             : 'Start Quiz'}
         </button>
       </div>
@@ -372,8 +373,8 @@ export default function QuizPage() {
             : 'Practice makes perfect. Keep reading and come back tomorrow!'}
         </p>
         
-        {isDummyContract ? (
-          <p className="text-amber-400 text-sm font-medium">Played in Demo Mode (Smart contracts not deployed on this network)</p>
+        {isDemoMode ? (
+          <p className="text-amber-400 text-sm font-medium">Played in Demo Mode (Score not saved onchain)</p>
         ) : isPending || isConfirming ? (
           <p className="text-indigo-400 text-sm animate-pulse">Saving score onchain...</p>
         ) : (

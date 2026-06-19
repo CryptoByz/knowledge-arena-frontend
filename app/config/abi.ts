@@ -38,6 +38,13 @@ export const DAILY_QUIZ_ABI = [
     outputs: [{ name: 'score', type: 'uint8' }, { name: 'submitted', type: 'bool' }],
   },
   {
+    name: 'lastPlayedDay',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'player', type: 'address' }],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
     name: 'entryFee',
     type: 'function',
     stateMutability: 'view',
