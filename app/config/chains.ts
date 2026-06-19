@@ -53,10 +53,10 @@ export const SUPPORTED_CHAINS = [arcTestnet, baseMainnet, celo] as const
 
 export const CONTRACTS = {
   [arcTestnet.id]: {
-    dailyQuiz:          '0xe68fF67a5B183D0F1A3454CEa12C741966Eb7dC2',
-    playerProfile:      '0x5cc33CEFFd7fF94092CB04A2067cB7a1b5D154e3',
-    achievementManager: '0x3d6A8C550820B68316F0990286da5b0e805dB2B4',
-    badgeNFT:           '0x8F1Ab7894DE24CD114d7CE69d557b04b1e626b2a',
+    dailyQuiz:          '0xa06cFb8364Bb4f0F89E8bF21344fd3A251A1322D',
+    playerProfile:      '0x82952D75cf7176ac5eBb9c599e151f6b5fd46E93',
+    achievementManager: '0xfEAabc60dFe0d6c37fF5A0c4BF91cDcc41eD68d8',
+    badgeNFT:           '0x92ce60c229D82F2DaD584ED83E0155Fd85C86bC4',
   },
   [baseMainnet.id]: {
     dailyQuiz:          '0xd88ADB6Ff6835535B97aff0765882D832c0a91F6',
