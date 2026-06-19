@@ -12,7 +12,7 @@ export default function AchievementsPage() {
   const { address, isConnected } = useAccount()
   const { contracts, isSupported } = useChainConfig()
 
-  const isDummy = !contracts?.achievementManager || contracts.achievementManager === '0x0000000000000000000000000000000000000000'
+  const isDummy = !contracts?.achievementManager || (contracts.achievementManager as string) === '0x0000000000000000000000000000000000000000'
 
   const { data: allAchievements } = useReadContract({
     address: contracts?.achievementManager as `0x${string}`,

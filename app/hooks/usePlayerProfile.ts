@@ -7,7 +7,7 @@ import { PLAYER_PROFILE_ABI } from '../config/abi'
 export function usePlayerProfile(address?: `0x${string}`) {
   const { contracts } = useChainConfig()
 
-  const isDummy = !contracts?.playerProfile || contracts.playerProfile === '0x0000000000000000000000000000000000000000'
+  const isDummy = !contracts?.playerProfile || (contracts.playerProfile as string) === '0x0000000000000000000000000000000000000000'
 
   const { data, isLoading, refetch } = useReadContract({
     address: contracts?.playerProfile as `0x${string}`,

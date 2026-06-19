@@ -7,7 +7,7 @@ import { DAILY_QUIZ_ABI } from '../config/abi'
 export function useQuizState(address?: `0x${string}`) {
   const { contracts } = useChainConfig()
 
-  const isDummy = !contracts?.dailyQuiz || contracts.dailyQuiz === '0x0000000000000000000000000000000000000000'
+  const isDummy = !contracts?.dailyQuiz || (contracts.dailyQuiz as string) === '0x0000000000000000000000000000000000000000'
 
   const { data: canPlay, refetch: refetchCanPlay } = useReadContract({
     address: contracts?.dailyQuiz as `0x${string}`,

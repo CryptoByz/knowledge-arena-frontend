@@ -58,7 +58,7 @@ export default function QuizPage() {
 
   const isWrongNetwork = chainId !== targetChainId
 
-  const isDummyContract = !contracts?.dailyQuiz || contracts.dailyQuiz === '0x0000000000000000000000000000000000000000'
+  const isDummyContract = !contracts?.dailyQuiz || (contracts.dailyQuiz as string) === '0x0000000000000000000000000000000000000000'
   const isDemoMode = isDummyContract || !isTodayReady
 
   // Determine stage on initial loading or state update
