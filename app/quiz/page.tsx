@@ -115,15 +115,15 @@ export default function QuizPage() {
           } else {
             handleSubmit(newAnswers)
           }
-        }, 2000)
+        }, 3000)
       } else {
         setIsSelectionCorrect(false)
         
-        // Wait 2 seconds, then show correct option
+        // Wait 1 second, then show correct option
         setTimeout(() => {
           setShowCorrectOption(true)
           
-          // Wait another 2 seconds, then move to the next question
+          // Wait another 3 seconds, then move to the next question
           setTimeout(() => {
             const newAnswers = [...answers, answer]
             setAnswers(newAnswers)
@@ -137,8 +137,8 @@ export default function QuizPage() {
             } else {
               handleSubmit(newAnswers)
             }
-          }, 2000)
-        }, 2000)
+          }, 3000)
+        }, 1000)
       }
     } catch (err) {
       console.error(err)
