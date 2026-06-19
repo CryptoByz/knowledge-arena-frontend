@@ -75,7 +75,7 @@ export default function FaucetPage() {
       if (res.ok && data.success) {
         setClaimStatus({
           success: true,
-          message: '0.05 CELO claimed successfully!',
+          message: '0.0015 CELO claimed successfully!',
           txHash: data.txHash,
         })
       } else {
@@ -124,7 +124,7 @@ export default function FaucetPage() {
               <span className="text-[10px] text-gray-500 block uppercase tracking-wider font-bold">Rule Restrictions</span>
               <ul className="text-xs text-gray-400 space-y-1 list-disc pl-4">
                 <li>One claim transaction per wallet address.</li>
-                <li>Receives 0.05 CELO (enough for dozens of gas fees).</li>
+                <li>Receives 0.0015 CELO (enough for gas fees).</li>
               </ul>
             </div>
           </div>
@@ -165,7 +165,7 @@ export default function FaucetPage() {
                 ? 'Connect Wallet to Claim CELO'
                 : isClaiming
                 ? 'Claiming CELO Gas...'
-                : 'Claim 0.05 CELO'}
+                : 'Claim 0.0015 CELO'}
             </button>
           </div>
         </div>
@@ -217,7 +217,7 @@ export default function FaucetPage() {
           💡 Faucet claim instructions
         </h3>
         <ul className="list-disc pl-5 text-sm text-gray-400 space-y-2 leading-relaxed">
-          <li><strong>Celo Gas Dropper:</strong> Make sure wallet extension supports Celo, connect your wallet, and click claim. Your address receives 0.05 CELO directly to your connected wallet.</li>
+          <li><strong>Celo Gas Dropper:</strong> Make sure wallet extension supports Celo, connect your wallet, and click claim. Your address receives 0.0015 CELO directly to your connected wallet.</li>
           <li><strong>Circle Faucet:</strong> Click Circle Faucet link, choose <strong>Arc Testnet</strong> from the dropdown, paste your wallet address, select the token, and submit.</li>
         </ul>
       </div>
