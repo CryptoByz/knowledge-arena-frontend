@@ -28,7 +28,9 @@ export default function QuizPage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<string[]>([])
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
-  const [showResult, setShowResult] = useState(false)
+  const [isSelectionCorrect, setIsSelectionCorrect] = useState<boolean | null>(null)
+  const [correctOption, setCorrectOption] = useState<string | null>(null)
+  const [showCorrectOption, setShowCorrectOption] = useState(false)
   const [finalScore, setFinalScore] = useState(0)
 
   const { writeContract, data: txHash, isPending } = useWriteContract()
@@ -75,24 +77,83 @@ export default function QuizPage() {
     }
   }
 
-  const handleAnswer = (answer: string) => {
-    if (selectedAnswer) return // Zaten cevap verildi
+  const handleAnswer = async (answer: string) => {
+    if (selectedAnswer) return
     setSelectedAnswer(answer)
-    setShowResult(true)
 
-    setTimeout(() => {
-      const newAnswers = [...answers, answer]
-      setAnswers(newAnswers)
-      setSelectedAnswer(null)
-      setShowResult(false)
+    try {
+      // Get proof and correctness for all 4 options to find the correct one securely
+      const res = await fetch(`${API_URL}/api/proof`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          answers: ['A', 'B', 'C', 'D'].map(opt => ({
+            questionIndex: currentIndex,
+            answer: opt,
+          })),
+        }),
+      })
+      const data = await res.json()
+      
+      const correctIndex = data.proofs.findIndex((p: any) => p.isCorrect)
+      const correctOpt = correctIndex !== -1 ? ['A', 'B', 'C', 'D'][correctIndex] : null
+      
+      setCorrectOption(correctOpt)
+      
+      if (answer === correctOpt) {
+        setIsSelectionCorrect(true)
+        
+        setTimeout(() => {
+          const newAnswers = [...answers, answer]
+          setAnswers(newAnswers)
+          setSelectedAnswer(null)
+          setIsSelectionCorrect(null)
+          setCorrectOption(null)
 
-      if (currentIndex + 1 < questions.length) {
-        setCurrentIndex(currentIndex + 1)
+          if (currentIndex + 1 < questions.length) {
+            setCurrentIndex(currentIndex + 1)
+          } else {
+            handleSubmit(newAnswers)
+          }
+        }, 2000)
       } else {
-        // Quiz bitti, cevapları gönder
-        handleSubmit(newAnswers)
+        setIsSelectionCorrect(false)
+        
+        // Wait 2 seconds, then show correct option
+        setTimeout(() => {
+          setShowCorrectOption(true)
+          
+          // Wait another 2 seconds, then move to the next question
+          setTimeout(() => {
+            const newAnswers = [...answers, answer]
+            setAnswers(newAnswers)
+            setSelectedAnswer(null)
+            setIsSelectionCorrect(null)
+            setCorrectOption(null)
+            setShowCorrectOption(false)
+
+            if (currentIndex + 1 < questions.length) {
+              setCurrentIndex(currentIndex + 1)
+            } else {
+              handleSubmit(newAnswers)
+            }
+          }, 2000)
+        }, 2000)
       }
-    }, 1500)
+    } catch (err) {
+      console.error(err)
+      // Fallback: move on after 1.5 seconds if API fails
+      setTimeout(() => {
+        const newAnswers = [...answers, answer]
+        setAnswers(newAnswers)
+        setSelectedAnswer(null)
+        if (currentIndex + 1 < questions.length) {
+          setCurrentIndex(currentIndex + 1)
+        } else {
+          handleSubmit(newAnswers)
+        }
+      }, 1500)
+    }
   }
 
   const handleSubmit = async (finalAnswers: string[]) => {
@@ -255,14 +316,21 @@ export default function QuizPage() {
       {/* Options */}
       <div className="grid grid-cols-1 gap-3">
         {Object.entries(question.options).map(([key, value]) => {
-          let style = 'bg-gray-900 border-gray-700 hover:border-indigo-500 hover:bg-gray-800'
+          let style = 'bg-gray-900 border-gray-800 text-gray-200 hover:border-indigo-500 hover:bg-gray-800'
 
-          if (showResult && selectedAnswer) {
+          if (selectedAnswer) {
             if (key === selectedAnswer) {
-              // Seçilen cevap
-              // Doğru/yanlış bilgisi proof'tan geliyor ama burada lokal gösterim için
-              // basit renklendirme yapıyoruz, gerçek doğrulama contract'ta
-              style = 'bg-gray-800 border-gray-600'
+              if (isSelectionCorrect === true) {
+                style = 'bg-green-950/40 border-green-500 text-green-300 shadow-[0_0_15px_rgba(34,197,94,0.15)]'
+              } else if (isSelectionCorrect === false) {
+                style = 'bg-red-950/40 border-red-500 text-red-300 shadow-[0_0_15px_rgba(239,68,68,0.15)]'
+              } else {
+                style = 'bg-indigo-950/30 border-indigo-500/50 text-indigo-300 animate-pulse'
+              }
+            } else if (key === correctOption && showCorrectOption) {
+              style = 'bg-green-950/40 border-green-500 text-green-300 shadow-[0_0_15px_rgba(34,197,94,0.15)] scale-[1.01]'
+            } else {
+              style = 'bg-gray-950/40 border-gray-900/60 text-gray-500 opacity-60'
             }
           }
 
@@ -271,10 +339,22 @@ export default function QuizPage() {
               key={key}
               onClick={() => handleAnswer(key)}
               disabled={!!selectedAnswer}
-              className={`w-full text-left px-5 py-4 rounded-xl border transition-all ${style} disabled:cursor-not-allowed`}
+              className={`w-full text-left px-5 py-4 rounded-xl border transition-all duration-300 ${style} disabled:cursor-not-allowed cursor-pointer`}
             >
-              <span className="text-indigo-400 font-bold mr-3">{key}</span>
-              <span className="text-gray-200">{value}</span>
+              <span className={`font-bold mr-3 transition-colors duration-300 ${
+                selectedAnswer 
+                  ? key === selectedAnswer
+                    ? isSelectionCorrect === true 
+                      ? 'text-green-400' 
+                      : isSelectionCorrect === false 
+                        ? 'text-red-400' 
+                        : 'text-indigo-400'
+                    : key === correctOption && showCorrectOption
+                      ? 'text-green-400'
+                      : 'text-gray-600'
+                  : 'text-indigo-400'
+              }`}>{key}</span>
+              <span className="transition-colors duration-300">{value}</span>
             </button>
           )
         })}
