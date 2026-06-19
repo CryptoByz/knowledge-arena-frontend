@@ -118,12 +118,11 @@ export default function FaucetPage() {
               </span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Get a small amount of native CELO to cover gas fees for taking the quiz. To prevent abuse, claims are limited to 1 per address and you must have 0 CELO in your wallet to qualify.
+              Get a small amount of native CELO to cover gas fees for taking the quiz. To prevent abuse, claims are limited to exactly 1 per address.
             </p>
             <div className="space-y-1.5 bg-gray-950 p-4 rounded-xl border border-gray-850">
               <span className="text-[10px] text-gray-500 block uppercase tracking-wider font-bold">Rule Restrictions</span>
               <ul className="text-xs text-gray-400 space-y-1 list-disc pl-4">
-                <li>Recipient cüzdan must have &lt; 0.001 CELO.</li>
                 <li>One claim transaction per wallet address.</li>
                 <li>Receives 0.05 CELO (enough for dozens of gas fees).</li>
               </ul>
@@ -184,24 +183,16 @@ export default function FaucetPage() {
               USDC is used as the native gas token and entry fee token on ARC Testnet. Claim both USDC and EURC testnet stables directly from the official Circle Faucet.
             </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {tokens.map((token) => (
-                <div key={token.name} className="p-4 rounded-xl bg-gray-950 border border-gray-850 space-y-3.5">
-                  <div className="flex justify-between items-center">
-                    <span className={`text-base font-bold ${token.textColor}`}>{token.name}</span>
-                    <button
-                      onClick={() => addTokenToWallet(token.address, token.name, token.decimals)}
-                      className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-gray-900 border border-gray-800 hover:border-gray-700 text-gray-300 transition-colors cursor-pointer"
-                    >
-                      Import to Wallet
-                    </button>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[9px] text-gray-500 block uppercase tracking-wider font-bold">Contract Address</span>
-                    <span className="text-[11px] text-gray-400 font-mono break-all select-all">
-                      {token.address}
-                    </span>
-                  </div>
+                <div key={token.name} className="p-4 rounded-xl bg-gray-950 border border-gray-850 flex justify-between items-center">
+                  <span className={`text-base font-bold ${token.textColor}`}>{token.name}</span>
+                  <button
+                    onClick={() => addTokenToWallet(token.address, token.name, token.decimals)}
+                    className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-gray-900 border border-gray-800 hover:border-gray-700 text-gray-300 transition-colors cursor-pointer shadow-sm"
+                  >
+                    Add {token.name} to Wallet
+                  </button>
                 </div>
               ))}
             </div>
@@ -226,7 +217,7 @@ export default function FaucetPage() {
           💡 Faucet claim instructions
         </h3>
         <ul className="list-disc pl-5 text-sm text-gray-400 space-y-2 leading-relaxed">
-          <li><strong>Celo Gas Dropper:</strong> Make sure cüzdan extension supports Celo, connect your wallet, and click claim. Your address must be empty (0 CELO) to request gas.</li>
+          <li><strong>Celo Gas Dropper:</strong> Make sure wallet extension supports Celo, connect your wallet, and click claim. Your address receives 0.05 CELO directly to your connected wallet.</li>
           <li><strong>Circle Faucet:</strong> Click Circle Faucet link, choose <strong>Arc Testnet</strong> from the dropdown, paste your wallet address, select the token, and submit.</li>
         </ul>
       </div>
