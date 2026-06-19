@@ -53,16 +53,16 @@ export const SUPPORTED_CHAINS = [arcTestnet, baseMainnet, celo] as const
 
 export const CONTRACTS = {
   [arcTestnet.id]: {
-    dailyQuiz:          '0xa06cFb8364Bb4f0F89E8bF21344fd3A251A1322D',
-    playerProfile:      '0x82952D75cf7176ac5eBb9c599e151f6b5fd46E93',
-    achievementManager: '0xfEAabc60dFe0d6c37fF5A0c4BF91cDcc41eD68d8',
-    badgeNFT:           '0x92ce60c229D82F2DaD584ED83E0155Fd85C86bC4',
+    dailyQuiz:          '0xf0642c1Df7E31579881e00cfC7A392a810e9E39B',
+    playerProfile:      '0x19F6860b0691723C8670039380c6c7A7714949a3',
+    achievementManager: '0xD9647B77c383db4cdB4496d1cE6086d6b3465C5B',
+    badgeNFT:           '0xb8A7D2c2B181341aF8Aa641eccF4792cB3339d49',
   },
   [baseMainnet.id]: {
-    dailyQuiz:          '0xd88ADB6Ff6835535B97aff0765882D832c0a91F6',
-    playerProfile:      '0x1031907A22bBD1CEDB12F2E45711208b3976E19a',
-    achievementManager: '0xA2eCc86497eed343dBCE8dB6513EFDc9E5a07E23',
-    badgeNFT:           '0x5744f79D84Bf0d09284dAF780aE81485C5AaD70E',
+    dailyQuiz:          '0xf0642c1Df7E31579881e00cfC7A392a810e9E39B',
+    playerProfile:      '0x19F6860b0691723C8670039380c6c7A7714949a3',
+    achievementManager: '0xD9647B77c383db4cdB4496d1cE6086d6b3465C5B',
+    badgeNFT:           '0xb8A7D2c2B181341aF8Aa641eccF4792cB3339d49',
   },
   [celo.id]: {
     dailyQuiz:          '0xf0642c1Df7E31579881e00cfC7A392a810e9E39B',
