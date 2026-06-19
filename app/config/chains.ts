@@ -33,7 +33,23 @@ export const baseMainnet = defineChain({
   },
 })
 
-export const SUPPORTED_CHAINS = [arcTestnet, baseMainnet] as const
+export const celo = defineChain({
+  id: 42220,
+  name: 'Celo',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'CELO',
+    symbol: 'CELO',
+  },
+  rpcUrls: {
+    default: { http: ['https://forno.celo.org'] },
+  },
+  blockExplorers: {
+    default: { name: 'CeloScan', url: 'https://celoscan.io' },
+  },
+})
+
+export const SUPPORTED_CHAINS = [arcTestnet, baseMainnet, celo] as const
 
 export const CONTRACTS = {
   [arcTestnet.id]: {
@@ -47,6 +63,12 @@ export const CONTRACTS = {
     playerProfile:      '0x1031907A22bBD1CEDB12F2E45711208b3976E19a',
     achievementManager: '0xA2eCc86497eed343dBCE8dB6513EFDc9E5a07E23',
     badgeNFT:           '0x5744f79D84Bf0d09284dAF780aE81485C5AaD70E',
+  },
+  [celo.id]: {
+    dailyQuiz:          '0x0000000000000000000000000000000000000000',
+    playerProfile:      '0x0000000000000000000000000000000000000000',
+    achievementManager: '0x0000000000000000000000000000000000000000',
+    badgeNFT:           '0x0000000000000000000000000000000000000000',
   },
 } as const
 
