@@ -164,17 +164,17 @@ export default function QuizPage() {
         <p className="text-gray-400">10 questions across Crypto, AI, DeFi, Tokenomics, and more.</p>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-3">
           <p className="text-gray-400 text-sm">Entry Fee</p>
-          <p className="text-3xl font-bold text-indigo-400">10 USDC</p>
-          <p className="text-gray-500 text-xs">Goes directly into the weekly reward pool</p>
+          <p className="text-3xl font-bold text-green-400">Free</p>
+          <p className="text-gray-500 text-xs">Play daily to build your onchain reputation</p>
         </div>
         <button
           onClick={handleEnterQuiz}
           disabled={isPending || isConfirming}
-          className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-700 disabled:cursor-not-allowed rounded-lg font-semibold transition-colors"
+          className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-700 disabled:cursor-not-allowed rounded-lg font-semibold transition-colors cursor-pointer"
         >
           {isPending || isConfirming
             ? 'Confirming...'
-            : 'Enter Quiz (10 USDC)'}
+            : 'Start Quiz'}
         </button>
       </div>
     )
@@ -183,7 +183,7 @@ export default function QuizPage() {
   if (phase === 'approving' || phase === 'entering') {
     return (
       <CenteredMessage
-        title={phase === 'approving' ? 'Approving USDC...' : 'Entering quiz...'}
+        title="Entering quiz..."
         subtitle="Please confirm the transaction in your wallet."
       />
     )

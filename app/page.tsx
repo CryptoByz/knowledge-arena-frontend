@@ -64,7 +64,7 @@ export default function Home() {
         <FeatureCard
           icon="🧠"
           title="Daily Quiz"
-          description="10 questions every day across Crypto, AI, DeFi, Tokenomics, and more. Entry fee goes directly into the reward pool."
+          description="10 questions every day across Crypto, AI, DeFi, Tokenomics, and more. Play daily to build your onchain reputation."
         />
         <FeatureCard
           icon="⛓️"
