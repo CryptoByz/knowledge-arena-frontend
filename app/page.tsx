@@ -44,7 +44,7 @@ export default function Home() {
           <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Arena</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
-          The ultimate onchain knowledge platform. Switch networks, complete daily quizzes, earn reputation points, and claim your place in the arena.
+          The ultimate onchain knowledge platform.
         </p>
 
         {!isConnected && (
@@ -56,7 +56,7 @@ export default function Home() {
 
       {/* Stats Board (Visible if connected & on supported chain) */}
       {isConnected && isSupported && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl bg-gray-900/40 border border-gray-800/80 backdrop-blur-md">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-gray-900/30 border border-gray-800/60 rounded-xl max-w-3xl mx-auto backdrop-blur-md">
           <StatCard label="Total Score" value={totalScore.toString()} color="text-indigo-400" />
           <StatCard label="Streak" value={`${streakDays.toString()} days`} color="text-pink-400" />
           <StatCard label="Boost Multiplier" value={`${(Number(boostMultiplier) / 100).toFixed(2)}x`} color="text-purple-400" />
@@ -83,11 +83,10 @@ export default function Home() {
             borderHover="hover:border-indigo-500"
             bulletColor="bg-indigo-500"
             bullets={['ARC Testnet (Chain 5042002)', 'Native Gas Stablecoins', 'Ecosystem Trivia']}
-            status={chainId === arcTestnet.id ? 'Active Network' : 'Auto-Switches Network'}
             buttonText="Enter ARC Arena"
             onClick={() => handlePlayQuiz('arc', arcTestnet.id)}
           />
-
+ 
           {/* Base Mainnet Quiz Card */}
           <QuizCard
             title="Base Mainnet Quiz"
@@ -96,11 +95,10 @@ export default function Home() {
             borderHover="hover:border-blue-500"
             bulletColor="bg-blue-500"
             bullets={['Base Mainnet (Chain 8453)', 'Fast, Low-cost L2', 'Ecosystem Trivia']}
-            status={chainId === baseMainnet.id ? 'Active Network' : 'Auto-Switches Network'}
             buttonText="Enter Base Arena"
             onClick={() => handlePlayQuiz('base', baseMainnet.id)}
           />
-
+ 
           {/* Celo Network Quiz Card */}
           <QuizCard
             title="Celo Network Quiz"
@@ -109,11 +107,10 @@ export default function Home() {
             borderHover="hover:border-amber-500"
             bulletColor="bg-amber-500"
             bullets={['Celo Network (Chain 42220)', 'Mobile-First & ReFi', 'Ecosystem Trivia']}
-            status={chainId === celo.id ? 'Active Network' : 'Auto-Switches Network'}
             buttonText="Enter Celo Arena"
             onClick={() => handlePlayQuiz('celo', celo.id)}
           />
-
+ 
           {/* General Crypto Quiz Card */}
           <QuizCard
             title="General Crypto Quiz"
@@ -122,7 +119,6 @@ export default function Home() {
             borderHover="hover:border-emerald-500"
             bulletColor="bg-emerald-500"
             bullets={['Base Mainnet (Chain 8453)', 'General Industry Trivia', 'Web3 Fundamentals']}
-            status={chainId === baseMainnet.id ? 'Active Network' : 'Auto-Switches Network'}
             buttonText="Enter General Arena"
             onClick={() => handlePlayQuiz('general', baseMainnet.id)}
           />
@@ -148,9 +144,9 @@ export default function Home() {
 
 function StatCard({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="bg-gray-950/60 border border-gray-800/50 rounded-xl p-4 text-center backdrop-blur-sm shadow-inner transition-transform duration-300 hover:scale-105">
-      <p className={`text-2xl font-bold ${color}`}>{value}</p>
-      <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider">{label}</p>
+    <div className="bg-gray-950/60 border border-gray-800/50 rounded-lg p-2.5 text-center backdrop-blur-sm shadow-inner transition-transform duration-300 hover:scale-102">
+      <p className={`text-lg font-extrabold ${color}`}>{value}</p>
+      <p className="text-[10px] text-gray-400 mt-0.5 uppercase tracking-wider">{label}</p>
     </div>
   )
 }
@@ -172,7 +168,6 @@ type QuizCardProps = {
   borderHover: string
   bulletColor: string
   bullets: string[]
-  status: string
   buttonText: string
   onClick: () => void
 }
@@ -184,7 +179,6 @@ function QuizCard({
   borderHover,
   bulletColor,
   bullets,
-  status,
   buttonText,
   onClick,
 }: QuizCardProps) {
@@ -193,14 +187,11 @@ function QuizCard({
       className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-800/80 bg-gradient-to-br ${gradient} p-6 shadow-xl transition-all duration-300 hover:-translate-y-1 ${borderHover} hover:shadow-2xl`}
     >
       <div className="space-y-4">
-        {/* Card Header & Status Indicator */}
+        {/* Card Header */}
         <div className="flex justify-between items-start">
           <h3 className="text-xl font-bold text-white group-hover:text-indigo-200 transition-colors">
             {title}
           </h3>
-          <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-900/80 border border-gray-800 text-gray-400">
-            {status}
-          </span>
         </div>
 
         {/* Card Body */}

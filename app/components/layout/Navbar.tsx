@@ -50,7 +50,6 @@ export function Navbar() {
 
         {/* Nav links */}
         <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
-          <Link href="/quiz" className="hover:text-white transition-colors">Play</Link>
           <Link href="/profile" className="hover:text-white transition-colors">Profile</Link>
           <Link href="/leaderboard" className="hover:text-white transition-colors">Leaderboard</Link>
           <Link href="/achievements" className="hover:text-white transition-colors">Achievements</Link>
