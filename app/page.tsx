@@ -54,19 +54,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* Stats Board (Visible if connected & on supported chain) */}
-      {isConnected && isSupported && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-gray-900/30 border border-gray-800/60 rounded-xl max-w-3xl mx-auto backdrop-blur-md">
-          <StatCard label="Total Score" value={totalScore.toString()} color="text-indigo-400" />
-          <StatCard label="Streak" value={`${streakDays.toString()} days`} color="text-pink-400" />
-          <StatCard label="Boost Multiplier" value={`${(Number(boostMultiplier) / 100).toFixed(2)}x`} color="text-purple-400" />
-          <StatCard
-            label="Today's Participation"
-            value={hasSubmitted ? `${todayScore}/10` : canPlay ? 'Ready' : 'Completed'}
-            color={hasSubmitted ? 'text-green-400' : 'text-amber-400'}
-          />
-        </div>
-      )}
+
 
       {/* Quiz Cards Selection Grid */}
       <div className="space-y-6">

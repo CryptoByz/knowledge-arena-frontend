@@ -11,7 +11,7 @@ export default function ProfilePage() {
   const { address, isConnected } = useAccount()
   const { isSupported, chainName, contracts } = useChainConfig()
   const { totalScore, weeklyScore, monthlyScore, seasonScore, streakDays, boostMultiplier } = usePlayerProfile(address)
-  const { todayScore, hasSubmitted } = useQuizState(address)
+  const { todayScore, hasSubmitted, canPlay } = useQuizState(address)
 
   const { data: gamesPlayed } = useReadContract({
     address: contracts?.achievementManager as `0x${string}`,
@@ -26,7 +26,7 @@ export default function ProfilePage() {
   }
 
   if (!isSupported) {
-    return <CenteredMessage title="Wrong network" subtitle="Switch to ARC Testnet or Base Sepolia." />
+    return <CenteredMessage title="Wrong network" subtitle="Please switch your wallet to a supported network (ARC Testnet, Base, or Celo)." />
   }
 
   const boost = Number(boostMultiplier) / 100
@@ -67,9 +67,9 @@ export default function ProfilePage() {
           <p className="text-3xl font-bold mt-1">{gamesPlayed?.toString() ?? '0'}</p>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <p className="text-gray-400 text-sm">Today</p>
+          <p className="text-gray-400 text-sm">Today's Participation</p>
           <p className="text-3xl font-bold mt-1">
-            {hasSubmitted ? `${todayScore}/10` : 'Not played'}
+            {hasSubmitted ? `${todayScore}/10` : canPlay ? 'Ready' : 'Completed'}
           </p>
         </div>
       </div>
