@@ -70,7 +70,7 @@ export default function Home() {
             gradient="from-indigo-950/80 via-purple-900/30 to-gray-950"
             borderHover="hover:border-indigo-500"
             bulletColor="bg-indigo-500"
-            bullets={['ARC Testnet (Chain 5042002)', 'Native Gas Stablecoins', 'Ecosystem Trivia']}
+            bullets={['ARC Testnet', 'Native Gas Stablecoins', 'Ecosystem Trivia']}
             buttonText="Enter ARC Arena"
             onClick={() => handlePlayQuiz('arc', arcTestnet.id)}
           />
@@ -82,7 +82,7 @@ export default function Home() {
             gradient="from-blue-950/80 via-cyan-900/30 to-gray-950"
             borderHover="hover:border-blue-500"
             bulletColor="bg-blue-500"
-            bullets={['Base Mainnet (Chain 8453)', 'Fast, Low-cost L2', 'Ecosystem Trivia']}
+            bullets={['Base Mainnet', 'Fast, Low-cost L2', 'Ecosystem Trivia']}
             buttonText="Enter Base Arena"
             onClick={() => handlePlayQuiz('base', baseMainnet.id)}
           />
@@ -94,7 +94,7 @@ export default function Home() {
             gradient="from-amber-950/80 via-yellow-900/30 to-gray-950"
             borderHover="hover:border-amber-500"
             bulletColor="bg-amber-500"
-            bullets={['Celo Network (Chain 42220)', 'Mobile-First & ReFi', 'Ecosystem Trivia']}
+            bullets={['Celo Network', 'Mobile-First & ReFi', 'Ecosystem Trivia']}
             buttonText="Enter Celo Arena"
             onClick={() => handlePlayQuiz('celo', celo.id)}
           />
@@ -106,7 +106,7 @@ export default function Home() {
             gradient="from-emerald-950/80 via-teal-900/30 to-gray-950"
             borderHover="hover:border-emerald-500"
             bulletColor="bg-emerald-500"
-            bullets={['Base Mainnet (Chain 8453)', 'General Industry Trivia', 'Web3 Fundamentals']}
+            bullets={['Base Mainnet', 'General Industry Trivia', 'Web3 Fundamentals']}
             buttonText="Enter General Arena"
             onClick={() => handlePlayQuiz('general', baseMainnet.id)}
           />
