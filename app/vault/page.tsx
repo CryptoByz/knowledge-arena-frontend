@@ -125,110 +125,81 @@ export default function VaultPage() {
         </div>
       ) : vaults ? (
         <div className="grid md:grid-cols-2 gap-8">
-          {Object.entries(vaults).map(([id, vault]) => {
-            const colors = networkColors[id] || {
-              bg: 'from-gray-900 to-gray-900',
-              text: 'text-white',
-              border: 'border-gray-800 hover:border-gray-700',
-              glow: 'shadow-black/5'
-            }
+          {Object.entries(vaults)
+            .filter(([id]) => id !== '84532')
+            .map(([id, vault]) => {
+              const colors = networkColors[id] || {
+                bg: 'from-gray-900 to-gray-900',
+                text: 'text-white',
+                border: 'border-gray-800 hover:border-gray-700',
+                glow: 'shadow-black/5'
+              }
 
-            const backed = isFullyBacked(vault)
+              const backed = isFullyBacked(vault)
 
-            return (
-              <div
-                key={id}
-                className={`bg-gray-900 border ${colors.border} rounded-2xl p-6 flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 shadow-xl bg-gradient-to-b ${colors.bg} ${colors.glow}`}
-              >
-                <div className="space-y-6">
-                  {/* Title & Status */}
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h2 className="text-2xl font-black text-white">{vault.chainName}</h2>
-                      <span className="text-[10px] text-gray-500 font-mono tracking-wider">CHAIN ID: {vault.chainId}</span>
+              return (
+                <div
+                  key={id}
+                  className={`bg-gray-900 border ${colors.border} rounded-2xl p-6 flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 shadow-xl bg-gradient-to-b ${colors.bg} ${colors.glow}`}
+                >
+                  <div className="space-y-6">
+                    {/* Title & Status */}
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h2 className="text-2xl font-black text-white">{vault.chainName}</h2>
+                      </div>
+                      <span
+                        className={`text-[10px] px-2.5 py-0.5 rounded-full border font-bold uppercase tracking-wider ${
+                          backed
+                            ? 'bg-green-950/40 text-green-300 border-green-800/80'
+                            : 'bg-yellow-950/40 text-yellow-400 border-yellow-800/80 animate-pulse'
+                        }`}
+                      >
+                        {backed ? '🟢 100% Backed' : '⚠️ Under-Reserved'}
+                      </span>
                     </div>
-                    <span
-                      className={`text-[10px] px-2.5 py-0.5 rounded-full border font-bold uppercase tracking-wider ${
-                        backed
-                          ? 'bg-green-950/40 text-green-300 border-green-800/80'
-                          : 'bg-yellow-950/40 text-yellow-400 border-yellow-800/80 animate-pulse'
-                      }`}
+
+                    {/* Core Metrics */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-gray-950/60 border border-gray-850 p-4 rounded-xl space-y-1">
+                        <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Reserves Collected</span>
+                        <p className="text-xl font-black text-green-400">{vault.totalFeesCollected} USDC</p>
+                        <span className="text-[9px] text-gray-600 block">{vault.totalGamesPlayed} Quizzes Played</span>
+                      </div>
+                      <div className="bg-gray-950/60 border border-gray-850 p-4 rounded-xl space-y-1">
+                        <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Admin Wallet Balance</span>
+                        {vault.nativeSymbol === 'USDC' ? (
+                          <p className="text-xl font-black text-blue-400">{vault.adminNativeBalance} USDC</p>
+                        ) : (
+                          <div className="space-y-0.5">
+                            <p className="text-base font-black text-blue-400">{vault.adminUsdcBalance} USDC</p>
+                            <p className="text-[10px] text-gray-400 font-mono font-medium">{vault.adminNativeBalance} {vault.nativeSymbol}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer buttons / links */}
+                  <div className="pt-6">
+                    <a
+                      href={
+                        id === '5042002'
+                          ? `https://testnet.arcscan.app/address/${vault.adminWallet}`
+                          : id === '42220'
+                          ? `https://celoscan.io/address/${vault.adminWallet}`
+                          : `https://basescan.org/address/${vault.adminWallet}`
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full text-center py-2.5 rounded-xl border border-gray-800 hover:border-gray-700 bg-gray-950 text-gray-300 hover:text-white text-xs font-bold tracking-wide transition-all block cursor-pointer"
                     >
-                      {backed ? '🟢 100% Backed' : '⚠️ Under-Reserved'}
-                    </span>
-                  </div>
-
-                  {/* Core Metrics */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-950/60 border border-gray-850 p-4 rounded-xl space-y-1">
-                      <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Reserves Collected</span>
-                      <p className="text-xl font-black text-green-400">{vault.totalFeesCollected} USDC</p>
-                      <span className="text-[9px] text-gray-600 block">{vault.totalGamesPlayed} Quizzes Played</span>
-                    </div>
-                    <div className="bg-gray-950/60 border border-gray-850 p-4 rounded-xl space-y-1">
-                      <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Admin Wallet Balance</span>
-                      {vault.nativeSymbol === 'USDC' ? (
-                        <p className="text-xl font-black text-blue-400">{vault.adminNativeBalance} USDC</p>
-                      ) : (
-                        <div className="space-y-0.5">
-                          <p className="text-base font-black text-blue-400">{vault.adminUsdcBalance} USDC</p>
-                          <p className="text-[10px] text-gray-400 font-mono font-medium">{vault.adminNativeBalance} {vault.nativeSymbol}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Addresses */}
-                  <div className="space-y-2 bg-gray-950/80 p-4 rounded-xl border border-gray-850 text-xs">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-500">Vault Wallet:</span>
-                      <div className="flex items-center gap-1.5 font-mono">
-                        <span className="text-gray-300">{vault.adminWallet.slice(0, 6)}...{vault.adminWallet.slice(-4)}</span>
-                        <button
-                          onClick={() => copyToClipboard(vault.adminWallet, `${id}-wallet`)}
-                          className="text-gray-500 hover:text-white transition-colors cursor-pointer"
-                          title="Copy address"
-                        >
-                          {copiedIndex === `${id}-wallet` ? '✓' : '❐'}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-500">DailyQuiz Contract:</span>
-                      <div className="flex items-center gap-1.5 font-mono">
-                        <span className="text-gray-300">{vault.dailyQuizAddress.slice(0, 6)}...{vault.dailyQuizAddress.slice(-4)}</span>
-                        <button
-                          onClick={() => copyToClipboard(vault.dailyQuizAddress, `${id}-quiz`)}
-                          className="text-gray-500 hover:text-white transition-colors cursor-pointer"
-                          title="Copy address"
-                        >
-                          {copiedIndex === `${id}-quiz` ? '✓' : '❐'}
-                        </button>
-                      </div>
-                    </div>
+                      View Wallet on Explorer ↗
+                    </a>
                   </div>
                 </div>
-
-                {/* Footer buttons / links */}
-                <div className="pt-6">
-                  <a
-                    href={
-                      id === '5042002'
-                        ? `https://testnet.arcscan.app/address/${vault.adminWallet}`
-                        : id === '42220'
-                        ? `https://celoscan.io/address/${vault.adminWallet}`
-                        : `https://basescan.org/address/${vault.adminWallet}`
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full text-center py-2.5 rounded-xl border border-gray-800 hover:border-gray-700 bg-gray-950 text-gray-300 hover:text-white text-xs font-bold tracking-wide transition-all block cursor-pointer"
-                  >
-                    View Wallet on Explorer ↗
-                  </a>
-                </div>
-              </div>
-            )
-          })}
+              )
+            })}
         </div>
       ) : null}
     </div>
