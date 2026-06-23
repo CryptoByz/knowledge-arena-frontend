@@ -2,7 +2,7 @@ export const DAILY_QUIZ_ABI = [
   {
     name: 'enterQuiz',
     type: 'function',
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     inputs: [],
     outputs: [],
   },
