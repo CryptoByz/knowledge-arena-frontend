@@ -102,17 +102,13 @@ export default function QuizPage() {
 
     if (!contracts) return
 
-    // Celo (42220) and Base Sepolia (84532) use ERC20 USDC which requires approval first
-    const isERC20 = chainId === 42220 || chainId === 84532;
+    // Base Sepolia (84532) uses ERC20 USDC which requires approval first
+    const isERC20 = chainId === 84532;
     
     if (isERC20 && phase === 'enter') {
       setPhase('approving');
-      const tokenAddress = chainId === 42220
-        ? '0x765DE816845861e75A25fCA122bb6898B8B1282a' // Celo USDC
-        : '0x036cbd53842c5426634e7929541ec2318f3dcf7e'; // Base Sepolia USDC
-      const feeAmount = chainId === 42220
-        ? 20000n // 0.02 USDC (6 decimals)
-        : 2000000n; // 2.00 USDC (6 decimals)
+      const tokenAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e'; // Base Sepolia USDC
+      const feeAmount = 2000000n; // 2.00 USDC (6 decimals)
 
       writeContract({
         address: tokenAddress as `0x${string}`,
@@ -134,12 +130,14 @@ export default function QuizPage() {
       return;
     }
 
-    // Determine native token value (for Base/ARC)
+    // Determine native token value (for Base/ARC/Celo)
     let value = 0n;
     if (chainId === 5042002) {
       value = 2000000n; // 2 USDC (native, 6 decimals)
     } else if (chainId === 8453) {
       value = 300000000000000n; // 0.0003 ETH (18 decimals)
+    } else if (chainId === 42220) {
+      value = 500000000000000000n; // 0.5 CELO (native, 18 decimals)
     }
 
     setPhase('entering');
@@ -357,7 +355,7 @@ export default function QuizPage() {
 
     const feeDisplays: Record<string, string> = {
       arc: '2.00 USDC',
-      celo: '0.02 USDC',
+      celo: '0.50 CELO',
       base: '0.0003 ETH',
       general: '0.0003 ETH',
     };
