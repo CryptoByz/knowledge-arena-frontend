@@ -59,13 +59,13 @@ export const CONTRACTS = {
     badgeNFT:           '0x74d00bdE11e2D8B91601C58E7f1447CF52B6f68a',
   },
   [baseMainnet.id]: {
-    dailyQuiz:          '0xC5deEE0616537C02C9c2a37B7ad09dab205988Cb',
+    dailyQuiz:          '0x8172189cCE9b68F94Ee23fB5077748495B85098F',
     playerProfile:      '0xc8Ba5dab61Ed592AA591a56F3880cDC892d78767',
     achievementManager: '0x413cE89ac030b44a261f97Fdcb3D4D49a92322E7',
     badgeNFT:           '0x74d00bdE11e2D8B91601C58E7f1447CF52B6f68a',
   },
   [celo.id]: {
-    dailyQuiz:          '0xC5deEE0616537C02C9c2a37B7ad09dab205988Cb',
+    dailyQuiz:          '0x8172189cCE9b68F94Ee23fB5077748495B85098F',
     playerProfile:      '0xc8Ba5dab61Ed592AA591a56F3880cDC892d78767',
     achievementManager: '0x413cE89ac030b44a261f97Fdcb3D4D49a92322E7',
     badgeNFT:           '0x74d00bdE11e2D8B91601C58E7f1447CF52B6f68a',
