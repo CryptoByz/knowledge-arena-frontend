@@ -366,7 +366,7 @@ export default function QuizPage() {
         <h1 className="text-3xl font-extrabold tracking-tight text-white">{networkName} Daily Quiz</h1>
         <p className="text-gray-400 text-sm leading-relaxed">
           10 daily questions tailored for the {tag === 'general' ? 'crypto industry' : `${networkName} network`} ecosystem.
-          Comprising 3 easy, 3 medium, and 3 hard questions, and 1 random general category question.
+          Comprising 4 easy, 2 medium, and 2 hard questions, and 2 random general category questions.
         </p>
         
         {isDemoMode && (
