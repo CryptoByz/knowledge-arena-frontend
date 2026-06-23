@@ -305,11 +305,29 @@ export default function QuizPage() {
   }
 
   if (phase === 'enter') {
-    const capitalizeTag = tag.toUpperCase();
+    const networkNames: Record<string, string> = {
+      arc: 'ARC',
+      base: 'Base',
+      celo: 'Celo',
+      general: 'General',
+    };
+    const networkName = networkNames[tag] || tag.toUpperCase();
+
+    const feeDisplays: Record<string, string> = {
+      arc: '2.00 USDC',
+      celo: '0.02 USDC',
+      base: '0.0003 ETH',
+      general: '0.0003 ETH',
+    };
+    const feeText = feeDisplays[tag] || '0.00 USDC';
+
     return (
       <div className="max-w-md mx-auto text-center space-y-6 pt-16">
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">{capitalizeTag} Quiz</h1>
-        <p className="text-gray-400">10 daily questions tailored for the {capitalizeTag === 'GENERAL' ? 'crypto industry' : `${capitalizeTag} network`} ecosystem.</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white">{networkName} Daily Quiz</h1>
+        <p className="text-gray-400 text-sm leading-relaxed">
+          10 daily questions tailored for the {tag === 'general' ? 'crypto industry' : `${networkName} network`} ecosystem.
+          Comprising 3 easy, 3 medium, and 3 hard questions, and 1 random general category question.
+        </p>
         
         {isDemoMode && (
           <div className="px-4 py-2.5 text-xs bg-amber-950/40 border border-amber-900/60 text-amber-400 rounded-xl leading-relaxed">
@@ -323,10 +341,11 @@ export default function QuizPage() {
           </div>
         )}
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 space-y-3">
-          <p className="text-gray-400 text-sm">Entry Fee</p>
-          <p className="text-3xl font-black text-green-400">FREE</p>
-          <p className="text-gray-500 text-xs">Prove your expertise & build onchain reputation</p>
+        <div className="bg-gray-900/40 border border-gray-800/80 rounded-xl px-4 py-3 flex items-center justify-between text-sm max-w-sm mx-auto">
+          <span className="text-gray-400 font-medium">Entry Fee</span>
+          <span className="font-bold text-indigo-400 bg-indigo-950/40 border border-indigo-900/50 px-2.5 py-1 rounded-lg text-xs">
+            {feeText}
+          </span>
         </div>
         <button
           onClick={handleEnterQuiz}
