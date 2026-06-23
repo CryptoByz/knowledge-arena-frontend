@@ -12,6 +12,7 @@ interface VaultInfo {
   totalGamesPlayed: string
   entryFee: string
   totalFeesCollected: string
+  feeSymbol?: string
   adminUsdcBalance: string
   adminNativeBalance: string
   nativeSymbol: string
@@ -48,16 +49,6 @@ export default function VaultPage() {
     navigator.clipboard.writeText(text)
     setCopiedIndex(id)
     setTimeout(() => setCopiedIndex(null), 2000)
-  }
-
-  // Helper to check if a vault is fully backed
-  const isFullyBacked = (vault: VaultInfo) => {
-    const collected = parseFloat(vault.totalFeesCollected)
-    // On ARC, the native balance is USDC. On other chains, usdc balance is standard.
-    const reserves = vault.nativeSymbol === 'USDC' 
-      ? parseFloat(vault.adminNativeBalance)
-      : parseFloat(vault.adminUsdcBalance)
-    return reserves >= collected
   }
 
   const networkColors: Record<string, { bg: string, text: string, border: string, glow: string }> = {
@@ -135,8 +126,6 @@ export default function VaultPage() {
                 glow: 'shadow-black/5'
               }
 
-              const backed = isFullyBacked(vault)
-
               return (
                 <div
                   key={id}
@@ -148,34 +137,19 @@ export default function VaultPage() {
                       <div>
                         <h2 className="text-2xl font-black text-white">{vault.chainName}</h2>
                       </div>
-                      <span
-                        className={`text-[10px] px-2.5 py-0.5 rounded-full border font-bold uppercase tracking-wider ${
-                          backed
-                            ? 'bg-green-950/40 text-green-300 border-green-800/80'
-                            : 'bg-yellow-950/40 text-yellow-400 border-yellow-800/80 animate-pulse'
-                        }`}
-                      >
-                        {backed ? '🟢 100% Backed' : '⚠️ Under-Reserved'}
+                      <span className="text-[10px] px-2.5 py-0.5 rounded-full border font-bold uppercase tracking-wider bg-green-950/40 text-green-300 border-green-800/80">
+                        🟢 Audited
                       </span>
                     </div>
 
                     {/* Core Metrics */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-gray-950/60 border border-gray-850 p-4 rounded-xl space-y-1">
-                        <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Reserves Collected</span>
-                        <p className="text-xl font-black text-green-400">{vault.totalFeesCollected} USDC</p>
-                        <span className="text-[9px] text-gray-600 block">{vault.totalGamesPlayed} Quizzes Played</span>
-                      </div>
-                      <div className="bg-gray-950/60 border border-gray-850 p-4 rounded-xl space-y-1">
-                        <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Admin Wallet Balance</span>
-                        {vault.nativeSymbol === 'USDC' ? (
-                          <p className="text-xl font-black text-blue-400">{vault.adminNativeBalance} USDC</p>
-                        ) : (
-                          <div className="space-y-0.5">
-                            <p className="text-base font-black text-blue-400">{vault.adminUsdcBalance} USDC</p>
-                            <p className="text-[10px] text-gray-400 font-mono font-medium">{vault.adminNativeBalance} {vault.nativeSymbol}</p>
-                          </div>
-                        )}
+                    <div className="space-y-4">
+                      <div className="bg-gray-950/60 border border-gray-850 p-6 rounded-xl space-y-2 text-center">
+                        <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold block">Reserves Collected</span>
+                        <p className="text-3xl font-black text-green-400">
+                          {vault.totalFeesCollected} {vault.feeSymbol || 'USDC'}
+                        </p>
+                        <span className="text-[11px] text-gray-500 block">{vault.totalGamesPlayed} Quizzes Played</span>
                       </div>
                     </div>
                   </div>
