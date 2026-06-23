@@ -149,7 +149,6 @@ export default function VaultPage() {
                         <p className="text-3xl font-black text-green-400">
                           {vault.totalFeesCollected} {vault.feeSymbol || 'USDC'}
                         </p>
-                        <span className="text-[11px] text-gray-500 block">{vault.totalGamesPlayed} Quizzes Played</span>
                       </div>
                     </div>
                   </div>
