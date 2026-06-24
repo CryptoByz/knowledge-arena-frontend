@@ -418,35 +418,132 @@ export default function QuizPage() {
   }
 
   if (phase === 'completed') {
+    const chainName = tag.toUpperCase()
+    const networkName = tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase()
+
+    // Define colors and styles based on chain
+    const themeColors: Record<string, { accent: string, border: string, textGlow: string, bgGlow: string }> = {
+      celo: {
+        accent: 'from-amber-400 to-yellow-500',
+        border: 'border-amber-500/30 hover:border-amber-500/60',
+        textGlow: 'shadow-[0_0_20px_rgba(245,158,11,0.35)]',
+        bgGlow: 'from-amber-950/20 via-transparent to-transparent',
+      },
+      base: {
+        accent: 'from-blue-400 to-indigo-500',
+        border: 'border-blue-500/30 hover:border-blue-500/60',
+        textGlow: 'shadow-[0_0_20px_rgba(59,130,246,0.35)]',
+        bgGlow: 'from-blue-950/20 via-transparent to-transparent',
+      },
+      arc: {
+        accent: 'from-purple-400 to-indigo-500',
+        border: 'border-purple-500/30 hover:border-purple-500/60',
+        textGlow: 'shadow-[0_0_20px_rgba(139,92,246,0.35)]',
+        bgGlow: 'from-purple-950/20 via-transparent to-transparent',
+      },
+      general: {
+        accent: 'from-indigo-400 to-purple-500',
+        border: 'border-indigo-500/30 hover:border-indigo-500/60',
+        textGlow: 'shadow-[0_0_20px_rgba(99,102,241,0.35)]',
+        bgGlow: 'from-indigo-950/20 via-transparent to-transparent',
+      },
+    }
+
+    const theme = themeColors[tag.toLowerCase()] || themeColors.general
+
+    // Prefill X share text & url
+    const tweetText = `I just scored ${finalScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠 Provable Web3 expertise and onchain reputation. 🚀 Join the arena:`
+    const shareUrl = `https://knowledge-arena.xyz/share?score=${finalScore}&chain=${tag}`
+    const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`
+
     return (
-      <div className="max-w-md mx-auto text-center space-y-6 pt-16">
-        <div className="text-6xl animate-bounce">{finalScore >= 8 ? '🏆' : finalScore >= 5 ? '👍' : '📚'}</div>
-        <h1 className="text-3xl font-extrabold text-white">{finalScore}/10 Correct</h1>
-        <p className="text-gray-400">
-          {finalScore === 10
-            ? 'Perfect score! Outstanding!'
-            : finalScore >= 8
-            ? 'Great job! Almost flawless.'
-            : finalScore >= 5
-            ? 'Well done! Solid effort.'
-            : 'Practice makes perfect. Keep reading and come back tomorrow!'}
-        </p>
-        
+      <div className="max-w-lg mx-auto text-center space-y-8 pt-8">
+        <div className="space-y-3">
+          <div className="text-6xl animate-bounce">{finalScore >= 8 ? '🏆' : finalScore >= 5 ? '👍' : '📚'}</div>
+          <h1 className="text-3xl font-black text-white">{finalScore}/10 Correct</h1>
+          <p className="text-gray-400 max-w-sm mx-auto text-sm">
+            {finalScore === 10
+              ? 'Perfect score! Outstanding!'
+              : finalScore >= 8
+              ? 'Great job! Almost flawless.'
+              : finalScore >= 5
+              ? 'Well done! Solid effort.'
+              : 'Practice makes perfect. Keep reading and come back tomorrow!'}
+          </p>
+        </div>
+
+        {/* Visual Card Preview */}
+        <div className={`relative overflow-hidden rounded-3xl border ${theme.border} bg-gray-950/80 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 text-left`}>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.08),rgba(255,255,255,0))]" />
+          <div className="relative z-10 space-y-6">
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
+                <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
+              </div>
+              <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
+                {networkName} Arena
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center py-4">
+              <span className="text-[10px] text-gray-500 tracking-[0.25em] font-extrabold block mb-1 uppercase">
+                Score Obtained
+              </span>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-7xl font-black text-white drop-shadow-md">
+                  {finalScore}
+                </span>
+                <span className="text-3xl text-gray-700 font-bold">/</span>
+                <span className="text-3xl text-gray-500 font-bold">10</span>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-900 pt-4 flex justify-between items-center text-xs">
+              <div className="flex items-center gap-1.5">
+                <span className="text-green-500 font-bold">✓</span>
+                <span className="text-[10px] text-green-400 font-bold tracking-wide uppercase">
+                  Verified Onchain
+                </span>
+              </div>
+              <span className="text-[9px] text-gray-600 tracking-wider font-bold uppercase">
+                {isDemoMode ? 'Demo Preview' : 'Onchain Signed'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Verification Status */}
         {isDemoMode ? (
-          <p className="text-amber-400 text-sm font-medium">Played in Demo Mode (Score not saved onchain)</p>
+          <p className="text-amber-400 text-xs font-semibold">Played in Demo Mode (Score not saved onchain)</p>
         ) : isPending || isConfirming ? (
-          <p className="text-indigo-400 text-sm animate-pulse">Saving score onchain...</p>
+          <p className="text-indigo-400 text-xs font-semibold animate-pulse">Saving score onchain...</p>
         ) : (
-          <p className="text-green-400 text-sm font-semibold">✓ Score saved onchain!</p>
+          <p className="text-green-400 text-xs font-semibold">✓ Score successfully committed onchain!</p>
         )}
 
-        <div className="flex gap-3 justify-center pt-4">
-          <a href="/profile" className="px-6 py-2.5 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-xl transition-colors text-sm font-medium">
-            View Profile
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+          <a
+            href={xShareLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-black hover:bg-neutral-900 border border-neutral-850 text-white font-extrabold text-sm rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02] shadow-lg shadow-black/20"
+          >
+            {/* X Logo SVG */}
+            <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            Share on X
           </a>
-          <a href="/leaderboard" className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-colors text-sm font-medium">
-            Leaderboard
-          </a>
+          <div className="flex gap-3 w-full sm:w-auto">
+            <a href="/profile" className="flex-1 sm:flex-none px-6 py-3 bg-gray-900 hover:bg-gray-800 border border-gray-800 text-white font-bold text-sm rounded-xl transition-all text-center">
+              View Profile
+            </a>
+            <a href="/leaderboard" className="flex-1 sm:flex-none px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl transition-all text-center">
+              Leaderboard
+            </a>
+          </div>
         </div>
       </div>
     )
