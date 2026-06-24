@@ -452,8 +452,8 @@ export default function QuizPage() {
     const theme = themeColors[tag.toLowerCase()] || themeColors.general
 
     // Prefill X share text & url
-    const tweetText = `I just scored ${finalScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠 Provable Web3 expertise and onchain reputation. 🚀 Join the arena:`
-    const shareUrl = `https://knowledge-arena.xyz/share?score=${finalScore}&chain=${tag}`
+    const tweetText = `I just scored ${finalScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠 Join the arena:`
+    const shareUrl = `https://knowledge-arena.xyz/?score=${finalScore}&chain=${tag}`
     const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`
 
     return (
