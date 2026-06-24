@@ -12,8 +12,9 @@ export async function generateMetadata({ searchParams }: HomeProps): Promise<Met
 
   if (score && chain) {
     const chainName = chain.toUpperCase()
-    const ogImageUrl = `/api/og?score=${score}&chain=${chain}`
+    const ogImageUrl = `https://knowledge-arena.xyz/api/og?score=${score}&chain=${chain}`
     return {
+      metadataBase: new URL('https://knowledge-arena.xyz'),
       title: `Verified Score: ${score}/10 on ${chainName} | Knowledge Arena`,
       description: `Prove your Web3 expertise on Celo, Base, and ARC network daily quizzes.`,
       openGraph: {

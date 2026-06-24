@@ -369,7 +369,7 @@ export default function QuizPage() {
     const theme = themeColors[tag.toLowerCase()] || themeColors.general
 
     // Prefill X share text & url
-    const tweetText = `I just scored ${todayScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠 Join the arena:`
+    const tweetText = `I just scored ${todayScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠\n\nJoin the arena:`
     const shareUrl = `https://knowledge-arena.xyz/?score=${todayScore}&chain=${tag}`
     const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`
 
@@ -587,7 +587,7 @@ export default function QuizPage() {
     const theme = themeColors[tag.toLowerCase()] || themeColors.general
 
     // Prefill X share text & url
-    const tweetText = `I just scored ${finalScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠 Join the arena:`
+    const tweetText = `I just scored ${finalScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠\n\nJoin the arena:`
     const shareUrl = `https://knowledge-arena.xyz/?score=${finalScore}&chain=${tag}`
     const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`
 

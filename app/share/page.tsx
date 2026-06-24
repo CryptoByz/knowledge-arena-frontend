@@ -11,9 +11,10 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
   const chain = params.chain || 'general'
   const chainName = chain.toUpperCase()
 
-  const ogImageUrl = `/api/og?score=${score}&chain=${chain}`
+  const ogImageUrl = `https://knowledge-arena.xyz/api/og?score=${score}&chain=${chain}`
 
   return {
+    metadataBase: new URL('https://knowledge-arena.xyz'),
     title: `Verified Score: ${score}/10 on ${chainName} | Knowledge Arena`,
     description: `I just scored ${score}/10 on the ${chainName} Daily Quiz at Knowledge Arena! Join the arena and prove your onchain reputation.`,
     openGraph: {
