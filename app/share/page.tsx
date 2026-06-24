@@ -86,65 +86,17 @@ export default async function SharePage({ searchParams }: SharePageProps) {
       </div>
 
       {/* Web Score Card Preview */}
-      <div
-        className={`relative overflow-hidden rounded-3xl border ${theme.border} bg-gray-900/60 p-8 md:p-10 shadow-2xl backdrop-blur-md transition-all duration-300`}
-        style={{
-          minHeight: chain.toLowerCase() === 'arc' ? '300px' : undefined,
-        }}
-      >
-        {chain.toLowerCase() === 'arc' && (
+      <div className="space-y-3">
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gray-900/40 shadow-2xl backdrop-blur-sm transition-all duration-300">
           <img
-            src="/arc-kart.png"
-            alt="Arc Card"
-            className="absolute inset-0 w-full h-full object-cover scale-[1.05] pointer-events-none z-0"
+            src={`/api/og?score=${score}&chain=${chain}`}
+            alt="Score Card"
+            className="w-full h-auto block select-all cursor-pointer rounded-3xl"
           />
-        )}
-        {/* Decorative Grid Background */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
-
-        <div className="relative z-10 space-y-8">
-          {/* Header Row */}
-          <div className="flex justify-between items-start">
-            <div className="space-y-1">
-              <span className="text-lg font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
-              <span className="text-[10px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
-            </div>
-            {chain.toLowerCase() !== 'arc' && (
-              <span className={`px-4 py-1.5 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-sm uppercase`}>
-                {chainName} Arena
-              </span>
-            )}
-          </div>
-
-          {/* Middle Row: Score */}
-          <div className="flex flex-col items-center justify-center py-6">
-            <span className="text-[11px] text-gray-500 tracking-[0.25em] font-extrabold block mb-2 uppercase">
-              Score Obtained
-            </span>
-            <div className="flex items-baseline gap-2">
-              <span className={`text-8xl md:text-9xl font-black text-white ${chain.toLowerCase() === 'arc' ? 'drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]' : 'drop-shadow-lg'}`}>
-                {score}
-              </span>
-              <span className="text-4xl md:text-5xl text-gray-700 font-bold">/</span>
-              <span className="text-4xl md:text-5xl text-gray-500 font-bold">10</span>
-            </div>
-          </div>
-
-          {/* Bottom Row */}
-          <div className="border-t border-gray-800/80 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-xs text-green-400 font-bold">
-                ✓
-              </div>
-              <span className="text-xs text-green-400 font-extrabold tracking-wide uppercase">
-                Cryptographically Signed & Verified
-              </span>
-            </div>
-            <span className="text-[10px] text-gray-500 tracking-wider font-bold uppercase">
-              Proven on {chainName} Network
-            </span>
-          </div>
         </div>
+        <p className="text-xs text-gray-500/85 italic text-center">
+          💡 Tip: Right-click the card above, select "Copy Image", and paste it directly into your X post!
+        </p>
       </div>
 
       {/* Play CTA Button */}

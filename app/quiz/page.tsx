@@ -369,9 +369,8 @@ export default function QuizPage() {
     const theme = themeColors[tag.toLowerCase()] || themeColors.general
 
     // Prefill X share text & url
-    const tweetText = `I just scored ${todayScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠\n\nJoin the arena:`
-    const shareUrl = `https://knowledge-arena.xyz/?score=${todayScore}&chain=${tag}`
-    const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`
+    const tweetText = `I just scored ${todayScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠\n\nJoin the arena: https://knowledge-arena.xyz/`
+    const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`
 
     return (
       <div className="max-w-lg mx-auto text-center space-y-8 pt-8">
@@ -384,58 +383,17 @@ export default function QuizPage() {
         </div>
 
         {/* Visual Card Preview */}
-        <div
-          className={`relative overflow-hidden rounded-3xl border ${theme.border} bg-gray-950/80 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 text-left`}
-          style={{
-            minHeight: tag === 'arc' ? '300px' : undefined,
-          }}
-        >
-          {tag === 'arc' && (
+        <div className="space-y-3">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gray-950/40 shadow-2xl backdrop-blur-sm transition-all duration-300">
             <img
-              src="/arc-kart.png"
-              alt="Arc Card"
-              className="absolute inset-0 w-full h-full object-cover scale-[1.05] pointer-events-none z-0"
+              src={`/api/og?score=${todayScore}&chain=${tag}`}
+              alt="Score Card"
+              className="w-full h-auto block select-all cursor-pointer rounded-3xl"
             />
-          )}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.08),rgba(255,255,255,0))]" />
-          <div className="relative z-10 space-y-6">
-            <div className="flex justify-between items-start">
-              <div className="space-y-1">
-                <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
-                <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
-              </div>
-              {tag !== 'arc' && (
-                <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
-                  {networkName} Arena
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-col items-center justify-center py-4">
-              <span className="text-[10px] text-gray-500 tracking-[0.25em] font-extrabold block mb-1 uppercase">
-                Score Obtained
-              </span>
-              <div className="flex items-baseline gap-1.5">
-                <span className={`text-7xl font-black text-white ${tag === 'arc' ? 'drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]' : 'drop-shadow-md'}`}>
-                  {todayScore}
-                </span>
-                <span className="text-3xl text-gray-700 font-bold">/</span>
-                <span className="text-3xl text-gray-500 font-bold">10</span>
-              </div>
-            </div>
-
-            <div className="border-t border-gray-900 pt-4 flex justify-between items-center text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="text-green-500 font-bold">✓</span>
-                <span className="text-[10px] text-green-400 font-bold tracking-wide uppercase">
-                  Verified Onchain
-                </span>
-              </div>
-              <span className="text-[9px] text-gray-600 tracking-wider font-bold uppercase">
-                Onchain Signed
-              </span>
-            </div>
           </div>
+          <p className="text-xs text-gray-500/85 italic text-center">
+            💡 Tip: Right-click the card above, select \"Copy Image\", and paste it directly into your X post!
+          </p>
         </div>
 
         {/* Action Buttons */}
@@ -573,9 +531,8 @@ export default function QuizPage() {
     const theme = themeColors[tag.toLowerCase()] || themeColors.general
 
     // Prefill X share text & url
-    const tweetText = `I just scored ${finalScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠\n\nJoin the arena:`
-    const shareUrl = `https://knowledge-arena.xyz/?score=${finalScore}&chain=${tag}`
-    const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`
+    const tweetText = `I just scored ${finalScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠\n\nJoin the arena: https://knowledge-arena.xyz/`
+    const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`
 
     return (
       <div className="max-w-lg mx-auto text-center space-y-8 pt-8">
@@ -594,58 +551,17 @@ export default function QuizPage() {
         </div>
 
         {/* Visual Card Preview */}
-        <div
-          className={`relative overflow-hidden rounded-3xl border ${theme.border} bg-gray-950/80 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 text-left`}
-          style={{
-            minHeight: tag === 'arc' ? '300px' : undefined,
-          }}
-        >
-          {tag === 'arc' && (
+        <div className="space-y-3">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gray-950/40 shadow-2xl backdrop-blur-sm transition-all duration-300">
             <img
-              src="/arc-kart.png"
-              alt="Arc Card"
-              className="absolute inset-0 w-full h-full object-cover scale-[1.05] pointer-events-none z-0"
+              src={`/api/og?score=${finalScore}&chain=${tag}`}
+              alt="Score Card"
+              className="w-full h-auto block select-all cursor-pointer rounded-3xl"
             />
-          )}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.08),rgba(255,255,255,0))]" />
-          <div className="relative z-10 space-y-6">
-            <div className="flex justify-between items-start">
-              <div className="space-y-1">
-                <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
-                <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
-              </div>
-              {tag !== 'arc' && (
-                <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
-                  {networkName} Arena
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-col items-center justify-center py-4">
-              <span className="text-[10px] text-gray-500 tracking-[0.25em] font-extrabold block mb-1 uppercase">
-                Score Obtained
-              </span>
-              <div className="flex items-baseline gap-1.5">
-                <span className={`text-7xl font-black text-white ${tag === 'arc' ? 'drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]' : 'drop-shadow-md'}`}>
-                  {finalScore}
-                </span>
-                <span className="text-3xl text-gray-700 font-bold">/</span>
-                <span className="text-3xl text-gray-500 font-bold">10</span>
-              </div>
-            </div>
-
-            <div className="border-t border-gray-900 pt-4 flex justify-between items-center text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="text-green-500 font-bold">✓</span>
-                <span className="text-[10px] text-green-400 font-bold tracking-wide uppercase">
-                  Verified Onchain
-                </span>
-              </div>
-              <span className="text-[9px] text-gray-600 tracking-wider font-bold uppercase">
-                {isDemoMode ? 'Demo Preview' : 'Onchain Signed'}
-              </span>
-            </div>
           </div>
+          <p className="text-xs text-gray-500/85 italic text-center">
+            💡 Tip: Right-click the card above, select \"Copy Image\", and paste it directly into your X post!
+          </p>
         </div>
 
         {/* Verification Status */}
