@@ -29,11 +29,14 @@ export async function GET(request: NextRequest) {
                 height: '630px',
                 width: '1200px',
                 display: 'flex',
+                flexDirection: 'column',
                 position: 'relative',
                 backgroundColor: '#040508',
                 fontFamily: 'sans-serif',
                 overflow: 'hidden',
                 boxSizing: 'border-box',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               {/* Background Image scaled by 4% to crop black corners */}
@@ -49,50 +52,127 @@ export async function GET(request: NextRequest) {
                 }}
               />
 
-              {/* Dynamic Score Mask Box */}
+              {/* Dynamic overlays layout */}
               <div
                 style={{
-                  position: 'absolute',
-                  width: '320px',
-                  height: '150px',
-                  backgroundColor: 'transparent',
-                  left: '440px', // Center
-                  top: '240px',  // Aligns with original score
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  width: '1120px',
+                  height: '550px',
+                  padding: '44px 50px',
+                  justifyContent: 'space-between',
+                  boxSizing: 'border-box',
+                  position: 'relative',
                 }}
               >
-                <span
+                {/* Top row */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span
+                        style={{
+                          color: '#ffffff',
+                          fontSize: '24px',
+                          fontWeight: 900,
+                          letterSpacing: '4px',
+                        }}
+                      >
+                        KNOWLEDGE ARENA
+                      </span>
+                      <span
+                        style={{
+                          color: '#6b7280',
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          letterSpacing: '2px',
+                          marginTop: '2px',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        Onchain Trivia
+                      </span>
+                    </div>
+                  </div>
+
+                  <span
+                    style={{
+                      color: '#c084fc',
+                      fontSize: '15px',
+                      fontWeight: 800,
+                      letterSpacing: '2px',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    ARC Arena
+                  </span>
+                </div>
+
+                {/* Score Centered */}
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                  <span
+                    style={{
+                      color: '#ffffff',
+                      fontSize: '110px',
+                      fontWeight: 950,
+                      lineHeight: 1,
+                      textShadow: `0 0 40px rgba(139, 92, 246, 0.3)`,
+                    }}
+                  >
+                    {score}
+                  </span>
+                  <span
+                    style={{
+                      color: 'rgba(255,255,255,0.15)',
+                      fontSize: '65px',
+                      fontWeight: 800,
+                      margin: '0 12px',
+                    }}
+                  >
+                    /
+                  </span>
+                  <span
+                    style={{
+                      color: '#6b7280',
+                      fontSize: '65px',
+                      fontWeight: 800,
+                    }}
+                  >
+                    10
+                  </span>
+                </div>
+
+                {/* Bottom Row */}
+                <div
                   style={{
-                    color: '#ffffff',
-                    fontSize: '110px',
-                    fontWeight: 950,
-                    lineHeight: 1,
-                    textShadow: `0 0 40px rgba(139, 92, 246, 0.3)`,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                    paddingTop: '24px',
                   }}
                 >
-                  {score}
-                </span>
-                <span
-                  style={{
-                    color: 'rgba(255,255,255,0.15)',
-                    fontSize: '65px',
-                    fontWeight: 800,
-                    margin: '0 12px',
-                  }}
-                >
-                  /
-                </span>
-                <span
-                  style={{
-                    color: '#6b7280',
-                    fontSize: '65px',
-                    fontWeight: 800,
-                  }}
-                >
-                  10
-                </span>
+                  <span
+                    style={{
+                      color: '#22c55e',
+                      fontSize: '14px',
+                      fontWeight: 800,
+                      letterSpacing: '1px',
+                    }}
+                  >
+                    ✓ Cryptographically Secured Result
+                  </span>
+                  <span
+                    style={{
+                      color: '#6b7280',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      letterSpacing: '2px',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    Onchain Signed
+                  </span>
+                </div>
               </div>
             </div>
           ),

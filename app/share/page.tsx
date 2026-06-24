@@ -103,61 +103,45 @@ export default async function SharePage({ searchParams }: SharePageProps) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
 
         <div className="relative z-10 space-y-8">
-          {chain.toLowerCase() === 'arc' ? (
-            <div className="flex flex-col items-center justify-center py-10">
-              <div className="h-6" />
-              <div className="flex items-baseline gap-1.5 relative z-20">
-                <span className="text-7xl md:text-8xl font-black text-white drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">
-                  {score}
-                </span>
-                <span className="text-3xl md:text-4xl text-gray-500 font-bold">/</span>
-                <span className="text-3xl md:text-4xl text-gray-500 font-bold">10</span>
-              </div>
-              <div className="h-6" />
+          {/* Header Row */}
+          <div className="flex justify-between items-start">
+            <div className="space-y-1">
+              <span className="text-lg font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
+              <span className="text-[10px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
             </div>
-          ) : (
-            <>
-              {/* Header Row */}
-              <div className="flex justify-between items-start">
-                <div className="space-y-1">
-                  <span className="text-lg font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
-                  <span className="text-[10px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
-                </div>
-                <span className={`px-4 py-1.5 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-sm uppercase`}>
-                  {chainName} Arena
-                </span>
-              </div>
+            <span className={`px-4 py-1.5 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-sm uppercase`}>
+              {chainName} Arena
+            </span>
+          </div>
 
-              {/* Middle Row: Score */}
-              <div className="flex flex-col items-center justify-center py-6">
-                <span className="text-[11px] text-gray-500 tracking-[0.25em] font-extrabold block mb-2 uppercase">
-                  Score Obtained
-                </span>
-                <div className="flex items-baseline gap-2">
-                  <span className={`text-8xl md:text-9xl font-black text-white drop-shadow-lg`}>
-                    {score}
-                  </span>
-                  <span className="text-4xl md:text-5xl text-gray-700 font-bold">/</span>
-                  <span className="text-4xl md:text-5xl text-gray-500 font-bold">10</span>
-                </div>
-              </div>
+          {/* Middle Row: Score */}
+          <div className="flex flex-col items-center justify-center py-6">
+            <span className="text-[11px] text-gray-500 tracking-[0.25em] font-extrabold block mb-2 uppercase">
+              Score Obtained
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span className={`text-8xl md:text-9xl font-black text-white ${chain.toLowerCase() === 'arc' ? 'drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]' : 'drop-shadow-lg'}`}>
+                {score}
+              </span>
+              <span className="text-4xl md:text-5xl text-gray-700 font-bold">/</span>
+              <span className="text-4xl md:text-5xl text-gray-500 font-bold">10</span>
+            </div>
+          </div>
 
-              {/* Bottom Row */}
-              <div className="border-t border-gray-800/80 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-xs text-green-400 font-bold">
-                    ✓
-                  </div>
-                  <span className="text-xs text-green-400 font-extrabold tracking-wide uppercase">
-                    Cryptographically Signed & Verified
-                  </span>
-                </div>
-                <span className="text-[10px] text-gray-500 tracking-wider font-bold uppercase">
-                  Proven on {chainName} Network
-                </span>
+          {/* Bottom Row */}
+          <div className="border-t border-gray-800/80 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-xs text-green-400 font-bold">
+                ✓
               </div>
-            </>
-          )}
+              <span className="text-xs text-green-400 font-extrabold tracking-wide uppercase">
+                Cryptographically Signed & Verified
+              </span>
+            </div>
+            <span className="text-[10px] text-gray-500 tracking-wider font-bold uppercase">
+              Proven on {chainName} Network
+            </span>
+          </div>
         </div>
       </div>
 
