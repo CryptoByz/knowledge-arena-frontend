@@ -402,12 +402,12 @@ export default function QuizPage() {
             {tag === 'arc' ? (
               <div className="flex flex-col items-center justify-center py-10">
                 <div className="h-6" />
-                <div className="bg-[#0b0814]/90 border border-purple-500/20 px-8 py-2.5 rounded-2xl flex items-baseline gap-1.5 relative z-20">
-                  <span className="text-6xl font-black text-white drop-shadow-md">
+                <div className="flex items-baseline gap-1.5 relative z-20">
+                  <span className="text-7xl font-black text-white drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">
                     {todayScore}
                   </span>
-                  <span className="text-2xl text-gray-700 font-bold">/</span>
-                  <span className="text-2xl text-gray-500 font-bold">10</span>
+                  <span className="text-3xl text-gray-500 font-bold">/</span>
+                  <span className="text-3xl text-gray-500 font-bold">10</span>
                 </div>
                 <div className="h-6" />
               </div>
@@ -626,12 +626,12 @@ export default function QuizPage() {
             {tag === 'arc' ? (
               <div className="flex flex-col items-center justify-center py-10">
                 <div className="h-6" />
-                <div className="bg-[#0b0814]/90 border border-purple-500/20 px-8 py-2.5 rounded-2xl flex items-baseline gap-1.5 relative z-20">
-                  <span className="text-6xl font-black text-white drop-shadow-md">
+                <div className="flex items-baseline gap-1.5 relative z-20">
+                  <span className="text-7xl font-black text-white drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">
                     {finalScore}
                   </span>
-                  <span className="text-2xl text-gray-700 font-bold">/</span>
-                  <span className="text-2xl text-gray-500 font-bold">10</span>
+                  <span className="text-3xl text-gray-500 font-bold">/</span>
+                  <span className="text-3xl text-gray-500 font-bold">10</span>
                 </div>
                 <div className="h-6" />
               </div>

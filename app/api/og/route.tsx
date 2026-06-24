@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
                   position: 'absolute',
                   width: '320px',
                   height: '150px',
-                  backgroundColor: '#0c0a15', // Matches the dark gradient behind score
+                  backgroundColor: 'transparent',
                   left: '440px', // Center
                   top: '240px',  // Aligns with original score
                   display: 'flex',
