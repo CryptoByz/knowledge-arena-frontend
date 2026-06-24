@@ -384,43 +384,71 @@ export default function QuizPage() {
         </div>
 
         {/* Visual Card Preview */}
-        <div className={`relative overflow-hidden rounded-3xl border ${theme.border} bg-gray-950/80 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 text-left`}>
+        <div
+          className={`relative overflow-hidden rounded-3xl border ${theme.border} bg-gray-950/80 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 text-left`}
+          style={{
+            minHeight: tag === 'arc' ? '300px' : undefined,
+          }}
+        >
+          {tag === 'arc' && (
+            <img
+              src="/arc-kart.png"
+              alt="Arc Card"
+              className="absolute inset-0 w-full h-full object-cover scale-[1.05] pointer-events-none z-0"
+            />
+          )}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.08),rgba(255,255,255,0))]" />
           <div className="relative z-10 space-y-6">
-            <div className="flex justify-between items-start">
-              <div className="space-y-1">
-                <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
-                <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
+            {tag === 'arc' ? (
+              <div className="flex flex-col items-center justify-center py-10">
+                <div className="h-6" />
+                <div className="bg-[#0b0814]/90 border border-purple-500/20 px-8 py-2.5 rounded-2xl flex items-baseline gap-1.5 relative z-20">
+                  <span className="text-6xl font-black text-white drop-shadow-md">
+                    {todayScore}
+                  </span>
+                  <span className="text-2xl text-gray-700 font-bold">/</span>
+                  <span className="text-2xl text-gray-500 font-bold">10</span>
+                </div>
+                <div className="h-6" />
               </div>
-              <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
-                {networkName} Arena
-              </span>
-            </div>
+            ) : (
+              <>
+                <div className="flex justify-between items-start">
+                  <div className="space-y-1">
+                    <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
+                    <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
+                  </div>
+                  <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
+                    {networkName} Arena
+                  </span>
+                </div>
 
-            <div className="flex flex-col items-center justify-center py-4">
-              <span className="text-[10px] text-gray-500 tracking-[0.25em] font-extrabold block mb-1 uppercase">
-                Score Obtained
-              </span>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-7xl font-black text-white drop-shadow-md">
-                  {todayScore}
-                </span>
-                <span className="text-3xl text-gray-700 font-bold">/</span>
-                <span className="text-3xl text-gray-500 font-bold">10</span>
-              </div>
-            </div>
+                <div className="flex flex-col items-center justify-center py-4">
+                  <span className="text-[10px] text-gray-500 tracking-[0.25em] font-extrabold block mb-1 uppercase">
+                    Score Obtained
+                  </span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-7xl font-black text-white drop-shadow-md">
+                      {todayScore}
+                    </span>
+                    <span className="text-3xl text-gray-700 font-bold">/</span>
+                    <span className="text-3xl text-gray-500 font-bold">10</span>
+                  </div>
+                </div>
 
-            <div className="border-t border-gray-900 pt-4 flex justify-between items-center text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="text-green-500 font-bold">✓</span>
-                <span className="text-[10px] text-green-400 font-bold tracking-wide uppercase">
-                  Verified Onchain
-                </span>
-              </div>
-              <span className="text-[9px] text-gray-600 tracking-wider font-bold uppercase">
-                Onchain Signed
-              </span>
-            </div>
+                <div className="border-t border-gray-900 pt-4 flex justify-between items-center text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-green-500 font-bold">✓</span>
+                    <span className="text-[10px] text-green-400 font-bold tracking-wide uppercase">
+                      Verified Onchain
+                    </span>
+                  </div>
+                  <span className="text-[9px] text-gray-600 tracking-wider font-bold uppercase">
+                    Onchain Signed
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -580,43 +608,71 @@ export default function QuizPage() {
         </div>
 
         {/* Visual Card Preview */}
-        <div className={`relative overflow-hidden rounded-3xl border ${theme.border} bg-gray-950/80 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 text-left`}>
+        <div
+          className={`relative overflow-hidden rounded-3xl border ${theme.border} bg-gray-950/80 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 text-left`}
+          style={{
+            minHeight: tag === 'arc' ? '300px' : undefined,
+          }}
+        >
+          {tag === 'arc' && (
+            <img
+              src="/arc-kart.png"
+              alt="Arc Card"
+              className="absolute inset-0 w-full h-full object-cover scale-[1.05] pointer-events-none z-0"
+            />
+          )}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.08),rgba(255,255,255,0))]" />
           <div className="relative z-10 space-y-6">
-            <div className="flex justify-between items-start">
-              <div className="space-y-1">
-                <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
-                <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
+            {tag === 'arc' ? (
+              <div className="flex flex-col items-center justify-center py-10">
+                <div className="h-6" />
+                <div className="bg-[#0b0814]/90 border border-purple-500/20 px-8 py-2.5 rounded-2xl flex items-baseline gap-1.5 relative z-20">
+                  <span className="text-6xl font-black text-white drop-shadow-md">
+                    {finalScore}
+                  </span>
+                  <span className="text-2xl text-gray-700 font-bold">/</span>
+                  <span className="text-2xl text-gray-500 font-bold">10</span>
+                </div>
+                <div className="h-6" />
               </div>
-              <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
-                {networkName} Arena
-              </span>
-            </div>
+            ) : (
+              <>
+                <div className="flex justify-between items-start">
+                  <div className="space-y-1">
+                    <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
+                    <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
+                  </div>
+                  <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
+                    {networkName} Arena
+                  </span>
+                </div>
 
-            <div className="flex flex-col items-center justify-center py-4">
-              <span className="text-[10px] text-gray-500 tracking-[0.25em] font-extrabold block mb-1 uppercase">
-                Score Obtained
-              </span>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-7xl font-black text-white drop-shadow-md">
-                  {finalScore}
-                </span>
-                <span className="text-3xl text-gray-700 font-bold">/</span>
-                <span className="text-3xl text-gray-500 font-bold">10</span>
-              </div>
-            </div>
+                <div className="flex flex-col items-center justify-center py-4">
+                  <span className="text-[10px] text-gray-500 tracking-[0.25em] font-extrabold block mb-1 uppercase">
+                    Score Obtained
+                  </span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-7xl font-black text-white drop-shadow-md">
+                      {finalScore}
+                    </span>
+                    <span className="text-3xl text-gray-700 font-bold">/</span>
+                    <span className="text-3xl text-gray-500 font-bold">10</span>
+                  </div>
+                </div>
 
-            <div className="border-t border-gray-900 pt-4 flex justify-between items-center text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="text-green-500 font-bold">✓</span>
-                <span className="text-[10px] text-green-400 font-bold tracking-wide uppercase">
-                  Verified Onchain
-                </span>
-              </div>
-              <span className="text-[9px] text-gray-600 tracking-wider font-bold uppercase">
-                {isDemoMode ? 'Demo Preview' : 'Onchain Signed'}
-              </span>
-            </div>
+                <div className="border-t border-gray-900 pt-4 flex justify-between items-center text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-green-500 font-bold">✓</span>
+                    <span className="text-[10px] text-green-400 font-bold tracking-wide uppercase">
+                      Verified Onchain
+                    </span>
+                  </div>
+                  <span className="text-[9px] text-gray-600 tracking-wider font-bold uppercase">
+                    {isDemoMode ? 'Demo Preview' : 'Onchain Signed'}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

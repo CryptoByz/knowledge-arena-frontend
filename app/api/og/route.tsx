@@ -11,6 +11,101 @@ export async function GET(request: NextRequest) {
     const score = Math.max(0, Math.min(10, parseInt(scoreStr) || 0))
     const chain = searchParams.get('chain') || 'general'
 
+    // Custom background card for ARC
+    if (chain.toLowerCase() === 'arc') {
+      try {
+        const imageUrl = `${request.nextUrl.origin}/arc-kart.png`
+        const imageBuffer = await fetch(imageUrl).then(res => res.arrayBuffer())
+        const base64 = btoa(
+          new Uint8Array(imageBuffer)
+            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+        )
+        const dataUrl = `data:image/png;base64,${base64}`
+
+        return new ImageResponse(
+          (
+            <div
+              style={{
+                height: '630px',
+                width: '1200px',
+                display: 'flex',
+                position: 'relative',
+                backgroundColor: '#040508',
+                fontFamily: 'sans-serif',
+                overflow: 'hidden',
+                boxSizing: 'border-box',
+              }}
+            >
+              {/* Background Image scaled by 4% to crop black corners */}
+              <img
+                src={dataUrl}
+                style={{
+                  position: 'absolute',
+                  width: '1248px', // 1200 * 1.04
+                  height: '655px', // 630 * 1.04
+                  left: '-24px',
+                  top: '-12px',
+                  objectFit: 'cover',
+                }}
+              />
+
+              {/* Dynamic Score Mask Box */}
+              <div
+                style={{
+                  position: 'absolute',
+                  width: '320px',
+                  height: '150px',
+                  backgroundColor: '#0c0a15', // Matches the dark gradient behind score
+                  left: '440px', // Center
+                  top: '240px',  // Aligns with original score
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <span
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '110px',
+                    fontWeight: 950,
+                    lineHeight: 1,
+                    textShadow: `0 0 40px rgba(139, 92, 246, 0.3)`,
+                  }}
+                >
+                  {score}
+                </span>
+                <span
+                  style={{
+                    color: 'rgba(255,255,255,0.15)',
+                    fontSize: '65px',
+                    fontWeight: 800,
+                    margin: '0 12px',
+                  }}
+                >
+                  /
+                </span>
+                <span
+                  style={{
+                    color: '#6b7280',
+                    fontSize: '65px',
+                    fontWeight: 800,
+                  }}
+                >
+                  10
+                </span>
+              </div>
+            </div>
+          ),
+          {
+            width: 1200,
+            height: 630,
+          }
+        )
+      } catch (e: any) {
+        console.error('Failed to load arc-kart.png for OG image, falling back to standard generator:', e.message)
+      }
+    }
+
     // Multi-color ambient background lighting & themes
     const themes: Record<string, {
       name: string,
