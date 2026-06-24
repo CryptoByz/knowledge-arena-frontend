@@ -93,18 +93,6 @@ export async function GET(request: NextRequest) {
                       </span>
                     </div>
                   </div>
-
-                  <span
-                    style={{
-                      color: '#c084fc',
-                      fontSize: '15px',
-                      fontWeight: 800,
-                      letterSpacing: '2px',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    ARC Arena
-                  </span>
                 </div>
 
                 {/* Score Centered */}

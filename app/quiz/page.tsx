@@ -404,9 +404,11 @@ export default function QuizPage() {
                 <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
                 <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
               </div>
-              <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
-                {networkName} Arena
-              </span>
+              {tag !== 'arc' && (
+                <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
+                  {networkName} Arena
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col items-center justify-center py-4">
@@ -612,9 +614,11 @@ export default function QuizPage() {
                 <span className="text-md font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
                 <span className="text-[9px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
               </div>
-              <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
-                {networkName} Arena
-              </span>
+              {tag !== 'arc' && (
+                <span className={`px-3 py-1 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-xs uppercase`}>
+                  {networkName} Arena
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col items-center justify-center py-4">

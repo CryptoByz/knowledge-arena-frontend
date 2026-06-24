@@ -109,9 +109,11 @@ export default async function SharePage({ searchParams }: SharePageProps) {
               <span className="text-lg font-black tracking-wider text-white">KNOWLEDGE ARENA</span>
               <span className="text-[10px] text-gray-500 tracking-wider font-bold block uppercase">Onchain Trivia</span>
             </div>
-            <span className={`px-4 py-1.5 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-sm uppercase`}>
-              {chainName} Arena
-            </span>
+            {chain.toLowerCase() !== 'arc' && (
+              <span className={`px-4 py-1.5 rounded-xl border border-white/5 bg-gradient-to-r ${theme.accent} bg-clip-text text-transparent font-black tracking-wider text-sm uppercase`}>
+                {chainName} Arena
+              </span>
+            )}
           </div>
 
           {/* Middle Row: Score */}
