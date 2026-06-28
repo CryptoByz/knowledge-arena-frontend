@@ -1,32 +1,35 @@
 'use client'
 
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useChainId, useSwitchChain, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { useReadContract } from 'wagmi'
-import { useChainConfig } from '../hooks/useChainConfig'
 import { ACHIEVEMENT_ABI } from '../config/abi'
 import { useState, useEffect } from 'react'
+import { arcTestnet, CONTRACTS } from '../config/chains'
 
 const CRITERIA_LABELS = ['Total Score', 'Streak Days', 'Games Played', 'Perfect Scores']
+const ARC_ACHIEVEMENT_MANAGER = CONTRACTS[arcTestnet.id].achievementManager as `0x${string}`
 
 export default function AchievementsPage() {
   const { address, isConnected } = useAccount()
-  const { contracts, isSupported } = useChainConfig()
+  const currentChainId = useChainId()
+  const { switchChainAsync } = useSwitchChain()
 
-  const isDummy = !contracts?.achievementManager || (contracts.achievementManager as string) === '0x0000000000000000000000000000000000000000'
-
+  // Read achievement list directly from ARC Testnet contract so it is visible on all chains
   const { data: allAchievements } = useReadContract({
-    address: contracts?.achievementManager as `0x${string}`,
+    address: ARC_ACHIEVEMENT_MANAGER,
     abi: ACHIEVEMENT_ABI,
     functionName: 'getAllAchievements',
-    query: { enabled: !!contracts && !isDummy },
+    chainId: arcTestnet.id,
   })
 
+  // Read player achievements directly from ARC Testnet contract
   const { data: playerData, refetch } = useReadContract({
-    address: contracts?.achievementManager as `0x${string}`,
+    address: ARC_ACHIEVEMENT_MANAGER,
     abi: ACHIEVEMENT_ABI,
     functionName: 'getPlayerAchievements',
     args: address ? [address] : undefined,
-    query: { enabled: !!address && !!contracts && !isDummy },
+    chainId: arcTestnet.id,
+    query: { enabled: !!address },
   })
 
   const { writeContract, data: txHash, isPending } = useWriteContract()
@@ -34,17 +37,32 @@ export default function AchievementsPage() {
     hash: txHash,
   })
 
-useEffect(() => {
+  useEffect(() => {
     if (isSuccess) refetch()
-  }, [isSuccess]) 
+  }, [isSuccess])
 
-  const handleMint = (index: number) => {
-    if (!contracts || isDummy) return
+  const handleMint = async (index: number) => {
+    if (!isConnected) {
+      alert('Please connect your wallet first!')
+      return
+    }
+
+    // Switch to ARC Testnet if not currently connected
+    if (currentChainId !== arcTestnet.id) {
+      try {
+        await switchChainAsync({ chainId: arcTestnet.id })
+      } catch (err) {
+        console.error('Failed to switch to ARC Testnet for minting:', err)
+        return
+      }
+    }
+
     writeContract({
-      address: contracts.achievementManager as `0x${string}`,
+      address: ARC_ACHIEVEMENT_MANAGER,
       abi: ACHIEVEMENT_ABI,
       functionName: 'mintAchievementBadge',
       args: [index],
+      chainId: arcTestnet.id,
     })
   }
 
@@ -52,24 +70,23 @@ useEffect(() => {
     return <CenteredMessage title="Connect your wallet" subtitle="Connect your wallet to view achievements." />
   }
 
-  if (!isSupported) {
-    return <CenteredMessage title="Wrong network" subtitle="Switch to ARC Testnet or Base Sepolia." />
-  }
-
-  if (isDummy) {
-    return <CenteredMessage title="Achievements Pending" subtitle="Smart contracts are not yet deployed on this network. Try switching to ARC Testnet or Base to earn Achievements." />
-  }
-
   const unlocked = playerData?.[0] ?? []
   const minted = playerData?.[1] ?? []
   const unlockedCount = unlocked.filter(Boolean).length
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Achievements</h1>
-        <span className="text-sm text-gray-400">
-          {unlockedCount} / {allAchievements?.length ?? 0} unlocked
+    <div className="space-y-6 max-w-4xl mx-auto">
+      <div className="flex items-center justify-between border-b border-gray-800 pb-4">
+        <div>
+          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+            Achievements
+          </h1>
+          <p className="text-xs text-gray-400 mt-1">
+            Unlock achievements across all networks and mint badge NFTs on ARC Network.
+          </p>
+        </div>
+        <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-indigo-950/60 text-indigo-400 border border-indigo-900/60">
+          🏆 {unlockedCount} / {allAchievements?.length ?? 0} Unlocked
         </span>
       </div>
 
@@ -81,35 +98,38 @@ useEffect(() => {
           return (
             <div
               key={i}
-              className={`bg-gray-900 border rounded-xl p-5 space-y-3 transition-colors ${
-                isUnlocked ? 'border-indigo-700' : 'border-gray-800 opacity-60'
+              className={`bg-gray-900/60 border rounded-2xl p-5 space-y-3 backdrop-blur-sm transition-all ${
+                isUnlocked ? 'border-indigo-500/60 shadow-lg shadow-indigo-500/5' : 'border-gray-800/80 opacity-60'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="font-semibold text-white flex items-center gap-2">
+                  <p className="font-bold text-white flex items-center gap-2 text-base">
                     {isUnlocked ? '✅' : '🔒'} {ach.name}
                   </p>
-                  <p className="text-gray-400 text-sm mt-1">{ach.description}</p>
+                  <p className="text-gray-400 text-sm mt-1 leading-relaxed">{ach.description}</p>
                 </div>
               </div>
 
-              <p className="text-xs text-gray-500">
-                {CRITERIA_LABELS[ach.criteriaType]}: {ach.criteriaValue.toString()}
-              </p>
+              <div className="flex items-center justify-between text-xs text-gray-500 font-mono pt-1">
+                <span>Criteria: {CRITERIA_LABELS[ach.criteriaType]}</span>
+                <span className="font-bold text-gray-300">{ach.criteriaValue.toString()}</span>
+              </div>
 
               {isUnlocked && !isMinted && (
                 <button
                   onClick={() => handleMint(i)}
                   disabled={isPending || isConfirming}
-                  className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-700 rounded-lg text-sm font-medium transition-colors"
+                  className="w-full py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all duration-200 cursor-pointer shadow-md shadow-indigo-600/20"
                 >
-                  {isPending || isConfirming ? 'Minting...' : 'Mint Badge NFT'}
+                  {isPending || isConfirming ? 'Minting Badge...' : 'Mint Badge NFT (on ARC)'}
                 </button>
               )}
 
               {isMinted && (
-                <p className="text-center text-sm text-green-400">Badge minted ✓</p>
+                <div className="text-center py-1 bg-emerald-950/40 border border-emerald-900/60 text-emerald-400 rounded-xl text-xs font-bold">
+                  ✓ Badge NFT Minted on ARC
+                </div>
               )}
             </div>
           )
@@ -122,8 +142,8 @@ useEffect(() => {
 function CenteredMessage({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className="text-center space-y-3 pt-24">
-      <h2 className="text-2xl font-bold">{title}</h2>
-      <p className="text-gray-400">{subtitle}</p>
+      <h2 className="text-2xl font-bold text-white">{title}</h2>
+      <p className="text-gray-400 text-sm">{subtitle}</p>
     </div>
   )
 }
