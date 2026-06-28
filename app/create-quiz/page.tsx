@@ -127,11 +127,11 @@ export default function CreateQuizPage() {
         await switchChainAsync({ chainId: arcTestnet.id })
       }
 
-      // 2. Execute 250 USDC Payment on ARC Network to Treasury Address
-      // USDC on ARC Testnet has 6 decimals -> 250 * 10^6
+      // 2. Execute 100 USDC Payment on ARC Network to Treasury Address
+      // USDC on ARC Testnet has 6 decimals -> 100 * 10^6
       const hash = await sendTransactionAsync({
         to: TREASURY_ADDRESS as `0x${string}`,
-        value: parseUnits('250', 6),
+        value: parseUnits('100', 6),
       })
 
       setTxHash(hash)
@@ -175,7 +175,7 @@ export default function CreateQuizPage() {
             ⚡ Özel Quiz Oluştur & Yayınla
           </h1>
           <p className="text-sm text-gray-400 mt-1">
-            Kendi özel yarışmanızı oluşturun. 250$ USDC ödeme ile onay sürecine gönderin.
+            Kendi özel yarışmanızı oluşturun. 100$ USDC ödeme ile onay sürecine gönderin.
           </p>
         </div>
 
@@ -199,11 +199,11 @@ export default function CreateQuizPage() {
             </span>
           </div>
           <p className="text-xs text-gray-300 leading-relaxed">
-            AI Agent'lar ve geliştiriciler, web arayüzünü kullanmadan programmatic olarak da 250$ USDC ödemesini gönderip kendi quizlerini otomatik olarak yayınlatabilirler.
+            AI Agent'lar ve geliştiriciler, web arayüzünü kullanmadan programmatic olarak da 100$ USDC ödemesini gönderip kendi quizlerini otomatik olarak yayınlatabilirler.
           </p>
 
           <div className="bg-gray-950 rounded-xl p-4 font-mono text-xs text-gray-300 space-y-2 overflow-x-auto border border-gray-800">
-            <div className="text-amber-400 font-bold"># Step 1: Transfer 250 USDC on ARC Network (ChainID: 5042002)</div>
+            <div className="text-amber-400 font-bold"># Step 1: Transfer 100 USDC on ARC Network (ChainID: 5042002)</div>
             <div>Treasury Address: <span className="text-emerald-400 font-bold">{TREASURY_ADDRESS}</span></div>
             <div className="text-amber-400 font-bold pt-2"># Step 2: POST JSON Payload to Submission API</div>
             <div>URL: <span className="text-indigo-400">{API_URL}/api/challenges/submit</span></div>
@@ -235,7 +235,7 @@ export default function CreateQuizPage() {
         </div>
         <div className="text-gray-700 font-bold px-2">➔</div>
         <div className={`flex-1 text-center py-2 text-xs font-bold rounded-xl transition-all ${step === 2 ? 'bg-amber-500 text-gray-950 shadow-md' : 'text-gray-500'}`}>
-          2. 250$ Ödeme (ARC)
+          2. 100$ Ödeme (ARC)
         </div>
         <div className="text-gray-700 font-bold px-2">➔</div>
         <div className={`flex-1 text-center py-2 text-xs font-bold rounded-xl transition-all ${step === 3 ? 'bg-emerald-500 text-gray-950 shadow-md' : 'text-gray-500'}`}>
@@ -382,7 +382,7 @@ export default function CreateQuizPage() {
         </div>
       )}
 
-      {/* ================= STEP 2: PAYMENT (250 USDC ON ARC) ================= */}
+      {/* ================= STEP 2: PAYMENT (100 USDC ON ARC) ================= */}
       {step === 2 && (
         <div className="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-8 space-y-6 shadow-xl backdrop-blur-sm max-w-xl mx-auto text-center">
           <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/30 text-3xl flex items-center justify-center mx-auto animate-pulse">
@@ -399,7 +399,7 @@ export default function CreateQuizPage() {
           <div className="bg-gray-950 border border-gray-800 rounded-2xl p-6 space-y-3">
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-400">Sabit Quiz Yayınlama Ücreti</span>
-              <span className="font-extrabold text-amber-400 text-lg">250 USDC</span>
+              <span className="font-extrabold text-amber-400 text-lg">100 USDC</span>
             </div>
             <div className="flex justify-between items-center text-sm border-t border-gray-850 pt-3">
               <span className="text-gray-400">Ödeme Ağı (Network)</span>
@@ -415,7 +415,7 @@ export default function CreateQuizPage() {
               disabled={isSubmitting || isTxPending}
               className="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 disabled:opacity-50 text-gray-950 font-black text-base rounded-xl transition-all cursor-pointer shadow-xl shadow-amber-500/20"
             >
-              {isSubmitting || isTxPending ? '250 USDC Ödemesi Gönderiliyor...' : 'Ödemeyi Yap & Gönder (250 USDC)'}
+              {isSubmitting || isTxPending ? '100 USDC Ödemesi Gönderiliyor...' : 'Ödemeyi Yap & Gönder (100 USDC)'}
             </button>
 
             <button
@@ -439,7 +439,7 @@ export default function CreateQuizPage() {
           <div>
             <h2 className="text-2xl font-black text-white">Quiz Başarıyla Alındı!</h2>
             <p className="text-emerald-400/90 text-sm mt-2 leading-relaxed font-semibold">
-              250 USDC ödemeniz onaylandı ve quiziniz yönetici onayına gönderildi.
+              100 USDC ödemeniz onaylandı ve quiziniz yönetici onayına gönderildi.
             </p>
           </div>
 

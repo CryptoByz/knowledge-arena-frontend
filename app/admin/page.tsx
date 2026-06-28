@@ -362,7 +362,7 @@ export default function AdminPage() {
           <div className="text-2xl font-bold text-emerald-400">{challenges.filter(c => c.isActive).length}</div>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-          <div className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">Onay Bekleyenler (250$)</div>
+          <div className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">Onay Bekleyenler (100$)</div>
           <div className="text-2xl font-bold text-amber-300">{challenges.filter(c => c.status === 'pending_approval').length}</div>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
@@ -413,7 +413,7 @@ export default function AdminPage() {
                           {ch.title}
                           {isPendingApproval && (
                             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-gray-950 animate-pulse">
-                              ⏳ 250$ Onay Bekliyor
+                              ⏳ 100$ Onay Bekliyor
                             </span>
                           )}
                         </div>
