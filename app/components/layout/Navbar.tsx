@@ -55,7 +55,6 @@ export function Navbar() {
           <Link href="/achievements" className="hover:text-white transition-colors">Achievements</Link>
           <Link href="/faucet" className="hover:text-white transition-colors">Faucet</Link>
           <Link href="/vault" className="hover:text-white transition-colors">Vault</Link>
-          <Link href="/admin" className="text-amber-400 hover:text-amber-300 transition-colors font-medium">Admin</Link>
         </div>
 
         {/* Chain Selector + Wallet */}
