@@ -28,6 +28,7 @@ export default function QuizPage() {
   const [mounted, setMounted] = useState(false)
   const [tag, setTag] = useState('general')
   const [challengeId, setChallengeId] = useState<string | null>(null)
+  const [startTime, setStartTime] = useState<number | null>(null)
   const [phase, setPhase] = useState<Phase>('loading')
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -161,6 +162,7 @@ export default function QuizPage() {
       const res = await fetch(url)
       const data = await res.json()
       setQuestions(data.questions)
+      setStartTime(Date.now())
       setPhase('playing')
     } catch {
       alert('Failed to fetch questions. Please try again.')
@@ -277,9 +279,13 @@ export default function QuizPage() {
         })),
       }
 
+      const durationSeconds = startTime ? Math.max(1, Math.round((Date.now() - startTime) / 1000)) : 30
+
       if (challengeId) {
         proofUrl = `${API_URL}/api/challenges/${challengeId}/proof`
         bodyData = {
+          playerAddress: address,
+          durationSeconds,
           answers: questions.map((q, i) => ({
             questionId: q.id,
             answer: finalAnswers[i],
