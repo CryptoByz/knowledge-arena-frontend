@@ -87,7 +87,7 @@ export default function LeaderboardPage() {
     fetchLeaderboard()
   }, [selectedChainId, period, mode])
 
-  // Fetch challenge list when switching to challenges mode
+  // Fetch challenge list (ONLY ACTIVE CHALLENGES) when switching to challenges mode
   useEffect(() => {
     if (mode !== 'challenges') return
     async function fetchChallengesList() {
@@ -96,9 +96,11 @@ export default function LeaderboardPage() {
         const res = await fetch(`${API_URL}/api/challenges`)
         if (res.ok) {
           const data: Challenge[] = await res.json()
-          setChallenges(data)
-          if (data.length > 0 && !selectedChallengeId) {
-            setSelectedChallengeId(data[0].id)
+          // Filter ONLY active challenges
+          const activeOnly = data.filter(c => c.isActive)
+          setChallenges(activeOnly)
+          if (activeOnly.length > 0 && (!selectedChallengeId || !activeOnly.some(c => c.id === selectedChallengeId))) {
+            setSelectedChallengeId(activeOnly[0].id)
           }
         }
       } catch (err) {
@@ -136,11 +138,11 @@ export default function LeaderboardPage() {
   }
 
   const formatDuration = (secs?: number) => {
-    if (!secs || secs <= 0) return 'N/A'
-    if (secs < 60) return `${secs} saniye`
+    if (!secs || secs <= 0) return '-'
+    if (secs < 60) return `${secs}s`
     const mins = Math.floor(secs / 60)
     const remSecs = secs % 60
-    return `${mins}dk ${remSecs}s`
+    return `${mins}m ${remSecs}s`
   }
 
   const getNetworkStyle = (chainId: number, isActive: boolean) => {
@@ -172,24 +174,24 @@ export default function LeaderboardPage() {
             Arena Rankings
           </h1>
           <p className="text-sm text-gray-400 mt-1">
-            Sıralamaları inceleyin, liderlik tablosundaki yerinizi alın.
+            Compare rankings across networks and track top trivia champions.
           </p>
         </div>
 
         {/* MODE SELECTOR (Daily vs Special Challenges) */}
-        <div className="flex bg-gray-950 border border-gray-800 rounded-2xl p-1 shadow-inner">
+        <div className="flex bg-gray-950 border border-gray-800/80 rounded-xl p-1 shadow-inner">
           <button
             onClick={() => setMode('daily')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
-              mode === 'daily' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'
+            className={`px-4 py-2 rounded-lg text-xs font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer ${
+              mode === 'daily' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-400 hover:text-white'
             }`}
           >
             🏆 Günlük Arenalar
           </button>
           <button
             onClick={() => setMode('challenges')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
-              mode === 'challenges' ? 'bg-amber-500 text-gray-950 shadow-lg' : 'text-gray-400 hover:text-white'
+            className={`px-4 py-2 rounded-lg text-xs font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer ${
+              mode === 'challenges' ? 'bg-amber-500 text-gray-950 shadow-md' : 'text-gray-400 hover:text-white'
             }`}
           >
             ⚡ Özel Quizler
@@ -237,18 +239,18 @@ export default function LeaderboardPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
               <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-sm text-gray-400">Yükleniyor...</p>
+              <p className="text-sm text-gray-400">Loading rankings...</p>
             </div>
           ) : error ? (
             <div className="bg-red-950/20 border border-red-900/50 rounded-2xl p-8 text-center text-red-200">
-              <p className="text-lg font-semibold">Hata Oluştu</p>
+              <p className="text-lg font-semibold">Error Loading Leaderboard</p>
               <p className="text-sm text-red-400/80 mt-1">{error}</p>
             </div>
           ) : players.length === 0 ? (
             <div className="bg-gray-900/40 border border-gray-800/80 rounded-2xl p-16 text-center space-y-4 max-w-lg mx-auto backdrop-blur-sm">
               <p className="text-5xl">🏆</p>
-              <h3 className="text-lg font-bold text-white">Henüz Sıralama Yok</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">İlk puanı kazanan siz olun!</p>
+              <h3 className="text-lg font-bold text-white">No Rankings Yet</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">Be the first to claim your spot! Complete quizzes to start earning points.</p>
             </div>
           ) : (
             <div className="space-y-6">
@@ -257,11 +259,11 @@ export default function LeaderboardPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-gray-800 text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-900/40">
-                        <th className="py-4 px-6 text-center w-16">Sıra</th>
-                        <th className="py-4 px-6">Oyuncu Adresi</th>
-                        <th className="py-4 px-6 text-center">Seri (Streak)</th>
+                        <th className="py-4 px-6 text-center w-16">Rank</th>
+                        <th className="py-4 px-6">Player Address</th>
+                        <th className="py-4 px-6 text-center">Streak</th>
                         <th className="py-4 px-6 text-center">Boost</th>
-                        <th className="py-4 px-6 text-right">Skor</th>
+                        <th className="py-4 px-6 text-right">Score</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-800/60">
@@ -310,124 +312,110 @@ export default function LeaderboardPage() {
 
       {/* ================= MODE 2: SPECIAL CHALLENGE LEADERBOARDS ================= */}
       {mode === 'challenges' && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           
-          {/* Challenge Selector */}
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4 shadow-xl">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <label className="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">
-                  Özel Quiz Seçimi
-                </label>
-                <select
-                  value={selectedChallengeId}
-                  onChange={(e) => setSelectedChallengeId(e.target.value)}
-                  className="bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:border-amber-500 w-full sm:w-80"
-                >
-                  {challenges.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.isActive ? '⚡ [AKTİF] ' : '🔒 [PASİF] '} {c.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {selectedChallenge && (
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                    selectedChallenge.isActive 
-                      ? 'bg-emerald-950/60 text-emerald-400 border-emerald-900/80 animate-pulse' 
-                      : 'bg-gray-950 text-gray-500 border-gray-800'
-                  }`}>
-                    {selectedChallenge.isActive ? '⚡ Etkinlik Aktif' : '🔒 Etkinlik Tamamlandı'}
-                  </span>
-
-                  {selectedChallenge.rewardPool && (
-                    <span className="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-full text-xs font-bold">
-                      🏆 {selectedChallenge.rewardPool}
-                    </span>
-                  )}
-                </div>
+          {/* Top Button Selector for Active Special Quizzes (IDENTICAL DESIGN LANGUAGE TO CHAINS) */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              {challenges.length === 0 ? (
+                <span className="text-xs text-gray-500 py-2">Aktif özel quiz bulunmuyor.</span>
+              ) : (
+                challenges.map((c) => {
+                  const isActive = selectedChallengeId === c.id
+                  return (
+                    <button
+                      key={c.id}
+                      onClick={() => setSelectedChallengeId(c.id)}
+                      className={`px-4 py-2 border rounded-xl text-xs font-semibold tracking-wider uppercase transition-all duration-200 cursor-pointer ${
+                        isActive
+                          ? 'bg-amber-500/20 border-amber-500/80 text-amber-300 shadow-md shadow-amber-500/10'
+                          : 'bg-gray-950/60 text-gray-400 border-gray-800 hover:text-white hover:bg-gray-900/60'
+                      }`}
+                    >
+                      ⚡ {c.title}
+                    </button>
+                  )
+                })
               )}
             </div>
 
-            {/* Tie breaking note */}
-            <div className="bg-amber-950/20 border border-amber-900/30 rounded-xl p-3 text-xs text-amber-300/90 flex items-start gap-2">
-              <span>ℹ️</span>
-              <div>
-                <strong>Ödül Dağıtımı & Eşitlik Kuralı:</strong> Sıralama öncelikle <span className="underline font-bold">En Yüksek Doğru Sayısı</span>, eşitlik halinde ise <span className="underline font-bold">En Hızlı Tamamlama Süresi</span> (saniye) baz alınarak filtrelenmektedir.
+            {selectedChallenge?.rewardPool && (
+              <div className="flex items-center gap-2">
+                <span className="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">
+                  🏆 Ödül Havuzu: {selectedChallenge.rewardPool}
+                </span>
               </div>
-            </div>
+            )}
           </div>
 
-          {/* Rankings Table for Challenge */}
+          {/* Rankings Table for Challenge (IDENTICAL TABLE DESIGN LANGUAGE) */}
           {loadingChallenge ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
               <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-sm text-gray-400">Özel yarışma sıralaması yükleniyor...</p>
+              <p className="text-sm text-gray-400">Loading challenge rankings...</p>
             </div>
           ) : challengePlayers.length === 0 ? (
             <div className="bg-gray-900/40 border border-gray-800/80 rounded-2xl p-16 text-center space-y-4 max-w-lg mx-auto backdrop-blur-sm">
               <p className="text-5xl">🎯</p>
-              <h3 className="text-lg font-bold text-white">Henüz Katılımcı Yok</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">Bu özel yarışmaya katılan ilk kişi olun ve ödül sıralamasına girin!</p>
+              <h3 className="text-lg font-bold text-white">No Rankings Yet</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">Be the first to participate in this special quiz and claim top spot!</p>
             </div>
           ) : (
-            <div className="overflow-hidden rounded-2xl border border-gray-800/80 bg-gray-950/40 backdrop-blur-md shadow-xl">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-gray-800 text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-900/40">
-                      <th className="py-4 px-6 text-center w-16">Sıra</th>
-                      <th className="py-4 px-6">Oyuncu Cüzdanı</th>
-                      <th className="py-4 px-6 text-center">Doğru Sayısı / Skor</th>
-                      <th className="py-4 px-6 text-center">Tamamlama Süresi</th>
-                      <th className="py-4 px-6 text-right">Tarih</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-800/60">
-                    {challengePlayers.map((player, idx) => {
-                      const rank = idx + 1
-                      const rankStyles =
-                        rank === 1 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 font-black' :
-                        rank === 2 ? 'bg-slate-300/20 text-slate-200 border border-slate-300/40 font-bold' :
-                        rank === 3 ? 'bg-amber-700/20 text-amber-500 border border-amber-700/40 font-bold' :
-                        'text-gray-400 font-medium'
+            <div className="space-y-6">
+              <div className="overflow-hidden rounded-2xl border border-gray-800/80 bg-gray-950/40 backdrop-blur-md shadow-xl">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-gray-800 text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-900/40">
+                        <th className="py-4 px-6 text-center w-16">Rank</th>
+                        <th className="py-4 px-6">Player Address</th>
+                        <th className="py-4 px-6 text-center">Completion Time</th>
+                        <th className="py-4 px-6 text-center">Correct Answers</th>
+                        <th className="py-4 px-6 text-right">Score</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-800/60">
+                      {challengePlayers.map((player, idx) => {
+                        const globalRank = idx + 1
+                        const rankStyles =
+                          globalRank === 1 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' :
+                          globalRank === 2 ? 'bg-slate-300/10 text-slate-300 border border-slate-300/30' :
+                          globalRank === 3 ? 'bg-amber-700/10 text-amber-600 border border-amber-700/30' :
+                          'text-gray-400'
 
-                      const qTotal = player.totalQuestions || selectedChallenge?.questionsCount || '?'
+                        const qTotal = player.totalQuestions || selectedChallenge?.questionsCount || '?'
 
-                      return (
-                        <tr key={player.address} className={`transition-colors duration-150 ${rank === 1 ? 'bg-amber-500/5' : 'hover:bg-gray-900/20'}`}>
-                          <td className="py-4 px-6 text-center">
-                            <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs ${rankStyles}`}>
-                              {rank}
-                            </span>
-                          </td>
+                        return (
+                          <tr key={player.address} className={`transition-colors duration-150 hover:bg-gray-900/20 ${globalRank === 1 ? 'bg-amber-500/5' : ''}`}>
+                            <td className="py-4 px-6 text-center font-bold">
+                              <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs ${rankStyles}`}>
+                                {globalRank}
+                              </span>
+                            </td>
 
-                          <td className="py-4 px-6 font-mono text-sm text-gray-200">
-                            {formatAddress(player.address)}
-                          </td>
+                            <td className="py-4 px-6 font-mono text-sm text-gray-200">
+                              {formatAddress(player.address)}
+                            </td>
 
-                          <td className="py-4 px-6 text-center">
-                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-950/40 text-emerald-400 border border-emerald-900/60">
-                              ✅ {player.score} / {qTotal} Doğru
-                            </span>
-                          </td>
+                            <td className="py-4 px-6 text-center">
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-950/30 text-amber-300 border border-amber-900/30">
+                                ⚡ {formatDuration(player.durationSeconds)}
+                              </span>
+                            </td>
 
-                          <td className="py-4 px-6 text-center font-mono text-xs">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/40 text-amber-300 border border-amber-900/60 font-bold">
-                              ⚡ {formatDuration(player.durationSeconds)}
-                            </span>
-                          </td>
+                            <td className="py-4 px-6 text-center font-mono text-xs text-gray-300">
+                              {player.score} / {qTotal}
+                            </td>
 
-                          <td className="py-4 px-6 text-right font-mono text-xs text-gray-500">
-                            {player.timestamp ? new Date(Number(player.timestamp) * 1000).toLocaleDateString() : '-'}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
+                            <td className="py-4 px-6 text-right font-extrabold text-white text-base">
+                              {player.score}
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
