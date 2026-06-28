@@ -40,43 +40,41 @@ export function Navbar() {
 
   return (
     <nav className="border-b border-gray-800 bg-gray-950">
-      <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 whitespace-nowrap shrink-0">
           <span className="text-xl font-bold text-white">Knowledge</span>
           <span className="text-xl font-bold text-indigo-400">Arena</span>
         </Link>
 
         {/* Nav links */}
-        <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
-          <Link href="/profile" className="hover:text-white transition-colors">Profile</Link>
-          <Link href="/leaderboard" className="hover:text-white transition-colors">Leaderboard</Link>
-          <Link href="/achievements" className="hover:text-white transition-colors">Achievements</Link>
-          <Link href="/faucet" className="hover:text-white transition-colors">Faucet</Link>
-          <Link href="/vault" className="hover:text-white transition-colors">Vault</Link>
-          <Link href="/create-quiz" className="text-amber-400 hover:text-amber-300 transition-colors font-semibold flex items-center gap-1">⚡ Quiz Yayınla</Link>
+        <div className="hidden lg:flex items-center gap-6 text-sm text-gray-400">
+          <Link href="/profile" className="hover:text-white transition-colors whitespace-nowrap">Profile</Link>
+          <Link href="/leaderboard" className="hover:text-white transition-colors whitespace-nowrap">Leaderboard</Link>
+          <Link href="/achievements" className="hover:text-white transition-colors whitespace-nowrap">Achievements</Link>
+          <Link href="/faucet" className="hover:text-white transition-colors whitespace-nowrap">Faucet</Link>
+          <Link href="/vault" className="hover:text-white transition-colors whitespace-nowrap">Vault</Link>
+          <Link href="/create-quiz" className="text-amber-400 hover:text-amber-300 transition-colors font-semibold flex items-center gap-1 whitespace-nowrap">
+            ⚡ Quiz Yayınla
+          </Link>
         </div>
 
         {/* Chain Selector + Wallet */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           
           {/* Network Toggle Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full font-medium transition-all duration-200 border cursor-pointer select-none
+              className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full font-medium transition-all duration-200 border cursor-pointer select-none whitespace-nowrap
                 ${isSupported 
                   ? 'bg-gray-900 text-gray-200 border-gray-800 hover:border-gray-700 hover:bg-gray-800' 
                   : 'bg-red-950/40 text-red-400 border-red-900/60 hover:bg-red-950/60'
                 }`}
             >
-              {/* Colored Dot Indicator */}
               <span className={`w-2 h-2 rounded-full ${isSupported ? activeNetworkColor : 'bg-red-500 animate-pulse'}`} />
-              
               <span>{isSupported ? chainName : 'Wrong Network'}</span>
-              
-              {/* Chevron Icon */}
               <svg 
                 className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                 fill="none" 
