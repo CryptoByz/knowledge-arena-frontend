@@ -1,12 +1,25 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useAccount, useSwitchChain, useChainId } from 'wagmi'
 import { useRouter } from 'next/navigation'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useQuizState } from './hooks/useQuizState'
 import { usePlayerProfile } from './hooks/usePlayerProfile'
 import { useChainConfig } from './hooks/useChainConfig'
-import { arcTestnet, baseMainnet, celo } from './config/chains'
+import { API_URL, arcTestnet, baseMainnet, celo } from './config/chains'
+
+type Challenge = {
+  id: string
+  title: string
+  description: string
+  chainId: number
+  questionsCount?: number
+  rewardPool: string
+  startTimestamp: number
+  endTimestamp: number
+  isActive: boolean
+}
 
 export default function HomeClient() {
   const { address, isConnected } = useAccount()
@@ -17,6 +30,27 @@ export default function HomeClient() {
 
   const { canPlay, hasSubmitted, todayScore } = useQuizState(address)
   const { totalScore, streakDays, boostMultiplier } = usePlayerProfile(address)
+
+  const [challenges, setChallenges] = useState<Challenge[]>([])
+  const [loadingChallenges, setLoadingChallenges] = useState<boolean>(true)
+
+  useEffect(() => {
+    fetchChallenges()
+  }, [])
+
+  const fetchChallenges = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/challenges`)
+      if (res.ok) {
+        const data: Challenge[] = await res.json()
+        setChallenges(data.filter(c => c.isActive))
+      }
+    } catch (err) {
+      console.error('Failed to fetch challenges:', err)
+    } finally {
+      setLoadingChallenges(false)
+    }
+  }
 
   const handlePlayQuiz = async (tag: string, targetChainId?: number) => {
     if (!isConnected) {
@@ -33,6 +67,24 @@ export default function HomeClient() {
     }
 
     router.push(`/quiz?tag=${tag}`)
+  }
+
+  const handlePlayChallenge = async (challenge: Challenge) => {
+    if (!isConnected) {
+      alert('Please connect your wallet first!')
+      return
+    }
+
+    if (challenge.chainId && chainId !== challenge.chainId) {
+      try {
+        await switchChainAsync({ chainId: challenge.chainId })
+      } catch (err) {
+        console.error('Failed to switch network:', err)
+      }
+    }
+
+    const tag = challenge.chainId === 5042002 ? 'arc' : challenge.chainId === 42220 ? 'celo' : 'base'
+    router.push(`/quiz?challengeId=${challenge.id}&tag=${tag}`)
   }
 
   return (
@@ -54,7 +106,35 @@ export default function HomeClient() {
         )}
       </div>
 
+      {/* 🔥 FLASH & PRIVATE EVENTS (SPECIAL CHALLENGES) SECTION */}
+      {challenges.length > 0 && (
+        <div className="space-y-4 pt-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+              </span>
+              <h2 className="text-2xl font-black tracking-wide text-white uppercase flex items-center gap-2">
+                ⚡ Flash & Özel Etkinlikler
+              </h2>
+            </div>
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
+              Süreli Özel Yarışmalar
+            </span>
+          </div>
 
+          <div className="grid grid-cols-1 gap-6">
+            {challenges.map((ch) => (
+              <FlashChallengeCard
+                key={ch.id}
+                challenge={ch}
+                onPlay={() => handlePlayChallenge(ch)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Quiz Cards Selection Grid */}
       <div className="space-y-6">
@@ -130,34 +210,71 @@ export default function HomeClient() {
   )
 }
 
-function StatCard({ label, value, color }: { label: string; value: string; color: string }) {
+function FlashChallengeCard({ challenge, onPlay }: { challenge: Challenge, onPlay: () => void }) {
+  const chainName = 
+    challenge.chainId === 5042002 ? 'ARC Testnet' : 
+    challenge.chainId === 42220 ? 'Celo Mainnet' : 
+    challenge.chainId === 84532 ? 'Base Sepolia' : 'Base Mainnet'
+
   return (
-    <div className="bg-gray-950/60 border border-gray-800/50 rounded-lg p-2.5 text-center backdrop-blur-sm shadow-inner transition-transform duration-300 hover:scale-102">
-      <p className={`text-lg font-extrabold ${color}`}>{value}</p>
-      <p className="text-[10px] text-gray-400 mt-0.5 uppercase tracking-wider">{label}</p>
+    <div className="relative group overflow-hidden rounded-3xl border-2 border-amber-500/50 bg-gradient-to-r from-amber-950/70 via-purple-950/80 to-gray-950 p-6 md:p-8 shadow-2xl shadow-amber-500/10 transition-all duration-300 hover:border-amber-400 hover:shadow-amber-500/20">
+      
+      {/* Background Decorative Glow */}
+      <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/20 transition-all" />
+
+      <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+        
+        {/* Left Info Column */}
+        <div className="space-y-3 max-w-2xl">
+          
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="bg-amber-500 text-gray-950 font-black text-[11px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+              ⚡ Flash Event
+            </span>
+            
+            <span className="bg-gray-900/80 text-gray-300 border border-gray-700 font-medium text-[11px] px-3 py-1 rounded-full">
+              🌐 {chainName}
+            </span>
+
+            {challenge.rewardPool && (
+              <span className="bg-emerald-950/80 text-emerald-400 border border-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full flex items-center gap-1">
+                🏆 {challenge.rewardPool}
+              </span>
+            )}
+          </div>
+
+          <h3 className="text-2xl md:text-3xl font-extrabold text-white group-hover:text-amber-200 transition-colors">
+            {challenge.title}
+          </h3>
+
+          <p className="text-gray-300 text-sm leading-relaxed">
+            {challenge.description}
+          </p>
+
+          <div className="flex items-center gap-4 text-xs text-gray-400 pt-1 font-mono">
+            <span>⏱️ Sınırlı Süreli Özel Etkinlik</span>
+            <span>•</span>
+            <span>❓ {challenge.questionsCount || 0} Özel Soru</span>
+          </div>
+
+        </div>
+
+        {/* Right CTA Button */}
+        <div className="flex-shrink-0">
+          <button
+            onClick={onPlay}
+            className="w-full md:w-auto flex items-center justify-center gap-3 py-4 px-8 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-gray-950 font-extrabold text-base rounded-2xl shadow-xl shadow-amber-500/20 hover:scale-105 transition-all duration-200 cursor-pointer"
+          >
+            <span>Özel Quize Katıl</span>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
     </div>
   )
-}
-
-function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
-  return (
-    <div className="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-6 space-y-3 backdrop-blur-sm transition-all duration-300 hover:border-gray-700 hover:bg-gray-900/80">
-      <div className="text-3xl">{icon}</div>
-      <h3 className="text-lg font-bold text-white">{title}</h3>
-      <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
-    </div>
-  )
-}
-
-type QuizCardProps = {
-  title: string
-  description: string
-  gradient: string
-  borderHover: string
-  bulletColor: string
-  bullets: string[]
-  buttonText: string
-  onClick: () => void
 }
 
 function QuizCard({
@@ -169,25 +286,31 @@ function QuizCard({
   bullets,
   buttonText,
   onClick,
-}: QuizCardProps) {
+}: {
+  title: string
+  description: string
+  gradient: string
+  borderHover: string
+  bulletColor: string
+  bullets: string[]
+  buttonText: string
+  onClick: () => void
+}) {
   return (
     <div
       className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-800/80 bg-gradient-to-br ${gradient} p-6 shadow-xl transition-all duration-300 hover:-translate-y-1 ${borderHover} hover:shadow-2xl`}
     >
       <div className="space-y-4">
-        {/* Card Header */}
         <div className="flex justify-between items-start">
           <h3 className="text-xl font-bold text-white group-hover:text-indigo-200 transition-colors">
             {title}
           </h3>
         </div>
 
-        {/* Card Body */}
         <p className="text-sm text-gray-400 leading-relaxed min-h-[3.75rem]">
           {description}
         </p>
 
-        {/* Feature Bullets */}
         <ul className="space-y-1.5 pt-2">
           {bullets.map((bullet, idx) => (
             <li key={idx} className="flex items-center gap-2 text-xs text-gray-300">
@@ -198,7 +321,6 @@ function QuizCard({
         </ul>
       </div>
 
-      {/* Play Button */}
       <div className="pt-6">
         <button
           onClick={onClick}
@@ -210,6 +332,16 @@ function QuizCard({
           </svg>
         </button>
       </div>
+    </div>
+  )
+}
+
+function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
+  return (
+    <div className="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-6 space-y-3 backdrop-blur-sm transition-all duration-300 hover:border-gray-700 hover:bg-gray-900/80">
+      <div className="text-3xl">{icon}</div>
+      <h3 className="text-lg font-bold text-white">{title}</h3>
+      <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
     </div>
   )
 }

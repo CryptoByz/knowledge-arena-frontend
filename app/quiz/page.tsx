@@ -27,6 +27,7 @@ export default function QuizPage() {
 
   const [mounted, setMounted] = useState(false)
   const [tag, setTag] = useState('general')
+  const [challengeId, setChallengeId] = useState<string | null>(null)
   const [phase, setPhase] = useState<Phase>('loading')
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -46,7 +47,9 @@ export default function QuizPage() {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       const t = params.get('tag') || 'general'
+      const cId = params.get('challengeId')
       setTag(t)
+      if (cId) setChallengeId(cId)
     }
   }, [])
 
@@ -151,7 +154,11 @@ export default function QuizPage() {
 
   const fetchQuestions = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/daily-questions?tag=${tag}&chainId=${chainId}`)
+      let url = `${API_URL}/api/daily-questions?tag=${tag}&chainId=${chainId}`
+      if (challengeId) {
+        url = `${API_URL}/api/challenges/${challengeId}`
+      }
+      const res = await fetch(url)
       const data = await res.json()
       setQuestions(data.questions)
       setPhase('playing')
@@ -166,18 +173,31 @@ export default function QuizPage() {
     setSelectedAnswer(answer)
 
     try {
+      let proofUrl = `${API_URL}/api/proof`
+      let bodyData: any = {
+        chainId,
+        tag,
+        answers: ['A', 'B', 'C', 'D'].map(opt => ({
+          questionIndex: currentIndex,
+          answer: opt,
+        })),
+      }
+
+      if (challengeId && questions[currentIndex]) {
+        proofUrl = `${API_URL}/api/challenges/${challengeId}/proof`
+        bodyData = {
+          answers: ['A', 'B', 'C', 'D'].map(opt => ({
+            questionId: questions[currentIndex].id,
+            answer: opt,
+          }))
+        }
+      }
+
       // Get proof and correctness for all 4 options to display the right selection
-      const res = await fetch(`${API_URL}/api/proof`, {
+      const res = await fetch(proofUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chainId,
-          tag,
-          answers: ['A', 'B', 'C', 'D'].map(opt => ({
-            questionIndex: currentIndex,
-            answer: opt,
-          })),
-        }),
+        body: JSON.stringify(bodyData),
       })
       const data = await res.json()
       
@@ -247,17 +267,30 @@ export default function QuizPage() {
     setPhase('submitting')
 
     try {
-      const res = await fetch(`${API_URL}/api/proof`, {
+      let proofUrl = `${API_URL}/api/proof`
+      let bodyData: any = {
+        chainId,
+        tag,
+        answers: questions.map((q, i) => ({
+          questionIndex: i,
+          answer: finalAnswers[i],
+        })),
+      }
+
+      if (challengeId) {
+        proofUrl = `${API_URL}/api/challenges/${challengeId}/proof`
+        bodyData = {
+          answers: questions.map((q, i) => ({
+            questionId: q.id,
+            answer: finalAnswers[i],
+          }))
+        }
+      }
+
+      const res = await fetch(proofUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chainId,
-          tag,
-          answers: questions.map((q, i) => ({
-            questionIndex: i,
-            answer: finalAnswers[i],
-          })),
-        }),
+        body: JSON.stringify(bodyData),
       })
       const data = await res.json()
 
@@ -267,7 +300,7 @@ export default function QuizPage() {
       const score = data.proofs.filter((p: any) => p.isCorrect).length
       setFinalScore(score)
 
-      if (isDemoMode) {
+      if (isDemoMode || challengeId) {
         setPhase('completed')
         return
       }
