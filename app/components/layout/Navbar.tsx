@@ -55,6 +55,7 @@ export function Navbar() {
           <Link href="/achievements" className="hover:text-white transition-colors">Achievements</Link>
           <Link href="/faucet" className="hover:text-white transition-colors">Faucet</Link>
           <Link href="/vault" className="hover:text-white transition-colors">Vault</Link>
+          <Link href="/create-quiz" className="text-amber-400 hover:text-amber-300 transition-colors font-semibold flex items-center gap-1">⚡ Quiz Yayınla</Link>
         </div>
 
         {/* Chain Selector + Wallet */}

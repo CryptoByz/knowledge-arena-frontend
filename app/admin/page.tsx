@@ -20,6 +20,10 @@ type Challenge = {
   startTimestamp: number
   endTimestamp: number
   isActive: boolean
+  status?: 'approved' | 'pending_approval' | 'rejected'
+  submittedBy?: string
+  paymentTxHash?: string
+  paidAmount?: string
   questions: Question[]
 }
 
@@ -129,6 +133,35 @@ export default function AdminPage() {
       })
       if (!res.ok) throw new Error('Silme işlemi başarısız')
       setMessage({ type: 'success', text: 'Özel quiz başarıyla silindi' })
+      fetchChallenges()
+    } catch (err: any) {
+      setMessage({ type: 'error', text: err.message })
+    }
+  }
+
+  const handleApprove = async (id: string) => {
+    try {
+      const res = await fetch(`${API_URL}/api/admin/challenges/${id}/approve`, {
+        method: 'POST',
+        headers: { 'x-admin-secret': adminSecret }
+      })
+      if (!res.ok) throw new Error('Onaylama başarısız oldu')
+      setMessage({ type: 'success', text: 'Quiz onaylandı ve canlıya alındı!' })
+      fetchChallenges()
+    } catch (err: any) {
+      setMessage({ type: 'error', text: err.message })
+    }
+  }
+
+  const handleReject = async (id: string) => {
+    if (!confirm('Bu quizi reddetmek istediğinize emin misiniz?')) return
+    try {
+      const res = await fetch(`${API_URL}/api/admin/challenges/${id}/reject`, {
+        method: 'POST',
+        headers: { 'x-admin-secret': adminSecret }
+      })
+      if (!res.ok) throw new Error('Reddetme başarısız oldu')
+      setMessage({ type: 'success', text: 'Quiz reddedildi.' })
       fetchChallenges()
     } catch (err: any) {
       setMessage({ type: 'error', text: err.message })
@@ -319,7 +352,7 @@ export default function AdminPage() {
       )}
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
           <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Toplam Challenge</div>
           <div className="text-2xl font-bold text-white">{challenges.length}</div>
@@ -329,8 +362,12 @@ export default function AdminPage() {
           <div className="text-2xl font-bold text-emerald-400">{challenges.filter(c => c.isActive).length}</div>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+          <div className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">Onay Bekleyenler (250$)</div>
+          <div className="text-2xl font-bold text-amber-300">{challenges.filter(c => c.status === 'pending_approval').length}</div>
+        </div>
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
           <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Toplam Soru Sayısı</div>
-          <div className="text-2xl font-bold text-amber-400">{totalQuestionsCount}</div>
+          <div className="text-2xl font-bold text-indigo-400">{totalQuestionsCount}</div>
         </div>
       </div>
 
@@ -357,7 +394,7 @@ export default function AdminPage() {
                 <tr className="border-b border-gray-800 bg-gray-950/50 text-gray-400 text-xs uppercase tracking-wider">
                   <th className="py-3.5 px-6">Quiz Başlığı & ID</th>
                   <th className="py-3.5 px-4">Ağ (Chain)</th>
-                  <th className="py-3.5 px-4">Ödül Havuzu</th>
+                  <th className="py-3.5 px-4">Ödül Havuzu / Ödeme</th>
                   <th className="py-3.5 px-4">Sorular</th>
                   <th className="py-3.5 px-4">Durum</th>
                   <th className="py-3.5 px-6 text-right">İşlemler</th>
@@ -367,12 +404,25 @@ export default function AdminPage() {
                 {challenges.map((ch) => {
                   const chainInfo = CHAINS.find(c => c.id === ch.chainId) || { name: `Chain ${ch.chainId}`, color: 'bg-gray-800 text-gray-300 border-gray-700' }
                   const qCount = ch.questions?.length || ch.questionsCount || 0
+                  const isPendingApproval = ch.status === 'pending_approval'
 
                   return (
-                    <tr key={ch.id} className="hover:bg-gray-800/30 transition-colors">
+                    <tr key={ch.id} className={`transition-colors ${isPendingApproval ? 'bg-amber-500/5 hover:bg-amber-500/10' : 'hover:bg-gray-800/30'}`}>
                       <td className="py-4 px-6">
-                        <div className="font-semibold text-white">{ch.title}</div>
+                        <div className="font-semibold text-white flex items-center gap-2">
+                          {ch.title}
+                          {isPendingApproval && (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-gray-950 animate-pulse">
+                              ⏳ 250$ Onay Bekliyor
+                            </span>
+                          )}
+                        </div>
                         <div className="text-xs text-gray-500 font-mono mt-0.5">{ch.id}</div>
+                        {ch.paymentTxHash && (
+                          <div className="text-[11px] text-indigo-400 font-mono mt-1 truncate max-w-xs">
+                            Tx: {ch.paymentTxHash.slice(0, 10)}...{ch.paymentTxHash.slice(-8)}
+                          </div>
+                        )}
                       </td>
 
                       <td className="py-4 px-4">
@@ -382,7 +432,8 @@ export default function AdminPage() {
                       </td>
 
                       <td className="py-4 px-4 text-gray-300 font-medium">
-                        {ch.rewardPool || '-'}
+                        <div>{ch.rewardPool || '-'}</div>
+                        {ch.paidAmount && <div className="text-xs text-amber-400 font-bold mt-0.5">✓ {ch.paidAmount}</div>}
                       </td>
 
                       <td className="py-4 px-4 text-gray-400">
@@ -392,40 +443,65 @@ export default function AdminPage() {
                       </td>
 
                       <td className="py-4 px-4">
-                        <button
-                          onClick={() => handleToggleActive(ch)}
-                          className={`inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full border cursor-pointer transition-all ${
-                            ch.isActive 
-                              ? 'bg-emerald-950/60 text-emerald-400 border-emerald-900/80 hover:bg-emerald-900/40' 
-                              : 'bg-gray-950 text-gray-500 border-gray-800 hover:text-gray-300'
-                          }`}
-                        >
-                          <span className={`w-1.5 h-1.5 rounded-full ${ch.isActive ? 'bg-emerald-400 animate-pulse' : 'bg-gray-600'}`} />
-                          {ch.isActive ? 'Aktif' : 'Pasif'}
-                        </button>
+                        {isPendingApproval ? (
+                          <span className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border bg-amber-950/60 text-amber-300 border-amber-900/80 font-bold">
+                            ⏳ Onay Bekliyor
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => handleToggleActive(ch)}
+                            className={`inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full border cursor-pointer transition-all ${
+                              ch.isActive 
+                                ? 'bg-emerald-950/60 text-emerald-400 border-emerald-900/80 hover:bg-emerald-900/40' 
+                                : 'bg-gray-950 text-gray-500 border-gray-800 hover:text-gray-300'
+                            }`}
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full ${ch.isActive ? 'bg-emerald-400 animate-pulse' : 'bg-gray-600'}`} />
+                            {ch.isActive ? 'Aktif' : 'Pasif'}
+                          </button>
+                        )}
                       </td>
 
                       <td className="py-4 px-6 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEditModal(ch)}
-                            className="p-2 text-gray-400 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-colors cursor-pointer"
-                            title="Düzenle"
-                          >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                          </button>
+                          {isPendingApproval ? (
+                            <>
+                              <button
+                                onClick={() => handleApprove(ch.id)}
+                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition-all shadow-md cursor-pointer"
+                              >
+                                ✓ Onayla
+                              </button>
+                              <button
+                                onClick={() => handleReject(ch.id)}
+                                className="px-3 py-1.5 bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-900/60 font-bold text-xs rounded-lg transition-all cursor-pointer"
+                              >
+                                ✕ Reddet
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => openEditModal(ch)}
+                                className="p-2 text-gray-400 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-colors cursor-pointer"
+                                title="Düzenle"
+                              >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                              </button>
 
-                          <button
-                            onClick={() => handleDelete(ch.id)}
-                            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
-                            title="Sil"
-                          >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
+                              <button
+                                onClick={() => handleDelete(ch.id)}
+                                className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                                title="Sil"
+                              >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>
