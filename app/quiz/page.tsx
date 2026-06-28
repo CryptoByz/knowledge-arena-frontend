@@ -161,7 +161,29 @@ export default function QuizPage() {
       }
       const res = await fetch(url)
       const data = await res.json()
-      setQuestions(data.questions)
+
+      const rawQuestions = data.questions || []
+      const normalized = rawQuestions.map((q: any, idx: number) => {
+        let opts = q.options
+        if (Array.isArray(opts)) {
+          opts = {
+            A: opts[0] || '',
+            B: opts[1] || '',
+            C: opts[2] || '',
+            D: opts[3] || '',
+          }
+        }
+        return {
+          index: idx,
+          id: q.id || `q${idx+1}`,
+          category: q.category || (challengeId ? 'Special Challenge' : 'General Trivia'),
+          difficulty: q.difficulty || 'medium',
+          question: q.question || q.text || '',
+          options: opts || { A:'', B:'', C:'', D:'' }
+        }
+      })
+
+      setQuestions(normalized)
       setStartTime(Date.now())
       setPhase('playing')
     } catch {
@@ -568,24 +590,25 @@ export default function QuizPage() {
     }
 
     const theme = themeColors[tag.toLowerCase()] || themeColors.general
+    const totalQ = questions.length || 10
 
     // Prefill X share text & url
-    const tweetText = `I just scored ${finalScore}/10 on the ${networkName} Daily Quiz at Knowledge Arena! 🧠\n\nJoin the arena: https://knowledge-arena.xyz/`
+    const tweetText = `I just scored ${finalScore}/${totalQ} on the ${networkName} Quiz at Knowledge Arena! 🧠\n\nJoin the arena: https://knowledge-arena.xyz/`
     const xShareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`
 
     return (
       <div className="max-w-lg mx-auto text-center space-y-8 pt-8">
         <div className="space-y-3">
-          <div className="text-6xl animate-bounce">{finalScore >= 8 ? '🏆' : finalScore >= 5 ? '👍' : '📚'}</div>
-          <h1 className="text-3xl font-black text-white">{finalScore}/10 Correct</h1>
+          <div className="text-6xl animate-bounce">{finalScore === totalQ ? '🏆' : finalScore >= Math.ceil(totalQ * 0.5) ? '👍' : '📚'}</div>
+          <h1 className="text-3xl font-black text-white">{finalScore}/{totalQ} Correct</h1>
           <p className="text-gray-400 max-w-sm mx-auto text-sm">
-            {finalScore === 10
+            {finalScore === totalQ
               ? 'Perfect score! Outstanding!'
-              : finalScore >= 8
+              : finalScore >= Math.ceil(totalQ * 0.8)
               ? 'Great job! Almost flawless.'
-              : finalScore >= 5
+              : finalScore >= Math.ceil(totalQ * 0.5)
               ? 'Well done! Solid effort.'
-              : 'Practice makes perfect. Keep reading and come back tomorrow!'}
+              : 'Practice makes perfect. Keep reading and come back next time!'}
           </p>
         </div>
 
