@@ -141,7 +141,7 @@ export default function QuizPage() {
     } else if (chainId === 8453) {
       value = 300000000000000n; // 0.0003 ETH (18 decimals)
     } else if (chainId === 42220) {
-      value = 500000000000000000n; // 0.5 CELO (native, 18 decimals)
+      value = 100000000000000000n; // 0.1 CELO (native, 18 decimals)
     }
 
     setPhase('entering');
@@ -495,7 +495,7 @@ export default function QuizPage() {
 
     const feeDisplays: Record<string, string> = {
       arc: '2.00 USDC',
-      celo: '0.50 CELO',
+      celo: '0.10 CELO',
       base: '0.0003 ETH',
       general: '0.0003 ETH',
     };
