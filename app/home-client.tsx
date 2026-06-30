@@ -21,7 +21,7 @@ type Challenge = {
   isActive: boolean
 }
 
-export default function HomeClient() {
+export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'base' | 'celo' }) {
   const { address, isConnected } = useAccount()
   const { isSupported } = useChainConfig()
   const chainId = useChainId()
@@ -33,6 +33,10 @@ export default function HomeClient() {
 
   const [challenges, setChallenges] = useState<Challenge[]>([])
   const [loadingChallenges, setLoadingChallenges] = useState<boolean>(true)
+
+  const targetChainId = filterChain === 'arc' ? 5042002 : filterChain === 'celo' ? 42220 : filterChain === 'base' ? 8453 : null
+  const targetChainName = filterChain === 'arc' ? 'ARC Testnet' : filterChain === 'celo' ? 'Celo' : filterChain === 'base' ? 'Base' : ''
+  const isWrongFilteredNetwork = isConnected && targetChainId && chainId !== targetChainId
 
   useEffect(() => {
     fetchChallenges()
@@ -87,6 +91,11 @@ export default function HomeClient() {
     router.push(`/quiz?challengeId=${challenge.id}&tag=${tag}`)
   }
 
+  const filteredChallenges = challenges.filter(c => {
+    if (!filterChain) return true;
+    return c.chainId === targetChainId;
+  })
+
   return (
     <div className="space-y-12">
       {/* Hero Banner with Glow Effect */}
@@ -96,18 +105,46 @@ export default function HomeClient() {
           <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Arena</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
-          The ultimate onchain knowledge platform.
+          {filterChain ? `${targetChainName} Özel Bilgi Arenası` : 'The ultimate onchain knowledge platform.'}
         </p>
 
-        {!isConnected && (
+        {!isConnected && !filterChain && (
           <div className="flex justify-center pt-6 animate-bounce">
             <ConnectButton label="Connect Wallet to Play" />
           </div>
         )}
       </div>
 
+      {/* Network Switch / Wallet Connect Overlay when chain-specific link is used */}
+      {((!isConnected && filterChain) || isWrongFilteredNetwork) && (
+        <div className="max-w-xl mx-auto bg-gray-900/80 border-2 border-indigo-500/50 rounded-3xl p-8 text-center space-y-6 shadow-2xl backdrop-blur-md">
+          <div className="text-5xl animate-bounce">⛓️</div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-black text-white">Lütfen {targetChainName} Ağına Bağlanın</h2>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Bu özel alandaki quizlere ve yarışmalara katılabilmek için cüzdanınızı bağlayıp <strong>{targetChainName}</strong> ağına geçiş yapmanız gerekmektedir.
+            </p>
+          </div>
+          
+          <button
+            onClick={async () => {
+              if (targetChainId) {
+                try {
+                  await switchChainAsync({ chainId: targetChainId })
+                } catch (err) {
+                  console.error(err)
+                }
+              }
+            }}
+            className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-sm rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-600/30"
+          >
+            {isConnected ? `${targetChainName} Ağına Geç` : 'Ağa Bağlan / Ağ Değiştir'}
+          </button>
+        </div>
+      )}
+
       {/* 🔥 FLASH & PRIVATE EVENTS (SPECIAL CHALLENGES) SECTION */}
-      {challenges.length > 0 && (
+      {filteredChallenges.length > 0 && (
         <div className="space-y-4 pt-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -125,7 +162,7 @@ export default function HomeClient() {
           </div>
 
           <div className="grid grid-cols-1 gap-6">
-            {challenges.map((ch) => (
+            {filteredChallenges.map((ch) => (
               <FlashChallengeCard
                 key={ch.id}
                 challenge={ch}
@@ -144,52 +181,60 @@ export default function HomeClient() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* ARC Quiz Card */}
-          <QuizCard
-            title="ARC Network Quiz"
-            description="Test your skills on ARC ecology, including gasless token transactions, scalability, and stablecoins."
-            gradient="from-indigo-950/80 via-purple-900/30 to-gray-950"
-            borderHover="hover:border-indigo-500"
-            bulletColor="bg-indigo-500"
-            bullets={['ARC Testnet', 'Native Gas Stablecoins', 'Ecosystem Trivia']}
-            buttonText="Enter ARC Arena"
-            onClick={() => handlePlayQuiz('arc', arcTestnet.id)}
-          />
+          {(!filterChain || filterChain === 'arc') && (
+            <QuizCard
+              title="ARC Network Quiz"
+              description="Test your skills on ARC ecology, including gasless token transactions, scalability, and stablecoins."
+              gradient="from-indigo-950/80 via-purple-900/30 to-gray-950"
+              borderHover="hover:border-indigo-500"
+              bulletColor="bg-indigo-500"
+              bullets={['ARC Testnet', 'Native Gas Stablecoins', 'Ecosystem Trivia']}
+              buttonText="Enter ARC Arena"
+              onClick={() => handlePlayQuiz('arc', arcTestnet.id)}
+            />
+          )}
  
           {/* Base Mainnet Quiz Card */}
-          <QuizCard
-            title="Base Mainnet Quiz"
-            description="Challenge yourself on the Base L2 ecosystem. Answer questions on Ethereum scaling, rollups, and Coinbase tools."
-            gradient="from-blue-950/80 via-cyan-900/30 to-gray-950"
-            borderHover="hover:border-blue-500"
-            bulletColor="bg-blue-500"
-            bullets={['Base Mainnet', 'Fast, Low-cost L2', 'Ecosystem Trivia']}
-            buttonText="Enter Base Arena"
-            onClick={() => handlePlayQuiz('base', baseMainnet.id)}
-          />
+          {(!filterChain || filterChain === 'base') && (
+            <QuizCard
+              title="Base Mainnet Quiz"
+              description="Challenge yourself on the Base L2 ecosystem. Answer questions on Ethereum scaling, rollups, and Coinbase tools."
+              gradient="from-blue-950/80 via-cyan-900/30 to-gray-950"
+              borderHover="hover:border-blue-500"
+              bulletColor="bg-blue-500"
+              bullets={['Base Mainnet', 'Fast, Low-cost L2', 'Ecosystem Trivia']}
+              buttonText="Enter Base Arena"
+              onClick={() => handlePlayQuiz('base', baseMainnet.id)}
+            />
+          )}
  
           {/* Celo Network Quiz Card */}
-          <QuizCard
-            title="Celo Network Quiz"
-            description="Delve into the Celo network. Learn about carbon-negativity, mobile-first design, and decentralized finance (ReFi)."
-            gradient="from-amber-950/80 via-yellow-900/30 to-gray-950"
-            borderHover="hover:border-amber-500"
-            bulletColor="bg-amber-500"
-            bullets={['Celo Network', 'Mobile-First & ReFi', 'Ecosystem Trivia']}
-            buttonText="Enter Celo Arena"
-            onClick={() => handlePlayQuiz('celo', celo.id)}
-          />
+          {(!filterChain || filterChain === 'celo') && (
+            <QuizCard
+              title="Celo Network Quiz"
+              description="Delve into the Celo network. Learn about carbon-negativity, mobile-first design, and decentralized finance (ReFi)."
+              gradient="from-amber-950/80 via-yellow-900/30 to-gray-950"
+              borderHover="hover:border-amber-500"
+              bulletColor="bg-amber-500"
+              bullets={['Celo Network', 'Mobile-First & ReFi', 'Ecosystem Trivia']}
+              buttonText="Enter Celo Arena"
+              onClick={() => handlePlayQuiz('celo', celo.id)}
+            />
+          )}
  
-          {/* General Crypto Quiz Card */}
-          <QuizCard
-            title="General Crypto Quiz"
-            description="Classic, general cryptocurrency questions. Test your fundamentals on Bitcoin, DeFi, Ethereum, and consensus systems."
-            gradient="from-emerald-950/80 via-teal-900/30 to-gray-950"
-            borderHover="hover:border-emerald-500"
-            bulletColor="bg-emerald-500"
-            bullets={['Base Mainnet', 'General Industry Trivia', 'Web3 Fundamentals']}
-            buttonText="Enter General Arena"
-            onClick={() => handlePlayQuiz('general', baseMainnet.id)}
-          />
+          {/* General Crypto Quiz Card (Shows on Base filter as well) */}
+          {(!filterChain || filterChain === 'base') && (
+            <QuizCard
+              title="General Crypto Quiz"
+              description="Classic, general cryptocurrency questions. Test your fundamentals on Bitcoin, DeFi, Ethereum, and consensus systems."
+              gradient="from-emerald-950/80 via-teal-900/30 to-gray-950"
+              borderHover="hover:border-emerald-500"
+              bulletColor="bg-emerald-500"
+              bullets={['Base Mainnet', 'General Industry Trivia', 'Web3 Fundamentals']}
+              buttonText="Enter General Arena"
+              onClick={() => handlePlayQuiz('general', baseMainnet.id)}
+            />
+          )}
         </div>
       </div>
 
