@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAccount, useSwitchChain, useChainId } from 'wagmi'
 import { useRouter } from 'next/navigation'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit'
 import { useQuizState } from './hooks/useQuizState'
 import { usePlayerProfile } from './hooks/usePlayerProfile'
 import { useChainConfig } from './hooks/useChainConfig'
@@ -27,6 +27,7 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
   const chainId = useChainId()
   const { switchChainAsync } = useSwitchChain()
   const router = useRouter()
+  const { openConnectModal } = useConnectModal()
 
   const { canPlay, hasSubmitted, todayScore } = useQuizState(address)
   const { totalScore, streakDays, boostMultiplier } = usePlayerProfile(address)
@@ -121,13 +122,18 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
           <div className="text-5xl animate-bounce">⛓️</div>
           <div className="space-y-2">
             <h2 className="text-2xl font-black text-white">Lütfen {targetChainName} Ağına Bağlanın</h2>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Bu özel alandaki quizlere ve yarışmalara katılabilmek için cüzdanınızı bağlayıp <strong>{targetChainName}</strong> ağına geçiş yapmanız gerekmektedir.
-            </p>
           </div>
           
           <button
             onClick={async () => {
+              if (!isConnected) {
+                if (openConnectModal) {
+                  openConnectModal()
+                } else {
+                  alert('Cüzdan bağlama modülü yüklenemedi. Lütfen sağ üstteki Connect butonunu kullanın.')
+                }
+                return
+              }
               if (targetChainId) {
                 try {
                   await switchChainAsync({ chainId: targetChainId })
@@ -138,7 +144,7 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
             }}
             className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-sm rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-600/30"
           >
-            {isConnected ? `${targetChainName} Ağına Geç` : 'Ağa Bağlan / Ağ Değiştir'}
+            {isConnected ? `${targetChainName} Ağına Geç` : 'Ağa Bağlan / Cüzdanı Bağla'}
           </button>
         </div>
       )}
