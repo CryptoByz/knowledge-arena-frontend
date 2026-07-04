@@ -17,6 +17,11 @@ export async function generateMetadata({ searchParams }: HomeProps): Promise<Met
       metadataBase: new URL('https://knowledge-arena.xyz'),
       title: `Verified Score: ${score}/10 on ${chainName} | Knowledge Arena`,
       description: `Prove your Web3 expertise on Celo, Base, and ARC network daily quizzes.`,
+      icons: {
+        icon: '/logo.png',
+        shortcut: '/logo.png',
+        apple: '/logo.png',
+      },
       openGraph: {
         title: `Verified Score: ${score}/10 on ${chainName} | Knowledge Arena`,
         description: `Prove your Web3 expertise on Celo, Base, and ARC network daily quizzes.`,
@@ -42,6 +47,11 @@ export async function generateMetadata({ searchParams }: HomeProps): Promise<Met
   return {
     title: 'Knowledge Arena | The Ultimate Onchain Trivia Platform',
     description: 'Prove your Web3 expertise, build onchain reputation, and earn badges cryptographically verified on Ethereum Layer 2s and Celo.',
+    icons: {
+      icon: '/logo.png',
+      shortcut: '/logo.png',
+      apple: '/logo.png',
+    },
   }
 }
 

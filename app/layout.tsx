@@ -10,6 +10,11 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Knowledge Arena',
   description: 'The onchain knowledge game platform for Web3 and AI',
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
   other: {
     'talentapp:project_verification': 'd7043c79ce40b4685beb5a79297308ceb6b3adadd645c14c6ae80f195107bbf11deef01b74ab87b3459aadc5690f1be65cbef7f046aa600fa26f657817b1d2ba',
   },
