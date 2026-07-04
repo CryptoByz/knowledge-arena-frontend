@@ -4,12 +4,15 @@ import { useAccount } from 'wagmi'
 import { usePlayerProfile } from '../hooks/usePlayerProfile'
 import { useQuizState } from '../hooks/useQuizState'
 import { useChainConfig } from '../hooks/useChainConfig'
+import { useLanguage } from '../context/LanguageContext'
+import { getTranslation } from '../config/translations'
 import { useReadContract } from 'wagmi'
 import { ACHIEVEMENT_ABI } from '../config/abi'
 
 export default function ProfilePage() {
   const { address, isConnected } = useAccount()
   const { isSupported, chainName, contracts } = useChainConfig()
+  const { language } = useLanguage()
   const { totalScore, weeklyScore, monthlyScore, seasonScore, streakDays, boostMultiplier } = usePlayerProfile(address)
   const { todayScore, hasSubmitted, canPlay } = useQuizState(address)
 
@@ -22,11 +25,21 @@ export default function ProfilePage() {
   })
 
   if (!isConnected) {
-    return <CenteredMessage title="Connect your wallet" subtitle="Connect your wallet to view your profile." />
+    return (
+      <CenteredMessage 
+        title={language === 'tr' ? 'Cüzdanınızı bağlayın' : 'Connect your wallet'} 
+        subtitle={language === 'tr' ? 'Profilinizi görüntülemek için cüzdanınızı bağlayın.' : 'Connect your wallet to view your profile.'} 
+      />
+    )
   }
 
   if (!isSupported) {
-    return <CenteredMessage title="Wrong network" subtitle="Please switch your wallet to a supported network (ARC Testnet, Base, or Celo)." />
+    return (
+      <CenteredMessage 
+        title={language === 'tr' ? 'Yanlış ağ' : 'Wrong network'} 
+        subtitle={language === 'tr' ? 'Lütfen cüzdanınızı desteklenen bir ağa geçirin (ARC Testnet, Base veya Celo).' : 'Please switch your wallet to a supported network (ARC Testnet, Base, or Celo).'} 
+      />
+    )
   }
 
   const boost = Number(boostMultiplier) / 100
@@ -34,7 +47,7 @@ export default function ProfilePage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Profile</h1>
+        <h1 className="text-2xl font-bold">{getTranslation('profile', language)}</h1>
         <span className="text-sm text-gray-400 font-mono">
           {address?.slice(0, 6)}...{address?.slice(-4)}
         </span>
@@ -43,40 +56,55 @@ export default function ProfilePage() {
       {/* Streak + Boost */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 flex items-center justify-between">
         <div>
-          <p className="text-gray-400 text-sm">Current Streak</p>
-          <p className="text-4xl font-bold text-orange-400">🔥 {streakDays.toString()} days</p>
+          <p className="text-gray-400 text-sm">
+            {language === 'tr' ? 'Günlük Seri' : 'Current Streak'}
+          </p>
+          <p className="text-4xl font-bold text-orange-400">
+            🔥 {streakDays.toString()} {language === 'tr' ? 'gün' : 'days'}
+          </p>
         </div>
         <div className="text-right">
-          <p className="text-gray-400 text-sm">Score Boost</p>
+          <p className="text-gray-400 text-sm">
+            {language === 'tr' ? 'Skor Çarpanı' : 'Score Boost'}
+          </p>
           <p className="text-4xl font-bold text-indigo-400">{boost.toFixed(2)}x</p>
         </div>
       </div>
 
       {/* Score grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <ScoreCard label="Total Score" value={totalScore.toString()} color="white" />
-        <ScoreCard label="This Week" value={weeklyScore.toString()} color="indigo" />
-        <ScoreCard label="This Month" value={monthlyScore.toString()} color="blue" />
-        <ScoreCard label="This Season" value={seasonScore.toString()} color="purple" />
+        <ScoreCard label={language === 'tr' ? 'Toplam Skor' : 'Total Score'} value={totalScore.toString()} color="white" />
+        <ScoreCard label={language === 'tr' ? 'Bu Hafta' : 'This Week'} value={weeklyScore.toString()} color="indigo" />
+        <ScoreCard label={language === 'tr' ? 'Bu Ay' : 'This Month'} value={monthlyScore.toString()} color="blue" />
+        <ScoreCard label={language === 'tr' ? 'Bu Sezon' : 'This Season'} value={seasonScore.toString()} color="purple" />
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <p className="text-gray-400 text-sm">Games Played</p>
+          <p className="text-gray-400 text-sm">
+            {language === 'tr' ? 'Oynanan Oyunlar' : 'Games Played'}
+          </p>
           <p className="text-3xl font-bold mt-1">{gamesPlayed?.toString() ?? '0'}</p>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <p className="text-gray-400 text-sm">Today's Participation</p>
+          <p className="text-gray-400 text-sm">
+            {language === 'tr' ? 'Bugünkü Katılım' : "Today's Participation"}
+          </p>
           <p className="text-3xl font-bold mt-1">
-            {hasSubmitted ? `${todayScore}/10` : canPlay ? 'Ready' : 'Completed'}
+            {hasSubmitted 
+              ? `${todayScore}/10` 
+              : canPlay 
+                ? (language === 'tr' ? 'Hazır' : 'Ready') 
+                : (language === 'tr' ? 'Tamamlandı' : 'Completed')}
           </p>
         </div>
       </div>
 
       {/* Network */}
       <div className="text-center text-sm text-gray-500">
-        Viewing stats on <span className="text-indigo-400">{chainName}</span>
+        {language === 'tr' ? 'İstatistikleri görüntülediğiniz ağ:' : 'Viewing stats on'}{' '}
+        <span className="text-indigo-400">{chainName}</span>
       </div>
     </div>
   )
@@ -100,8 +128,8 @@ function ScoreCard({ label, value, color }: { label: string; value: string; colo
 function CenteredMessage({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className="text-center space-y-3 pt-24">
-      <h2 className="text-2xl font-bold">{title}</h2>
-      <p className="text-gray-400">{subtitle}</p>
+      <h2 className="text-2xl font-bold text-white">{title}</h2>
+      <p className="text-gray-400 text-sm">{subtitle}</p>
     </div>
   )
 }

@@ -1,0 +1,862 @@
+{
+  "easy_001": {
+    "question": "Bitcoin'i yaratan takma adla kim biliniyor?",
+    "options": [
+      "Vitalik Buterin",
+      "Satoshi Nakamoto",
+      "Changpeng Zhao",
+      "Elon Musk"
+    ],
+    "answer": "Satoshi Nakamoto"
+  },
+  "easy_002": {
+    "question": "Bitcoin'in maksimum arzı nedir?",
+    "options": [
+      ".",
+      "21 MİLYON",
+      "100 milyon",
+      "1 milyar"
+    ],
+    "answer": "21 MİLYON"
+  },
+  "easy_003": {
+    "question": "Kripto para birimlerini depolamak ve yönetmek için kullanılan aracın adı nedir?",
+    "options": [
+      "Gezgin",
+      "Düğüm",
+      "Cüzdan",
+      "Köprü "
+    ],
+    "answer": "Cüzdan"
+  },
+  "easy_004": {
+    "question": "Bir işlem bir blok zincirine kaydedildiğinde buna ne denir?",
+    "options": [
+      "Minting",
+      "Onay",
+      "Çatallama",
+      "Yanıyor"
+    ],
+    "answer": "Onay"
+  },
+  "easy_005": {
+    "question": "Özel anahtarınıza erişiminizi kaybederseniz ne olabilir?",
+    "options": [
+      "İnternet erişimini kaybetme",
+      "Kripto varlıklara erişimi kaybetme",
+      "Cüzdan adres değişiklikleri",
+      "Geçmiş silindi"
+    ],
+    "answer": "Kripto varlıklara erişimi kaybetme"
+  },
+  "easy_006": {
+    "question": "İnsanlar neden cüzdan adreslerini paylaşıyor?",
+    "options": [
+      "Fon alın",
+      "Şifreleri saklayın",
+      "Kripto madenciliği yapın",
+      "Token oluşturun"
+    ],
+    "answer": "Fon alın"
+  },
+  "easy_007": {
+    "question": "Blockchain teknolojisinin temel özelliklerinden biri nedir?",
+    "options": [
+      "Merkezi kontrol",
+      "Değişmez kayıtlar",
+      "Tek sunucu",
+      "Özel mülkiyet"
+    ],
+    "answer": "Değişmez kayıtlar"
+  },
+  "easy_008": {
+    "question": "HODL genel olarak ne anlama gelir?",
+    "options": [
+      "Hızlı satış yapın",
+      "Uzun vadeli tutun",
+      "Token oluşturun",
+      "Likidite sağlayın"
+    ],
+    "answer": "Uzun vadeli tutun"
+  },
+  "easy_009": {
+    "question": "Blok zinciri gezgini ne için kullanılır?",
+    "options": [
+      "NFT'ler oluşturun",
+      "İşlemleri görüntüleyin",
+      "Mint tokenleri",
+      "Cüzdan oluşturun"
+    ],
+    "answer": "İşlemleri görüntüleyin"
+  },
+  "easy_010": {
+    "question": "Blok zinciri işlem ücretinin ortak adı nedir?",
+    "options": [
+      "Gaz Ücreti",
+      "NİS",
+      "Kayma",
+      "TVL"
+    ],
+    "answer": "Gaz Ücreti"
+  },
+  "easy_011": {
+    "question": "Tohum cümlesi nedir?",
+    "options": [
+      "Şifre değiştirme",
+      "Cüzdan kurtarma ibaresi",
+      "Token adı",
+      "Madencilik cihazı"
+    ],
+    "answer": "Cüzdan kurtarma ibaresi"
+  },
+  "easy_012": {
+    "question": "DYOR ne anlama geliyor?",
+    "options": [
+      "Kendi Araştırmanızı Yapın",
+      "Kendi Ödülünüzü Yatırın",
+      "Rezervde Dijital Getiri",
+      "Resmi Raporunuzu Yapın"
+    ],
+    "answer": "Kendi Araştırmanızı Yapın"
+  },
+  "easy_013": {
+    "question": "Tek bir kişi birden fazla cüzdan adresini kontrol edebilir mi?",
+    "options": [
+      "Hayır",
+      "Evet",
+      "Sadece şirketler",
+      "Sadece borsalar"
+    ],
+    "answer": "Evet"
+  },
+  "easy_014": {
+    "question": "Kripto yanlış adrese gönderilirse genellikle ne olur?",
+    "options": [
+      "Otomatik iade",
+      "Madenci onarır",
+      "Kurtarılması zor/imkansız",
+      "Borsa geri yükler"
+    ],
+    "answer": "Kurtarılması zor/imkansız"
+  },
+  "easy_015": {
+    "question": "Bitcoin hangi yılda piyasaya sürüldü?",
+    "options": [
+      "2009",
+      "2012",
+      "2015",
+      "2018"
+    ],
+    "answer": "2009"
+  },
+  "med_001": {
+    "question": "DeFi ne anlama geliyor?",
+    "options": [
+      "Merkezi Olmayan Finans",
+      "Tanımlı Defter",
+      "Yatırılan Fon Endeksi",
+      "Ertelenmiş Finansal Faiz"
+    ],
+    "answer": "Merkezi Olmayan Finans"
+  },
+  "med_002": {
+    "question": "Stablecoin'in birincil amacı nedir?",
+    "options": [
+      "Fiyat istikrarı",
+      "Yüksek getiri staking",
+      "Anonim ödemeler",
+      "Daha hızlı blok oluşturma"
+    ],
+    "answer": "Fiyat istikrarı"
+  },
+  "med_003": {
+    "question": "Staking nedir?",
+    "options": [
+      "Bir ağın güvenliğini sağlamaya yardımcı olmak için varlıkları kilitleme",
+      "Yüksek kaldıraçla kripto ticareti yapmak",
+      "Teminat karşılığında token ödünç almak",
+      "Gelecekteki token fiyatlarını tahmin etmek"
+    ],
+    "answer": "Bir ağın güvenliğini sağlamaya yardımcı olmak için varlıkları kilitleme"
+  },
+  "med_004": {
+    "question": "TVL, DeFi'de ne anlama geliyor?",
+    "options": [
+      "Kilitlenen Toplam Değer",
+      "Tasfiye Edilen Toplam Hacim",
+      "Token Değerleme Limiti",
+      "İşlem Hızı Defteri"
+    ],
+    "answer": "Kilitlenen Toplam Değer"
+  },
+  "med_005": {
+    "question": "Akıllı sözleşme nedir?",
+    "options": [
+      "Bir blok zincirinde kendi kendini çalıştıran kod",
+      "Şifrelenmiş bir mesajlaşma sistemi",
+      "Bir veritabanında saklanan yasal bir belge",
+      "Yapay zeka kullanan bir cüzdan"
+    ],
+    "answer": "Bir blok zincirinde kendi kendini çalıştıran kod"
+  },
+  "med_006": {
+    "question": "Blockchain köprüsü ne için kullanılır?",
+    "options": [
+      "Varlıkları blok zincirleri arasında taşıma",
+      "Bir cüzdanı web tarayıcısına bağlama",
+      "Fiat parayı kripto para birimine dönüştürme",
+      "Madenciler için internet bağlantısını hızlandırma"
+    ],
+    "answer": "Varlıkları blok zincirleri arasında taşıma"
+  },
+  "med_007": {
+    "question": "İşlemlerde kayma nedir?",
+    "options": [
+      "Beklenen ve gerçekleştirilen fiyat arasındaki fark",
+      "İşlem onay süresindeki gecikme",
+      "Hareketsizlik nedeniyle bir cüzdana erişimin kaybedilmesi",
+      "Genel piyasa kapitalizasyonunda keskin bir düşüş"
+    ],
+    "answer": "Beklenen ve gerçekleştirilen fiyat arasındaki fark"
+  },
+  "med_008": {
+    "question": "Airdrop nedir?",
+    "options": [
+      "Tokenlerin kullanıcılara dağıtımı",
+      "Bir tokenin fiyatındaki ani düşüş",
+      "Bir cüzdanı bulut depolama alanına yedekleme",
+      "Bir blockchain'in temel yazılımını yükseltme"
+    ],
+    "answer": "Tokenlerin kullanıcılara dağıtımı"
+  },
+  "med_009": {
+    "question": "APR ne anlama geliyor?",
+    "options": [
+      "Yıllık Yüzde Oranı",
+      "Varlık Fiyat Oranı",
+      "Otomatik Protokol Ödülü",
+      "Algoritmik Rezerv Kanıtı"
+    ],
+    "answer": "Yıllık Yüzde Oranı"
+  },
+  "med_010": {
+    "question": "Yönetişim tokeni genellikle ne için kullanılır?",
+    "options": [
+      "Protokol kararlarının oylanması",
+      "Ağ işlem ücretlerinin ödenmesi",
+      "Fiziksel doğrulama düğümlerinin güvence altına alınması",
+      "Özel cüzdan iletişimlerinin şifrelenmesi"
+    ],
+    "answer": "Protokol kararlarının oylanması"
+  },
+  "med_011": {
+    "question": "Kripto piyasalarında likidite nedir?",
+    "options": [
+      "İşlem için mevcut varlıklar",
+      "Dijital bir tokenin volatilite seviyesi",
+      "Kilitli geliştirici fonlarının toplam sayısı",
+      "Yeni bir blok oluşturma hızı"
+    ],
+    "answer": "İşlem için mevcut varlıklar"
+  },
+  "med_012": {
+    "question": "DAO nedir?",
+    "options": [
+      "Merkezi Olmayan Otonom Organizasyon",
+      "Dağıtılmış Varlık Optimizasyonu",
+      "Dijital Otomatik Derebeyi",
+      "Zincir Dışı Veri Erişimi"
+    ],
+    "answer": "Merkezi Olmayan Otonom Organizasyon"
+  },
+  "med_013": {
+    "question": "Validatörün amacı nedir?",
+    "options": [
+      "İşlemleri doğrulayın ve güvence altına alın",
+      "Akıllı sözleşme kodu yazın",
+      "Merkezi olmayan borsalarda yeni tokenleri listeleyin",
+      "Blockchain projeleri için halkla ilişkileri yönetin"
+    ],
+    "answer": "İşlemleri doğrulayın ve güvence altına alın"
+  },
+  "med_014": {
+    "question": "Piyasa değeri nedir?",
+    "options": [
+      "Fiyat × Dolaşımdaki Arz",
+      "Günlük Toplam İşlem Hacmi",
+      "Fiyat × Toplam Maksimum Arz",
+      "Ağ Doğrulayıcılarına Ödenen Toplam Ücretler"
+    ],
+    "answer": "Fiyat × Dolaşımdaki Arz"
+  },
+  "med_015": {
+    "question": "NFT nedir?",
+    "options": [
+      "Değiştirilemez Token",
+      "Ağ Finansal Transferi",
+      "Düğüm Tabanlı Füzyon Teknolojisi",
+      "Yeni Nesil Finansal Güven"
+    ],
+    "answer": "Değiştirilemez Token"
+  },
+  "hard_001": {
+    "question": "Blockchain kahininin amacı nedir?",
+    "options": [
+      "Zincire harici veriler getirin",
+      "AI kullanarak gelecekteki kripto fiyatlarını tahmin edin",
+      "Katman 2 'deki işlem verilerini sıkıştırın",
+      "Cüzdanlar için rastgele özel anahtarlar oluşturun"
+    ],
+    "answer": "Zincire harici veriler getirin"
+  },
+  "hard_002": {
+    "question": "FDV ne anlama geliyor?",
+    "options": [
+      "Tamamen Seyreltilmiş Değerleme",
+      "Finansal Veri Doğrulama",
+      "Kesirli Dijital Değer",
+      "Sabit Mevduat Oynaklığı"
+    ],
+    "answer": "Tamamen Seyreltilmiş Değerleme"
+  },
+  "hard_003": {
+    "question": "Kaldıraç kullanmanın ana riski nedir?",
+    "options": [
+      "Tasfiye",
+      "Kayma",
+      "Kalıcı Kayıp",
+      "Akıllı Sözleşme Hatası"
+    ],
+    "answer": "Tasfiye"
+  },
+  "hard_004": {
+    "question": "MEV ne anlama geliyor?",
+    "options": [
+      "Maksimum (veya Madenci) Çıkarılabilir Değer",
+      "Çoklu Döviz Oynaklığı",
+      "Ana Ağ Şifreleme Doğrulaması",
+      "Piyasa Fazlalığı Hacmi"
+    ],
+    "answer": "Maksimum (veya Madenci) Çıkarılabilir Değer"
+  },
+  "hard_005": {
+    "question": "Öncelikli olarak geliştirmek için tasarlanmış bir L2 nedir?",
+    "options": [
+      "Ölçeklenebilirlik",
+      "Yerinden Yönetim",
+      "Gizlilik",
+      "Tokenomics"
+    ],
+    "answer": "Ölçeklenebilirlik"
+  },
+  "hard_006": {
+    "question": "Kalıcı olmayan kayıp neyle ilişkilidir?",
+    "options": [
+      "Likidite sağlama",
+      "Donanım cüzdanı hatası",
+      "Tokenleri yanlış bir adrese gönderme",
+      "Ayı piyasası sırasında varlıkları tutma"
+    ],
+    "answer": "Likidite sağlama"
+  },
+  "hard_007": {
+    "question": "Multisig cüzdan nedir?",
+    "options": [
+      "Birden fazla onay gerektiren bir cüzdan",
+      "Birden fazla itibari para birimini saklayan bir cüzdan",
+      "Birden fazla blok zincirinde çalışan bir cüzdan",
+      "Otomatik yinelenen ödemelere sahip bir cüzdan"
+    ],
+    "answer": "Birden fazla onay gerektiren bir cüzdan"
+  },
+  "hard_008": {
+    "question": "Halı çekme nedir?",
+    "options": [
+      "Kötü niyetli bir çıkış dolandırıcılığı",
+      "Beklenmedik bir protokol sert çatalı",
+      "Kaldıraçlı uzun pozisyonların toplu tasfiyesi",
+      "Otomatik bir token yeniden dengeleme olayı"
+    ],
+    "answer": "Kötü niyetli bir çıkış dolandırıcılığı"
+  },
+  "hard_009": {
+    "question": "Token hakedişi nedir?",
+    "options": [
+      "Zaman içinde kademeli jeton serbest bırakma",
+      "Eski jetonları yükseltilmiş bir sürümle değiştirme",
+      "Protokol hibelerine oy vermek için jetonları kullanma",
+      "Dolaşımdaki arzı azaltmak için jetonları yok etme"
+    ],
+    "answer": "Zaman içinde kademeli jeton serbest bırakma"
+  },
+  "hard_010": {
+    "question": "Blok gezgininin sözleşme sekmesinin amacı nedir?",
+    "options": [
+      "Akıllı sözleşmeleri inceleyin",
+      "Yasal istihdam sözleşmeleri imzalayın",
+      "Ticaret seçenekleri ve vadeli işlem sözleşmeleri",
+      "Merkezi borsaların hizmet şartlarını görüntüleyin"
+    ],
+    "answer": "Akıllı sözleşmeleri inceleyin"
+  },
+  "hard_011": {
+    "question": "Dolaşımdaki arz neyi temsil eder?",
+    "options": [
+      "Şu anda piyasada bulunan tokenlar",
+      "Ekip hak ediş sözleşmelerinde kilitli tokenlar",
+      "Var olacak toplam tokenlar",
+      "Protokol tarafından yakılan tokenlar"
+    ],
+    "answer": "Şu anda piyasada bulunan tokenlar"
+  },
+  "hard_012": {
+    "question": "Rekt genellikle neyi tanımlamak için kullanılır?",
+    "options": [
+      "Ciddi bir finansal kayıp",
+      "Başarılı bir düğüm dağıtımı",
+      "Onaylanmış bir yönetişim teklifi",
+      "Son derece optimize edilmiş bir akıllı sözleşme"
+    ],
+    "answer": "Ciddi bir finansal kayıp"
+  },
+  "hard_013": {
+    "question": "Token yakma nedir?",
+    "options": [
+      "Tokenlerin dolaşımdan kalıcı olarak kaldırılması",
+      "Piyasa sıkışıklığı sırasında yüksek gas ücretleri",
+      "Bir protokolden fon çalan bilgisayar korsanları",
+      "Tokenleri önemli bir zararla satmak"
+    ],
+    "answer": "Tokenlerin dolaşımdan kalıcı olarak kaldırılması"
+  },
+  "hard_014": {
+    "question": "Beyaz liste yaygın olarak ne için kullanılır?",
+    "options": [
+      "Erken erişim izni verme",
+      "Kötü amaçlı cüzdan adreslerini yasaklama",
+      "Global token işlemlerini izleme",
+      "Stablecoin'leri merkezi borsalarda listeleme"
+    ],
+    "answer": "Erken erişim izni verme"
+  },
+  "hard_015": {
+    "question": "Bir test ağının birincil amacı nedir?",
+    "options": [
+      "Uygulamaların güvenli bir şekilde test edilmesi",
+      "Yüksek reel getirili varlıkların stake edilmesi",
+      "Yüksek frekanslı reel işlemlerin yürütülmesi",
+      "Uzun vadeli derin likidite sağlanması"
+    ],
+    "answer": "Uygulamaların güvenli bir şekilde test edilmesi"
+  },
+  "ai_001": {
+    "question": "ZK - ML (Sıfır Bilgi Makine Öğrenimi) Nedir?",
+    "options": [
+      "Yürütmeyi kriptografik olarak kanıtlarken AI modellerini çalıştırmak",
+      "Otomatik olarak özel anahtarlar üreten bir AI aracısı",
+      "Sıfır genel öğe içeren bir makine öğrenimi veri kümesi",
+      "LLM dosya boyutunu sıfıra indiren bir sıkıştırma yöntemi"
+    ],
+    "answer": "Yürütmeyi kriptografik olarak kanıtlarken AI modellerini çalıştırmak"
+  },
+  "ai_002": {
+    "question": "Yapay zeka bağlamında DePIN ağı nedir?",
+    "options": [
+      "GPU'lar gibi fiziksel hesaplama sağlayan merkezi olmayan altyapı",
+      "Özel cüzdan geçmişlerini analiz eden bir AI protokolü",
+      "Hızlı enjeksiyonu tespit etmek için tasarlanmış bir güvenlik çerçevesi",
+      "Kurumsal düğümler tarafından yönetilen merkezi bir veritabanı sistemi"
+    ],
+    "answer": "GPU'lar gibi fiziksel hesaplama sağlayan merkezi olmayan altyapı"
+  },
+  "ai_003": {
+    "question": "Hızlı Enjeksiyon ne anlama gelir?",
+    "options": [
+      "Bir yapay zekanın davranışını manipüle etmek için tasarlanmış kötü amaçlı girdiler",
+      "LLM eğitim süresini hızlandıran otomatik bir araç",
+      "Bir sinir ağına zincir üstü Gas tokenleri enjekte etmek",
+      "Bir kullanıcı arayüzünde birden fazla sohbet kutusu görüntülemek için bir yöntem"
+    ],
+    "answer": "Bir yapay zekanın davranışını manipüle etmek için tasarlanmış kötü amaçlı girdiler"
+  },
+  "ai_004": {
+    "question": "Yapay zeka sistemlerinde vektör veri tabanlarının birincil kullanımı nedir?",
+    "options": [
+      "Yüksek boyutlu veri eklemelerini saklama ve sorgulama",
+      "Blockchain cüzdanlarının ham işlem geçmişlerini kaydetme",
+      "Madencilik teçhizatları arasında veri işleme hızlarını dengeleme",
+      "Üretken NFT'ler için benzersiz görsel sanat stilleri oluşturma"
+    ],
+    "answer": "Yüksek boyutlu veri eklemelerini saklama ve sorgulama"
+  },
+  "ai_005": {
+    "question": "Bir yapay zeka temsilcisi, zincirdeki işlemleri yürütmek için neye ihtiyaç duyar?",
+    "options": [
+      "Özel bir anahtar veya bir akıllı sözleşme cüzdanına erişim",
+      "Bir insan kullanıcıdan sürekli bir sesli arama doğrulaması",
+      "Devlet düğümleri tarafından onaylanan merkezi bir API belirteci",
+      "Bir doğrulayıcıya bağlı fiziksel bir grafik işlemcisi"
+    ],
+    "answer": "Özel bir anahtar veya bir akıllı sözleşme cüzdanına erişim"
+  },
+  "ai_006": {
+    "question": "Anlamsal Arama Nedir?",
+    "options": [
+      "Tam kelimeler yerine anlam ve bağlama göre arama",
+      "Akıllı sözleşmeler için oluşturulmuş hızlı bir sözdizimi kontrol aracı",
+      "Merkezi olmayan DEX'lerdeki şüpheli faaliyetleri izleme",
+      "İngilizceyi Sağlamlığa çeviren otomatik bir komut dosyası"
+    ],
+    "answer": "Tam kelimeler yerine anlam ve bağlama göre arama"
+  },
+  "ai_007": {
+    "question": "Doğal Dil İşlemede Tokenizasyon (NLP) Nedir?",
+    "options": [
+      "Metin dizelerini kelimeler gibi daha küçük birimlere ayırmak",
+      "Katman 2 ağında yepyeni bir yardımcı token yayınlamak",
+      "Dijital varlıkları bir staking sözleşmesi içinde kilitlemek",
+      "Fiziksel gayrimenkul belgelerini NFT'lere dönüştürmek"
+    ],
+    "answer": "Metin dizelerini kelimeler gibi daha küçük birimlere ayırmak"
+  },
+  "ai_008": {
+    "question": "Çoklu ajan sistemi nedir?",
+    "options": [
+      "İşbirliği yapan veya rekabet eden çoklu otonom AI varlıkları",
+      "Birden fazla sunucu ağında çalışan tek bir model",
+      "Üç ayrı kullanıcı anahtarı gerektiren bir kurumsal cüzdan",
+      "İki ayrı blok zinciri istemcisi çalıştıran bir doğrulayıcı düğümü"
+    ],
+    "answer": "İşbirliği yapan veya rekabet eden çoklu otonom AI varlıkları"
+  },
+  "ai_009": {
+    "question": "Yapay Zeka Orkestratörünün işlevi nedir?",
+    "options": [
+      "İş akışlarını yönetme ve görevleri belirli modellere devretme",
+      "Merkezi olmayan oyun dApp'leri için arka plan müziği oluşturma",
+      "Blokların 12 saniye içinde üretildiğini doğrulama",
+      "Zincirler arası mesajlaşma köprüleri arasındaki iletişimi şifreleme"
+    ],
+    "answer": "İş akışlarını yönetme ve görevleri belirli modellere devretme"
+  },
+  "ai_010": {
+    "question": "RLHF, AI hizalamasında neyi ifade eder?",
+    "options": [
+      "İnsan Geribildiriminden Öğrenme",
+      "Tekrarlayan Mantık Geçmişi Çerçevesi",
+      "Rastgele Düşük Gecikmeli Karma İşlevi",
+      "Akıl Yürütme Seviyesi Hiper Parametre Ayarı"
+    ],
+    "answer": "İnsan Geribildiriminden Öğrenme"
+  },
+  "arc_001": {
+    "question": "ARC protokolünün amacı nedir?",
+    "options": [
+      "Temsilci koordinasyonu için güvenilir bir çerçeve sağlamak",
+      "Oyun tokenleri için yüksek hızlı katman 3 ağları oluşturmak",
+      "İnternet etki alanları için merkezi bir veritabanı oluşturmak",
+      "İş kanıtı dijital varlıklarının madenciliğini otomatikleştirmek"
+    ],
+    "answer": "Temsilci koordinasyonu için güvenilir bir çerçeve sağlamak"
+  },
+  "arc_002": {
+    "question": "Temsilciler Arc Network'teki kimlikleri nasıl doğrular?",
+    "options": [
+      "Kriptografik kimlik bilgileri ve zincir içi anahtarlar aracılığıyla",
+      "Metin kodu aracılığıyla fiziksel bir telefon numarasını doğrulayarak",
+      "Bir firma tarafından yönetilen merkezi bir kullanıcı dizini kullanarak",
+      "Resmi devlet kimlik belgesi dosyalarını göndererek"
+    ],
+    "answer": "Kriptografik kimlik bilgileri ve zincir içi anahtarlar aracılığıyla"
+  },
+  "arc_003": {
+    "question": "Ajan ekonomide 'kesinti' olayı nedir?",
+    "options": [
+      "Bir aracıyı veya düğümü kötü niyetli veya yanlış davranış nedeniyle cezalandırmak",
+      "Ağ hizmet tokenlerinin piyasa fiyatında ani bir düşüş",
+      "Büyük bir işi daha küçük bitlere bölen otomatik bir süreç",
+      "Bir LLM'nin bellek kullanımını azaltan bir yazılım yaması"
+    ],
+    "answer": "Bir aracıyı veya düğümü kötü niyetli veya yanlış davranış nedeniyle cezalandırmak"
+  },
+  "arc_004": {
+    "question": "ARC içinde otonom b2b etkileşimi nedir?",
+    "options": [
+      "Bir hizmet için başka bir aracıyı işe alan ve ödeyen bir AI aracısı",
+      "Manuel e - posta yoluyla sözleşmeleri imzalayan bir kurumsal kuruluş",
+      "İki ayrı kripto para cüzdanını yöneten tek bir kullanıcı",
+      "Planlanmış bir hard fork yükseltmesini yürüten bir blockchain ağı"
+    ],
+    "answer": "Bir hizmet için başka bir aracıyı işe alan ve ödeyen bir AI aracısı"
+  },
+  "arc_005": {
+    "question": "ARC düğümü neden sorumludur?",
+    "options": [
+      "Aracı durumunu korumak, mesajları yönlendirmek ve kayıtları güncellemek",
+      "Web dApp'leri için yüksek çözünürlüklü 3D grafikler oluşturmak",
+      "Harici DeFi havuzlarında kilitlenen tam değeri hesaplamak",
+      "Ses aracılarından sıkıştırılmış geçmiş ses verilerini depolamak"
+    ],
+    "answer": "Aracı durumunu korumak, mesajları yönlendirmek ve kayıtları güncellemek"
+  },
+  "arc_006": {
+    "question": "ARC üzerinde güvene dayalı olmayan işbirliği nedir?",
+    "options": [
+      "Merkezi güven değil, kriptografi ile doğrulanmış birlikte çalışan aracılar",
+      "Doğrulanmamış kodun özel cüzdan adreslerine erişmesine izin verme",
+      "Genel ana ağlarda herhangi bir şifreleme protokolü olmadan çalışma",
+      "İnsan denetçilerin her komutu onayladığı bir yedekleme sistemi"
+    ],
+    "answer": "Merkezi güven değil, kriptografi ile doğrulanmış birlikte çalışan aracılar"
+  },
+  "arc_007": {
+    "question": "Bir temsilcinin itibar geçmişi ARC'de neleri içerir?",
+    "options": [
+      "Görevinin yerine getirildiğinin doğrulanabilir, değişmez bir kaydı",
+      "Ön uç kullanıcı arayüzünün estetik değerlendirmesi",
+      "Barındırma veri merkezinin fiziksel ülke konumu",
+      "Bağlı sosyal profillerdeki toplam takipçi sayısı"
+    ],
+    "answer": "Görevinin yerine getirildiğinin doğrulanabilir, değişmez bir kaydı"
+  },
+  "arc_008": {
+    "question": "Zincirler arası aracı iş akışı nedir?",
+    "options": [
+      "Farklı blok zincirlerinde çok adımlı görevleri yürüten bir aracı",
+      "Bir AI aracısının kaynak kodunu bir sunucudan diğerine taşıma",
+      "Bir aracının hizmet tokenlerini fiziksel itibari paraya dönüştürme",
+      "Aynı anda iki web tarayıcısında bir LLM modeli çalıştırma"
+    ],
+    "answer": "Farklı blok zincirlerinde çok adımlı görevleri yürüten bir aracı"
+  },
+  "arc_009": {
+    "question": "Aracı mikro ödemeleri nedir?",
+    "options": [
+      "Aktif aracılar arasında küçük, otomatik anlık token transferleri",
+      "DEX'lerde günlük işlem yapan insan kullanıcılara verilen indirim",
+      "Cüzdan adresi satın almak için gereken küçük kayıt ücreti",
+      "Yalnızca Katman 1 doğrulayıcı düğümlerine ödenen gaz ücretleri"
+    ],
+    "answer": "Aktif aracılar arasında küçük, otomatik anlık token transferleri"
+  },
+  "arc_010": {
+    "question": "Makine tarafından okunabilir amaç nedir?",
+    "options": [
+      "Bir temsilcinin hedefini tanımlayan yapılandırılmış bir veri yükü",
+      "Bir bilgisayar ekranının metin karakterlerini görüntüleme kapasitesi",
+      "Özellikle madencilik çipleri için oluşturulmuş bir programlama dili",
+      "Değişken yorumları kaldıran otomatik bir kod derleyici"
+    ],
+    "answer": "Bir temsilcinin hedefini tanımlayan yapılandırılmış bir veri yükü"
+  },
+  "arc_011": {
+    "question": "Arc'ta acente pazarı nedir?",
+    "options": [
+      "Özel aracı hizmetlerini kiralamak için merkezi olmayan bir keşif katmanı",
+      "Üst düzey sunucu donanımı satan fiziksel bir elektronik pazar",
+      "Yapay zeka kurumsal değerlemelerini izleyen merkezi bir hisse senedi platformu",
+      "Geliştiricilerin hızlı şablonları değiştirdiği özel bir sohbet odası"
+    ],
+    "answer": "Özel aracı hizmetlerini kiralamak için merkezi olmayan bir keşif katmanı"
+  },
+  "arc_012": {
+    "question": "Zincir içi hesap verebilirlik ARC için neden önemlidir?",
+    "options": [
+      "Özerk kuruluşların başarısızlıklar için ekonomik maliyetlerle karşı karşıya kalmasını sağlamak",
+      "Kriptografik imza ihtiyacını tamamen ortadan kaldırmak",
+      "Kamu kullanıcılarının bir temsilcinin dahili ağırlıklarını düzenlemesine izin vermek",
+      "Blok onay sürelerini milisaniyenin altına düşürmek için"
+    ],
+    "answer": "Özerk kuruluşların başarısızlıklar için ekonomik maliyetlerle karşı karşıya kalmasını sağlamak"
+  },
+  "arc_013": {
+    "question": "Modüler görev atama nedir?",
+    "options": [
+      "Karmaşık bir görevi uzman temsilciler için parçalara ayırmak",
+      "Bir doğrulama düğümünün tüm ağ bloklarını işlemesine izin vermek",
+      "Bir veritabanından eski işlem geçmişini silmek için bir yöntem",
+      "Bir yapay zeka istemini birden fazla programlama diline dönüştürmek"
+    ],
+    "answer": "Karmaşık bir görevi uzman temsilciler için parçalara ayırmak"
+  },
+  "arc_014": {
+    "question": "ARC bağlamında egemen operasyon nedir?",
+    "options": [
+      "Programlanmış kısıtlamaları dahilinde bağımsız hareket eden bir temsilci",
+      "Doğrudan bir blockchain düğümünü kontrol eden bir devlet hükümeti",
+      "Herhangi bir internet ağına bağlanmadan çalışan bir AI modeli",
+      "Tüm işlemlerin gas token maliyetlerinden arınmış olduğu bir sistem"
+    ],
+    "answer": "Programlanmış kısıtlamaları dahilinde bağımsız hareket eden bir temsilci"
+  },
+  "arc_015": {
+    "question": "Temsilciler ne tür faaliyetleri otomatikleştirebilir?",
+    "options": [
+      "Likidite optimizasyonu, piyasa arbitrajı ve otomatik veri kaynağı",
+      "Depo konumlarındaki sunucu raflarının fiziksel montajı",
+      "Yepyeni fiziksel blok zinciri konsensüs donanım tasarımları oluşturmak",
+      "Egemen ülkeler için anayasal yasal çerçeveler yazmak"
+    ],
+    "answer": "Likidite optimizasyonu, piyasa arbitrajı ve otomatik veri kaynağı"
+  },
+  "arc_016": {
+    "question": "İşletmeler neden yapay zeka aracılarını kullanabilir?",
+    "options": [
+      "Operasyonel sürtünmeyi azaltmak, verimliliği en üst düzeye çıkarmak ve hızlı kararlar almak",
+      "Fiziksel elektrik şebekesine erişim ihtiyacını tamamen ortadan kaldırmak",
+      "Katı yargı bölgelerinde düzenlenmemiş finansal faaliyetleri yasallaştırmak",
+      "Veritabanlarını tamamen kaldırmak ve bilgi kaydetmeden çalışmak"
+    ],
+    "answer": "Operasyonel sürtünmeyi azaltmak, verimliliği en üst düzeye çıkarmak ve hızlı kararlar almak"
+  },
+  "arc_017": {
+    "question": "Acenteden acenteye işlemlerin bir amacı nedir?",
+    "options": [
+      "Makine tarafından okunabilir niyet ve protokol şartlarına dayalı doğrudan değer alışverişi",
+      "Otomatik kod iş akışlarını manuel kağıt defter defterlerine geri dönüştürme",
+      "Özel operasyonel anahtarları herkese açık sosyal medya üzerinden açık olarak yayınlama",
+      "Birden fazla insan kullanıcısının tek bir sohbet avatarını kontrol etmesine izin verme"
+    ],
+    "answer": "Makine tarafından okunabilir niyet ve protokol şartlarına dayalı doğrudan değer alışverişi"
+  },
+  "arc_018": {
+    "question": "Acente pazarı nedir?",
+    "options": [
+      "Özel AI aracı hizmetlerini keşfetmek, kiralamak veya satın almak için bir platform",
+      "Geliştiricilerin grafik işlemcileri sattığı fiziksel bir kongre salonu",
+      "İlkel metin filtreleri kullanan bir market uygulaması",
+      "Gayrimenkul tapularının ticareti için merkezi bir borsa"
+    ],
+    "answer": "Özel AI aracı hizmetlerini keşfetmek, kiralamak veya satın almak için bir platform"
+  },
+  "arc_019": {
+    "question": "What does verifiable identity help establish?",
+    "options": [
+      "On-chain accountability and protection against Sybil attacks",
+      "A method to keep all agent code completely hidden from everyone",
+      "A faster connection to central banking servers around the globe",
+      "An automated way to reset a lost recovery phrase instantly"
+    ],
+    "answer": "On-chain accountability and protection against Sybil attacks"
+  },
+  "arc_020": {
+    "question": "What is a common requirement for autonomous agents to operate effectively?",
+    "options": [
+      "Access to secure API keys, on-chain execution logic, and capital wallets",
+      "A constant active connection to a human controller's touchscreen device",
+      "A physical registration file submitted to centralized web authorities",
+      "Running on an obsolete computer processor architecture setup"
+    ],
+    "answer": "Access to secure API keys, on-chain execution logic, and capital wallets"
+  },
+  "arc_021": {
+    "question": "What is the purpose of an agent reputation system?",
+    "options": [
+      "To mitigate risk during trustless b2b agent interactions",
+      "To rank individual artificial agents by their natural voice quality",
+      "To determine how many lines of software code an agent contains",
+      "To award seasonal digital badges on web forum platforms"
+    ],
+    "answer": "To mitigate risk during trustless b2b agent interactions"
+  },
+  "arc_022": {
+    "question": "What is the relationship between agents and jobs in ARC's vision?",
+    "options": [
+      "Complex jobs are split into modular sub-tasks and delegated to specialized agents",
+      "Agents are completely restricted from participating in multi-task workflows",
+      "Every automated job requires a unique physical human manager supervising it",
+      "Jobs are randomly assigned to available wallets regardless of competency"
+    ],
+    "answer": "Complex jobs are split into modular sub-tasks and delegated to specialized agents"
+  },
+  "arc_023": {
+    "question": "Why is transparency valuable in agent economies?",
+    "options": [
+      "It allows cryptographic auditing of agent decisions and task history",
+      "It makes the source code completely modifiable by malicious third parties",
+      "It reduces the need for secure private data channels entirely",
+      "It forces agents to display all internal user personal passwords publicly"
+    ],
+    "answer": "It allows cryptographic auditing of agent decisions and task history"
+  },
+  "arc_024": {
+    "question": "What is one advantage of blockchain-based reputation?",
+    "options": [
+      "Tamper-proof, verifiable, and historical record of performance",
+      "It can be altered easily by paying higher validation network fees",
+      "It hides all historical mistakes from future collaborative entities",
+      "It completely eliminates the necessity for cryptographic signatures"
+    ],
+    "answer": "Tamper-proof, verifiable, and historical record of performance"
+  },
+  "arc_025": {
+    "question": "What long-term vision does ARC support?",
+    "options": [
+      "A fully autonomous, scalable, and decentralized agent-to-agent economy",
+      "A singular giant corporate AI model that controls all world networks",
+      "Moving all digital internet structures back to local offline databases",
+      "A network dedicated strictly to trading digital collectible art profiles"
+    ],
+    "answer": "A fully autonomous, scalable, and decentralized agent-to-agent economy"
+  },
+  "crypto_001": {
+    "question": "What does a Sybil attack involve?",
+    "options": [
+      "An attacker creating many fake identities to gain influence",
+      "Flooding a network with physical hardware overheating",
+      "Stealing private keys through a phishing website",
+      "Modifying the block reward size of miners"
+    ],
+    "answer": "An attacker creating many fake identities to gain influence"
+  },
+  "crypto_002": {
+    "question": "Which cryptographic mechanism ensures that transactions cannot be altered once confirmed?",
+    "options": [
+      "Hashing functions",
+      "Dynamic routing",
+      "Asymmetric load balancing",
+      "Symmetric encryption keys"
+    ],
+    "answer": "Hashing functions"
+  },
+  "crypto_003": {
+    "question": "What is the primary function of a mempool in a blockchain network?",
+    "options": [
+      "To store unconfirmed transactions waiting for miners",
+      "To archive historical blocks older than one year",
+      "To generate random seeds for hardware wallets",
+      "To balance electricity consumption across nodes"
+    ],
+    "answer": "To store unconfirmed transactions waiting for miners"
+  },
+  "crypto_004": {
+    "question": "What is a dusting attack?",
+    "options": [
+      "Sending tiny amounts of crypto to track wallet identities",
+      "Flooding a validator node to crash its server",
+      "An exploit that drains all stablecoins from a pool",
+      "A physical attack on a mining facility facility"
+    ],
+    "answer": "Sending tiny amounts of crypto to track wallet identities"
+  },
+  "crypto_005": {
+    "question": "What does the 'Time to Finality' (TTF) measure in a blockchain?",
+    "options": [
+      "The time it takes for a transaction to become irreversible",
+      "The lifespan of a physical validation node server",
+      "The duration of a typical bear market cycle",
+      "The time required to compile smart contract code"
+    ],
+    "answer": "The time it takes for a transaction to become irreversible"
+  },
+  "crypto_006": {
+    "question": "What is the purpose of BIPs (Bitcoin Improvement Proposals)?",
+    "options": [
+      "To propose updates and standards to the Bitcoin network",
+      "To increase the daily trading volume on exchanges",
+      "To legalise cryptocurrency in strict jurisdictions",
+      "To automatically calculate tax on crypto profits"
+    ],
+    "answer": "To propose updates and standards to the Bitcoin network"
+  }
+}

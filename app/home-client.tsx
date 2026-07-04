@@ -8,6 +8,9 @@ import { useQuizState } from './hooks/useQuizState'
 import { usePlayerProfile } from './hooks/usePlayerProfile'
 import { useChainConfig } from './hooks/useChainConfig'
 import { API_URL, arcTestnet, baseMainnet, celo } from './config/chains'
+import { useLanguage } from './context/LanguageContext'
+import { getTranslation, Lang } from './config/translations'
+import translatedChallenges from './config/translatedChallenges.json'
 
 type Challenge = {
   id: string
@@ -28,6 +31,7 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
   const { switchChainAsync } = useSwitchChain()
   const router = useRouter()
   const { openConnectModal } = useConnectModal()
+  const { language } = useLanguage()
 
   const { canPlay, hasSubmitted, todayScore } = useQuizState(address)
   const { totalScore, streakDays, boostMultiplier } = usePlayerProfile(address)
@@ -106,12 +110,15 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
           <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Arena</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
-          {filterChain ? `${targetChainName} Özel Bilgi Arenası` : 'The ultimate onchain knowledge platform.'}
+          {filterChain 
+            ? getTranslation('specialArenaTitle', language).replace('{chainName}', targetChainName)
+            : getTranslation('dailyChallengePoolsDesc', language)
+          }
         </p>
 
         {!isConnected && !filterChain && (
           <div className="flex justify-center pt-6 animate-bounce">
-            <ConnectButton label="Connect Wallet to Play" />
+            <ConnectButton label={getTranslation('connectToPlay', language)} />
           </div>
         )}
       </div>
@@ -121,7 +128,9 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
         <div className="max-w-xl mx-auto bg-gray-900/80 border-2 border-indigo-500/50 rounded-3xl p-8 text-center space-y-6 shadow-2xl backdrop-blur-md">
           <div className="text-5xl animate-bounce">⛓️</div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-black text-white">Lütfen {targetChainName} Ağına Bağlanın</h2>
+            <h2 className="text-2xl font-black text-white">
+              {getTranslation('connectToChainMsg', language).replace('{chainName}', targetChainName)}
+            </h2>
           </div>
           
           <button
@@ -144,7 +153,10 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
             }}
             className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-sm rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-600/30"
           >
-            {isConnected ? `${targetChainName} Ağına Geç` : 'Ağa Bağlan / Cüzdanı Bağla'}
+            {isConnected 
+              ? getTranslation('switchChainBtn', language).replace('{chainName}', targetChainName)
+              : getTranslation('connectAndSwitchBtn', language)
+            }
           </button>
         </div>
       )}
@@ -159,11 +171,11 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
               </span>
               <h2 className="text-2xl font-black tracking-wide text-white uppercase flex items-center gap-2">
-                ⚡ Flash & Özel Etkinlikler
+                {getTranslation('flashEvents', language)}
               </h2>
             </div>
             <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
-              Süreli Özel Yarışmalar
+              {getTranslation('timedChallenges', language)}
             </span>
           </div>
 
@@ -173,6 +185,7 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
                 key={ch.id}
                 challenge={ch}
                 onPlay={() => handlePlayChallenge(ch)}
+                language={language}
               />
             ))}
           </div>
@@ -182,20 +195,20 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
       {/* Quiz Cards Selection Grid */}
       <div className="space-y-6">
         <h2 className="text-2xl font-bold tracking-wide text-white border-l-4 border-indigo-500 pl-3">
-          Select Your Arena
+          {getTranslation('selectArena', language)}
         </h2>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* ARC Quiz Card */}
           {(!filterChain || filterChain === 'arc') && (
             <QuizCard
-              title="ARC Network Quiz"
-              description="Test your skills on ARC ecology, including gasless token transactions, scalability, and stablecoins."
+              title={getTranslation('arcQuizTitle', language)}
+              description={getTranslation('arcQuizDesc', language)}
               gradient="from-indigo-950/80 via-purple-900/30 to-gray-950"
               borderHover="hover:border-indigo-500"
               bulletColor="bg-indigo-500"
-              bullets={['ARC Testnet', 'Native Gas Stablecoins', 'Ecosystem Trivia']}
-              buttonText="Enter ARC Arena"
+              bullets={['ARC Testnet', language === 'tr' ? 'Gazsız Token İşlemleri' : 'Native Gas Stablecoins', language === 'tr' ? 'Ekosistem Soruları' : 'Ecosystem Trivia']}
+              buttonText={getTranslation('enterArcArena', language)}
               onClick={() => handlePlayQuiz('arc', arcTestnet.id)}
             />
           )}
@@ -203,13 +216,13 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
           {/* Base Mainnet Quiz Card */}
           {(!filterChain || filterChain === 'base') && (
             <QuizCard
-              title="Base Mainnet Quiz"
-              description="Challenge yourself on the Base L2 ecosystem. Answer questions on Ethereum scaling, rollups, and Coinbase tools."
+              title={getTranslation('baseQuizTitle', language)}
+              description={getTranslation('baseQuizDesc', language)}
               gradient="from-blue-950/80 via-cyan-900/30 to-gray-950"
               borderHover="hover:border-blue-500"
               bulletColor="bg-blue-500"
-              bullets={['Base Mainnet', 'Fast, Low-cost L2', 'Ecosystem Trivia']}
-              buttonText="Enter Base Arena"
+              bullets={['Base Mainnet', language === 'tr' ? 'Hızlı ve Ucuz L2' : 'Fast, Low-cost L2', language === 'tr' ? 'Ekosistem Soruları' : 'Ecosystem Trivia']}
+              buttonText={getTranslation('enterBaseArena', language)}
               onClick={() => handlePlayQuiz('base', baseMainnet.id)}
             />
           )}
@@ -217,13 +230,13 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
           {/* Celo Network Quiz Card */}
           {(!filterChain || filterChain === 'celo') && (
             <QuizCard
-              title="Celo Network Quiz"
-              description="Delve into the Celo network. Learn about carbon-negativity, mobile-first design, and decentralized finance (ReFi)."
+              title={getTranslation('celoQuizTitle', language)}
+              description={getTranslation('celoQuizDesc', language)}
               gradient="from-amber-950/80 via-yellow-900/30 to-gray-950"
               borderHover="hover:border-amber-500"
               bulletColor="bg-amber-500"
-              bullets={['Celo Network', 'Mobile-First & ReFi', 'Ecosystem Trivia']}
-              buttonText="Enter Celo Arena"
+              bullets={['Celo Network', language === 'tr' ? 'Mobil Öncelikli & ReFi' : 'Mobile-First & ReFi', language === 'tr' ? 'Ekosistem Soruları' : 'Ecosystem Trivia']}
+              buttonText={getTranslation('enterCeloArena', language)}
               onClick={() => handlePlayQuiz('celo', celo.id)}
             />
           )}
@@ -231,13 +244,13 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
           {/* General Crypto Quiz Card (Shows on Base filter as well) */}
           {(!filterChain || filterChain === 'base') && (
             <QuizCard
-              title="General Crypto Quiz"
-              description="Classic, general cryptocurrency questions. Test your fundamentals on Bitcoin, DeFi, Ethereum, and consensus systems."
+              title={getTranslation('generalQuizTitle', language)}
+              description={getTranslation('generalQuizDesc', language)}
               gradient="from-emerald-950/80 via-teal-900/30 to-gray-950"
               borderHover="hover:border-emerald-500"
               bulletColor="bg-emerald-500"
-              bullets={['Base Mainnet', 'General Industry Trivia', 'Web3 Fundamentals']}
-              buttonText="Enter General Arena"
+              bullets={['Base Mainnet', language === 'tr' ? 'Genel Sektör Soruları' : 'General Industry Trivia', language === 'tr' ? 'Web3 Temelleri' : 'Web3 Fundamentals']}
+              buttonText={getTranslation('enterGeneralArena', language)}
               onClick={() => handlePlayQuiz('general', baseMainnet.id)}
             />
           )}
@@ -248,24 +261,28 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
       <div className="grid md:grid-cols-2 gap-6 pt-6">
         <FeatureCard
           icon="🧠"
-          title="Daily Challenge Pools"
-          description="Each chain features a custom daily quiz plus a shared general crypto quiz. Deduplicated and committed to the blockchain every 24 hours."
+          title={getTranslation('dailyChallengePools', language)}
+          description={getTranslation('dailyChallengePoolsDesc', language)}
         />
         <FeatureCard
           icon="⛓️"
-          title="Verifiable Onchain Proofs"
-          description="Your answers are validated locally and verified onchain using Cryptographic Merkle Proofs. Prove your knowledge transparently."
+          title={getTranslation('verifiableProofs', language)}
+          description={getTranslation('verifiableProofsDesc', language)}
         />
       </div>
     </div>
   )
 }
 
-function FlashChallengeCard({ challenge, onPlay }: { challenge: Challenge, onPlay: () => void }) {
+function FlashChallengeCard({ challenge, onPlay, language }: { challenge: Challenge, onPlay: () => void, language: Lang }) {
   const chainName = 
     challenge.chainId === 5042002 ? 'ARC Testnet' : 
     challenge.chainId === 42220 ? 'Celo Mainnet' : 
     challenge.chainId === 84532 ? 'Base Sepolia' : 'Base Mainnet'
+
+  const trData = (translatedChallenges as any)[challenge.id]
+  const title = language === 'tr' && trData?.title ? trData.title : challenge.title
+  const description = language === 'tr' && trData?.description ? trData.description : challenge.description
 
   return (
     <div className="relative group overflow-hidden rounded-3xl border-2 border-amber-500/50 bg-gradient-to-r from-amber-950/70 via-purple-950/80 to-gray-950 p-6 md:p-8 shadow-2xl shadow-amber-500/10 transition-all duration-300 hover:border-amber-400 hover:shadow-amber-500/20">
@@ -280,7 +297,7 @@ function FlashChallengeCard({ challenge, onPlay }: { challenge: Challenge, onPla
           
           <div className="flex flex-wrap items-center gap-2">
             <span className="bg-amber-500 text-gray-950 font-black text-[11px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-              ⚡ Flash Event
+              ⚡ {language === 'tr' ? 'Özel Etkinlik' : 'Flash Event'}
             </span>
             
             <span className="bg-gray-900/80 text-gray-300 border border-gray-700 font-medium text-[11px] px-3 py-1 rounded-full">
@@ -295,17 +312,17 @@ function FlashChallengeCard({ challenge, onPlay }: { challenge: Challenge, onPla
           </div>
 
           <h3 className="text-2xl md:text-3xl font-extrabold text-white group-hover:text-amber-200 transition-colors">
-            {challenge.title}
+            {title}
           </h3>
 
           <p className="text-gray-300 text-sm leading-relaxed">
-            {challenge.description}
+            {description}
           </p>
 
           <div className="flex items-center gap-4 text-xs text-gray-400 pt-1 font-mono">
-            <span>⏱️ Sınırlı Süreli Özel Etkinlik</span>
+            <span>⏱️ {language === 'tr' ? 'Sınırlı Süreli Özel Etkinlik' : 'Time-Limited Special Challenge'}</span>
             <span>•</span>
-            <span>❓ {challenge.questionsCount || 0} Özel Soru</span>
+            <span>❓ {challenge.questionsCount || 0} {language === 'tr' ? 'Özel Soru' : 'Special Questions'}</span>
           </div>
 
         </div>
@@ -316,7 +333,7 @@ function FlashChallengeCard({ challenge, onPlay }: { challenge: Challenge, onPla
             onClick={onPlay}
             className="w-full md:w-auto flex items-center justify-center gap-3 py-4 px-8 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-gray-950 font-extrabold text-base rounded-2xl shadow-xl shadow-amber-500/20 hover:scale-105 transition-all duration-200 cursor-pointer"
           >
-            <span>Özel Quize Katıl</span>
+            <span>{language === 'tr' ? 'Özel Yarışmaya Katıl' : 'Enter Special Quiz'}</span>
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
             </svg>

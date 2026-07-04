@@ -6,6 +6,10 @@ import { useChainConfig } from '../hooks/useChainConfig'
 import { useQuizState } from '../hooks/useQuizState'
 import { DAILY_QUIZ_ABI } from '../config/abi'
 import { API_URL, arcTestnet, baseMainnet, celo } from '../config/chains'
+import { useLanguage } from '../context/LanguageContext'
+import { getTranslation } from '../config/translations'
+import translatedQuestions from '../config/translatedQuestions.json'
+import translatedChallenges from '../config/translatedChallenges.json'
 
 type Question = {
   index: number
@@ -23,6 +27,7 @@ export default function QuizPage() {
   const chainId = useChainId()
   const { contracts, isSupported } = useChainConfig()
   const { switchChain } = useSwitchChain()
+  const { language } = useLanguage()
   const { canPlay, isTodayReady, hasSubmitted, todayScore, hasEnteredToday } = useQuizState(address)
 
   const [mounted, setMounted] = useState(false)
@@ -489,7 +494,7 @@ export default function QuizPage() {
       arc: 'ARC',
       base: 'Base',
       celo: 'Celo',
-      general: 'General',
+      general: language === 'tr' ? 'Genel' : 'General',
     };
     const networkName = networkNames[tag] || tag.toUpperCase();
 
@@ -503,26 +508,29 @@ export default function QuizPage() {
 
     return (
       <div className="max-w-md mx-auto text-center space-y-6 pt-16">
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">{networkName} Daily Quiz</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white">
+          {getTranslation('dailyQuizTitle', language).replace('{network}', networkName)}
+        </h1>
         <p className="text-gray-400 text-sm leading-relaxed">
-          10 daily questions tailored for the {tag === 'general' ? 'crypto industry' : `${networkName} network`} ecosystem.
-          Comprising 4 easy, 2 medium, and 2 hard questions, and 2 random general category questions.
+          {tag === 'general'
+            ? getTranslation('generalQuizDescLabel', language)
+            : getTranslation('quizDesc', language).replace('{network}', networkName)}
         </p>
         
         {isDemoMode && (
           <div className="px-4 py-2.5 text-xs bg-amber-950/40 border border-amber-900/60 text-amber-400 rounded-xl leading-relaxed">
-            ⚠️ {isDummyContract ? 'Smart contracts are not yet deployed' : 'Quiz not yet initialized onchain'} for this network. Running in <strong>Demo Preview Mode</strong>.
+            ⚠️ {getTranslation('demoModeWarning', language)}
           </div>
         )}
 
         {hasEnteredToday && !isDemoMode && (
           <div className="px-4 py-2.5 text-xs bg-indigo-950/40 border border-indigo-900/60 text-indigo-400 rounded-xl leading-relaxed">
-            ⚡ You have already registered entry today. Click below to start playing.
+            {getTranslation('alreadyPlayedToday', language)}
           </div>
         )}
 
         <div className="bg-gray-900/40 border border-gray-800/80 rounded-xl px-4 py-3 flex items-center justify-between text-sm max-w-sm mx-auto">
-          <span className="text-gray-400 font-medium">Entry Fee</span>
+          <span className="text-gray-400 font-medium">{language === 'tr' ? 'Giriş Ücreti' : 'Entry Fee'}</span>
           <span className="font-bold text-indigo-400 bg-indigo-950/40 border border-indigo-900/50 px-2.5 py-1 rounded-lg text-xs">
             {feeText}
           </span>
@@ -533,12 +541,12 @@ export default function QuizPage() {
           className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed rounded-xl font-bold transition-all duration-200 cursor-pointer shadow-lg shadow-indigo-600/20"
         >
           {isPending || isConfirming
-            ? 'Confirming Transaction...'
+            ? (language === 'tr' ? 'İşlem Onaylanıyor...' : 'Confirming Transaction...')
             : isDemoMode
-            ? 'Start Quiz (Demo Mode)'
+            ? `${getTranslation('startQuiz', language)} (${language === 'tr' ? 'Demo Modu' : 'Demo Mode'})`
             : hasEnteredToday
-            ? 'Start Quiz'
-            : 'Start Quiz'}
+            ? getTranslation('startQuiz', language)
+            : getTranslation('startQuiz', language)}
         </button>
       </div>
     )
@@ -547,14 +555,19 @@ export default function QuizPage() {
   if (phase === 'approving' || phase === 'entering') {
     return (
       <CenteredMessage
-        title="Entering Quiz..."
-        subtitle="Please confirm the entry in your wallet."
+        title={language === 'tr' ? 'Quize Giriş Yapılıyor...' : 'Entering Quiz...'}
+        subtitle={language === 'tr' ? 'Lütfen cüzdanınızdan işlemi onaylayın.' : 'Please confirm the entry in your wallet.'}
       />
     )
   }
 
   if (phase === 'submitting') {
-    return <CenteredMessage title="Submitting Answers..." subtitle="Please confirm the scoring transaction in your wallet." />
+    return (
+      <CenteredMessage 
+        title={language === 'tr' ? 'Skor Gönderiliyor...' : 'Submitting Answers...'} 
+        subtitle={language === 'tr' ? 'Lütfen cüzdanınızdan skor kaydetme işlemini onaylayın.' : 'Please confirm the scoring transaction in your wallet.'} 
+      />
+    )
   }
 
   if (phase === 'completed') {
@@ -600,15 +613,17 @@ export default function QuizPage() {
       <div className="max-w-lg mx-auto text-center space-y-8 pt-8">
         <div className="space-y-3">
           <div className="text-6xl animate-bounce">{finalScore === totalQ ? '🏆' : finalScore >= Math.ceil(totalQ * 0.5) ? '👍' : '📚'}</div>
-          <h1 className="text-3xl font-black text-white">{finalScore}/{totalQ} Correct</h1>
+          <h1 className="text-3xl font-black text-white">
+            {finalScore}/{totalQ} {language === 'tr' ? 'Doğru' : 'Correct'}
+          </h1>
           <p className="text-gray-400 max-w-sm mx-auto text-sm">
             {finalScore === totalQ
-              ? 'Perfect score! Outstanding!'
+              ? (language === 'tr' ? 'Kusursuz skor! Harika!' : 'Perfect score! Outstanding!')
               : finalScore >= Math.ceil(totalQ * 0.8)
-              ? 'Great job! Almost flawless.'
+              ? (language === 'tr' ? 'Harika iş! Neredeyse kusursuz.' : 'Great job! Almost flawless.')
               : finalScore >= Math.ceil(totalQ * 0.5)
-              ? 'Well done! Solid effort.'
-              : 'Practice makes perfect. Keep reading and come back next time!'}
+              ? (language === 'tr' ? 'Tebrikler! İyi bir deneme.' : 'Well done! Solid effort.')
+              : (language === 'tr' ? 'Pratik yapmak mükemmelleştirir. Okumaya devam edin ve bir dahaki sefere tekrar deneyin!' : 'Practice makes perfect. Keep reading and come back next time!')}
           </p>
         </div>
 
@@ -622,17 +637,25 @@ export default function QuizPage() {
             />
           </div>
           <p className="text-xs text-gray-500/85 italic text-center">
-            💡 Tip: Right-click the card above, select \"Copy Image\", and paste it directly into your X post!
+            {language === 'tr'
+              ? '💡 İpucu: Yukarıdaki karta sağ tıklayıp "Görseli Kopyala" seçeneğini seçin ve doğrudan X gönderinize yapıştırın!'
+              : '💡 Tip: Right-click the card above, select "Copy Image", and paste it directly into your X post!'}
           </p>
         </div>
 
         {/* Verification Status */}
         {isDemoMode ? (
-          <p className="text-amber-400 text-xs font-semibold">Played in Demo Mode (Score not saved onchain)</p>
+          <p className="text-amber-400 text-xs font-semibold">
+            {language === 'tr' ? 'Demo Modunda Oynandı (Skor zincir üstüne kaydedilmedi)' : 'Played in Demo Mode (Score not saved onchain)'}
+          </p>
         ) : isPending || isConfirming ? (
-          <p className="text-indigo-400 text-xs font-semibold animate-pulse">Saving score onchain...</p>
+          <p className="text-indigo-400 text-xs font-semibold animate-pulse">
+            {language === 'tr' ? 'Skor zincir üstüne kaydediliyor...' : 'Saving score onchain...'}
+          </p>
         ) : (
-          <p className="text-green-400 text-xs font-semibold">✓ Score successfully committed onchain!</p>
+          <p className="text-green-400 text-xs font-semibold">
+            {language === 'tr' ? '✓ Skor zincir üstünde başarıyla onaylandı!' : '✓ Score successfully committed onchain!'}
+          </p>
         )}
 
         {/* Action Buttons */}
@@ -647,14 +670,14 @@ export default function QuizPage() {
             <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
             </svg>
-            Share on X
+            {getTranslation('shareOnX', language)}
           </a>
           <div className="flex gap-3 w-full sm:w-auto">
             <a href="/profile" className="flex-1 sm:flex-none px-6 py-3 bg-gray-900 hover:bg-gray-800 border border-gray-800 text-white font-bold text-sm rounded-xl transition-all text-center">
-              View Profile
+              {getTranslation('viewProfileBtn', language)}
             </a>
             <a href="/leaderboard" className="flex-1 sm:flex-none px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl transition-all text-center">
-              Leaderboard
+              {getTranslation('leaderboardBtn', language)}
             </a>
           </div>
         </div>
@@ -668,13 +691,54 @@ export default function QuizPage() {
 
   const progress = (currentIndex / questions.length) * 100
 
+  // Translate active question and options if language is TR
+  let displayedQuestionText = question.question
+  let displayedOptions = { ...question.options }
+
+  if (language === 'tr') {
+    if (challengeId) {
+      const trChallenge = (translatedChallenges as any)[challengeId]
+      if (trChallenge && Array.isArray(trChallenge.questions)) {
+        const trQ = trChallenge.questions.find((q: any) => q.id === question.id) || trChallenge.questions[currentIndex]
+        if (trQ) {
+          displayedQuestionText = trQ.question || trQ.text || displayedQuestionText
+          if (Array.isArray(trQ.options)) {
+            displayedOptions = {
+              A: trQ.options[0] || displayedOptions.A,
+              B: trQ.options[1] || displayedOptions.B,
+              C: trQ.options[2] || displayedOptions.C,
+              D: trQ.options[3] || displayedOptions.D,
+            }
+          }
+        }
+      }
+    } else {
+      const trQ = (translatedQuestions as any)[question.id]
+      if (trQ) {
+        displayedQuestionText = trQ.question || displayedQuestionText
+        if (Array.isArray(trQ.options)) {
+          displayedOptions = {
+            A: trQ.options[0] || displayedOptions.A,
+            B: trQ.options[1] || displayedOptions.B,
+            C: trQ.options[2] || displayedOptions.C,
+            D: trQ.options[3] || displayedOptions.D,
+          }
+        }
+      }
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Progress & Category */}
       <div className="space-y-2">
         <div className="flex justify-between text-sm text-gray-400 font-medium">
           <span className="uppercase tracking-wider text-indigo-400">{question.category}</span>
-          <span>Question {currentIndex + 1} of {questions.length}</span>
+          <span>
+            {getTranslation('questionLabel', language)
+              .replace('{current}', String(currentIndex + 1))
+              .replace('{total}', String(questions.length))}
+          </span>
         </div>
         <div className="h-2 bg-gray-900 border border-gray-850 rounded-full overflow-hidden">
           <div
@@ -686,12 +750,12 @@ export default function QuizPage() {
 
       {/* Question Card */}
       <div className="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
-        <p className="text-lg font-semibold leading-relaxed text-gray-100">{question.question}</p>
+        <p className="text-lg font-semibold leading-relaxed text-gray-100">{displayedQuestionText}</p>
       </div>
 
       {/* Answers List */}
       <div className="grid grid-cols-1 gap-3">
-        {Object.entries(question.options).map(([key, value]) => {
+        {Object.entries(displayedOptions).map(([key, value]) => {
           let style = 'bg-gray-900 border-gray-800 text-gray-200 hover:border-indigo-500 hover:bg-gray-850/60'
 
           if (selectedAnswer) {

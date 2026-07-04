@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useChainId } from 'wagmi'
 import { API_URL, SUPPORTED_CHAINS } from '../config/chains'
+import { useLanguage } from '../context/LanguageContext'
+import { getTranslation } from '../config/translations'
+import translatedChallenges from '../config/translatedChallenges.json'
 
 type Period = 'weekly' | 'monthly'
 type Mode = 'daily' | 'challenges'
@@ -40,6 +43,7 @@ type ChallengePlayer = {
 
 export default function LeaderboardPage() {
   const walletChainId = useChainId()
+  const { language } = useLanguage()
   const [mode, setMode] = useState<Mode>('daily')
 
   // Daily Leaderboard States
@@ -171,10 +175,12 @@ export default function LeaderboardPage() {
       <div className="border-b border-gray-800 pb-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-            Arena Rankings
+            {getTranslation('leaderboard', language)}
           </h1>
           <p className="text-sm text-gray-400 mt-1">
-            Compare rankings across networks and track top trivia champions.
+            {language === 'tr'
+              ? 'Ağlar arasındaki sıralamaları karşılaştırın ve lider oyuncuları takip edin.'
+              : 'Compare rankings across networks and track top trivia champions.'}
           </p>
         </div>
 
@@ -186,7 +192,7 @@ export default function LeaderboardPage() {
               mode === 'daily' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-400 hover:text-white'
             }`}
           >
-            🏆 Günlük Arenalar
+            🏆 {language === 'tr' ? 'Günlük Arenalar' : 'Daily Arenas'}
           </button>
           <button
             onClick={() => setMode('challenges')}
@@ -194,7 +200,7 @@ export default function LeaderboardPage() {
               mode === 'challenges' ? 'bg-amber-500 text-gray-950 shadow-md' : 'text-gray-400 hover:text-white'
             }`}
           >
-            ⚡ Özel Quizler
+            ⚡ {language === 'tr' ? 'Özel Quizler' : 'Special Quizzes'}
           </button>
         </div>
       </div>
@@ -230,7 +236,7 @@ export default function LeaderboardPage() {
                     period === p ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-400 hover:text-white'
                   }`}
                 >
-                  {p}
+                  {language === 'tr' ? (p === 'weekly' ? 'Haftalık' : 'Aylık') : p}
                 </button>
               ))}
             </div>
@@ -239,18 +245,28 @@ export default function LeaderboardPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
               <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-sm text-gray-400">Loading rankings...</p>
+              <p className="text-sm text-gray-400">
+                {language === 'tr' ? 'Sıralamalar yükleniyor...' : 'Loading rankings...'}
+              </p>
             </div>
           ) : error ? (
             <div className="bg-red-950/20 border border-red-900/50 rounded-2xl p-8 text-center text-red-200">
-              <p className="text-lg font-semibold">Error Loading Leaderboard</p>
+              <p className="text-lg font-semibold">
+                {language === 'tr' ? 'Liderlik Tablosu Yüklenirken Hata Oluştu' : 'Error Loading Leaderboard'}
+              </p>
               <p className="text-sm text-red-400/80 mt-1">{error}</p>
             </div>
           ) : players.length === 0 ? (
             <div className="bg-gray-900/40 border border-gray-800/80 rounded-2xl p-16 text-center space-y-4 max-w-lg mx-auto backdrop-blur-sm">
               <p className="text-5xl">🏆</p>
-              <h3 className="text-lg font-bold text-white">No Rankings Yet</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">Be the first to claim your spot! Complete quizzes to start earning points.</p>
+              <h3 className="text-lg font-bold text-white">
+                {language === 'tr' ? 'Henüz Sıralama Yok' : 'No Rankings Yet'}
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                {language === 'tr'
+                  ? 'İlk sırayı kapmak için yarışmaya katılın! Puan kazanmaya başlamak için quizleri tamamlayın.'
+                  : 'Be the first to claim your spot! Complete quizzes to start earning points.'}
+              </p>
             </div>
           ) : (
             <div className="space-y-6">
@@ -259,11 +275,11 @@ export default function LeaderboardPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-gray-800 text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-900/40">
-                        <th className="py-4 px-6 text-center w-16">Rank</th>
-                        <th className="py-4 px-6">Player Address</th>
-                        <th className="py-4 px-6 text-center">Streak</th>
-                        <th className="py-4 px-6 text-center">Boost</th>
-                        <th className="py-4 px-6 text-right">Score</th>
+                        <th className="py-4 px-6 text-center w-16">{getTranslation('rank', language)}</th>
+                        <th className="py-4 px-6">{getTranslation('walletAddress', language)}</th>
+                        <th className="py-4 px-6 text-center">{getTranslation('streak', language)}</th>
+                        <th className="py-4 px-6 text-center">{getTranslation('boost', language)}</th>
+                        <th className="py-4 px-6 text-right">{getTranslation('score', language)}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-800/60">
@@ -286,7 +302,7 @@ export default function LeaderboardPage() {
                               {formatAddress(player.address)}
                             </td>
                             <td className="py-4 px-6 text-center">
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-950/30 text-pink-400 border border-pink-900/30">
+                              <span className="inline-flex items-center gap-1 gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-950/30 text-pink-400 border border-pink-900/30">
                                 🔥 {player.streakDays || '0'}
                               </span>
                             </td>
@@ -318,10 +334,14 @@ export default function LeaderboardPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex flex-wrap gap-2">
               {challenges.length === 0 ? (
-                <span className="text-xs text-gray-500 py-2">Aktif özel quiz bulunmuyor.</span>
+                <span className="text-xs text-gray-500 py-2">
+                  {language === 'tr' ? 'Aktif özel quiz bulunmuyor.' : 'No active special quizzes.'}
+                </span>
               ) : (
                 challenges.map((c) => {
                   const isActive = selectedChallengeId === c.id
+                  const trChallenge = (translatedChallenges as any)[c.id]
+                  const cTitle = language === 'tr' && trChallenge?.title ? trChallenge.title : c.title
                   return (
                     <button
                       key={c.id}
@@ -332,7 +352,7 @@ export default function LeaderboardPage() {
                           : 'bg-gray-950/60 text-gray-400 border-gray-800 hover:text-white hover:bg-gray-900/60'
                       }`}
                     >
-                      ⚡ {c.title}
+                      ⚡ {cTitle}
                     </button>
                   )
                 })
@@ -342,7 +362,7 @@ export default function LeaderboardPage() {
             {selectedChallenge?.rewardPool && (
               <div className="flex items-center gap-2">
                 <span className="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">
-                  🏆 Ödül Havuzu: {selectedChallenge.rewardPool}
+                  🏆 {language === 'tr' ? 'Ödül Havuzu:' : 'Reward Pool:'} {selectedChallenge.rewardPool}
                 </span>
               </div>
             )}
@@ -352,13 +372,21 @@ export default function LeaderboardPage() {
           {loadingChallenge ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
               <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-sm text-gray-400">Loading challenge rankings...</p>
+              <p className="text-sm text-gray-400">
+                {language === 'tr' ? 'Yarışma sıralaması yükleniyor...' : 'Loading challenge rankings...'}
+              </p>
             </div>
           ) : challengePlayers.length === 0 ? (
             <div className="bg-gray-900/40 border border-gray-800/80 rounded-2xl p-16 text-center space-y-4 max-w-lg mx-auto backdrop-blur-sm">
               <p className="text-5xl">🎯</p>
-              <h3 className="text-lg font-bold text-white">No Rankings Yet</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">Be the first to participate in this special quiz and claim top spot!</p>
+              <h3 className="text-lg font-bold text-white">
+                {language === 'tr' ? 'Henüz Sıralama Yok' : 'No Rankings Yet'}
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                {language === 'tr'
+                  ? 'İlk katılan siz olun! Top Lider koltuğunu kapmak için quizi tamamlayın.'
+                  : 'Be the first to participate in this special quiz and claim top spot!'}
+              </p>
             </div>
           ) : (
             <div className="space-y-6">
@@ -367,11 +395,15 @@ export default function LeaderboardPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-gray-800 text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-900/40">
-                        <th className="py-4 px-6 text-center w-16">Rank</th>
-                        <th className="py-4 px-6">Player Address</th>
-                        <th className="py-4 px-6 text-center">Completion Time</th>
-                        <th className="py-4 px-6 text-center">Correct Answers</th>
-                        <th className="py-4 px-6 text-right">Score</th>
+                        <th className="py-4 px-6 text-center w-16">{getTranslation('rank', language)}</th>
+                        <th className="py-4 px-6">{getTranslation('walletAddress', language)}</th>
+                        <th className="py-4 px-6 text-center">
+                          {language === 'tr' ? 'Tamamlama Süresi' : 'Completion Time'}
+                        </th>
+                        <th className="py-4 px-6 text-center">
+                          {language === 'tr' ? 'Doğru Cevaplar' : 'Correct Answers'}
+                        </th>
+                        <th className="py-4 px-6 text-right">{getTranslation('score', language)}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-800/60">

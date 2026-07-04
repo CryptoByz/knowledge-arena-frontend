@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Web3Provider } from './config/Web3Provider'
 import { Navbar } from './components/layout/Navbar'
+import { LanguageProvider } from './context/LanguageContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,12 +19,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-950 text-white min-h-screen`}>
-        <Web3Provider>
-          <Navbar />
-          <main className="max-w-5xl mx-auto px-4 py-8">
-            {children}
-          </main>
-        </Web3Provider>
+        <LanguageProvider>
+          <Web3Provider>
+            <Navbar />
+            <main className="max-w-5xl mx-auto px-4 py-8">
+              {children}
+            </main>
+          </Web3Provider>
+        </LanguageProvider>
       </body>
     </html>
   )

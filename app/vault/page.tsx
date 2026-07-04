@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { API_URL } from '../config/chains'
+import { useLanguage } from '../context/LanguageContext'
+import { getTranslation } from '../config/translations'
 
 interface VaultInfo {
   chainName: string
@@ -20,6 +22,7 @@ interface VaultInfo {
 }
 
 export default function VaultPage() {
+  const { language } = useLanguage()
   const [vaults, setVaults] = useState<Record<string, VaultInfo> | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -83,10 +86,12 @@ export default function VaultPage() {
       {/* Header */}
       <div className="text-center space-y-3">
         <h1 className="text-4xl font-black tracking-tight bg-gradient-to-r from-white via-gray-100 to-gray-400 bg-clip-text text-transparent">
-          Knowledge Arena Vault
+          {language === 'tr' ? 'Knowledge Arena Kasası' : 'Knowledge Arena Vault'}
         </h1>
         <p className="text-gray-400 max-w-xl mx-auto leading-relaxed text-sm">
-          Real-time onchain reserves auditing. All entry fees collected from participants are tracked and backed transparently by reserves in our admin wallets.
+          {language === 'tr'
+            ? 'Gerçek zamanlı zincir üstü rezerv denetimi. Katılımcılardan toplanan tüm giriş ücretleri takip edilmekte ve yönetici cüzdanlarımızdaki rezervlerle şeffaf bir şekilde desteklenmektedir.'
+            : 'Real-time onchain reserves auditing. All entry fees collected from participants are tracked and backed transparently by reserves in our admin wallets.'}
         </p>
       </div>
 
@@ -105,13 +110,15 @@ export default function VaultPage() {
         </div>
       ) : error ? (
         <div className="p-6 rounded-2xl bg-red-950/20 border border-red-900/50 text-center max-w-md mx-auto space-y-3">
-          <p className="text-red-400 font-bold">⚠️ Error Loading Vault</p>
+          <p className="text-red-400 font-bold">
+            {language === 'tr' ? '⚠️ Kasa Yüklenirken Hata' : '⚠️ Error Loading Vault'}
+          </p>
           <p className="text-gray-400 text-sm">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
             className="px-4 py-2 bg-red-900/50 hover:bg-red-800 text-white rounded-xl text-xs font-bold transition-all cursor-pointer"
           >
-            Retry Sync
+            {language === 'tr' ? 'Yeniden Eşitle' : 'Retry Sync'}
           </button>
         </div>
       ) : vaults ? (
@@ -138,14 +145,16 @@ export default function VaultPage() {
                         <h2 className="text-2xl font-black text-white">{vault.chainName}</h2>
                       </div>
                       <span className="text-[10px] px-2.5 py-0.5 rounded-full border font-bold uppercase tracking-wider bg-green-950/40 text-green-300 border-green-800/80">
-                        🟢 Audited
+                        {language === 'tr' ? '🟢 Denetlendi' : '🟢 Audited'}
                       </span>
                     </div>
 
                     {/* Core Metrics */}
                     <div className="space-y-4">
                       <div className="bg-gray-950/60 border border-gray-850 p-6 rounded-xl space-y-2 text-center">
-                        <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold block">Reserves Collected</span>
+                        <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold block">
+                          {language === 'tr' ? 'Toplanan Rezervler' : 'Reserves Collected'}
+                        </span>
                         <p className="text-3xl font-black text-green-400">
                           {vault.totalFeesCollected} {vault.feeSymbol || 'USDC'}
                         </p>
@@ -167,7 +176,7 @@ export default function VaultPage() {
                       rel="noopener noreferrer"
                       className="w-full text-center py-2.5 rounded-xl border border-gray-800 hover:border-gray-700 bg-gray-950 text-gray-300 hover:text-white text-xs font-bold tracking-wide transition-all block cursor-pointer"
                     >
-                      View Wallet on Explorer ↗
+                      {language === 'tr' ? 'Cüzdanı Tarayıcıda Görüntüle ↗' : 'View Wallet on Explorer ↗'}
                     </a>
                   </div>
                 </div>

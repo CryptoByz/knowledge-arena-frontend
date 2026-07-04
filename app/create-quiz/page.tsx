@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useAccount, useChainId, useSwitchChain, useSendTransaction } from 'wagmi'
 import { parseUnits } from 'viem'
 import { API_URL, arcTestnet } from '../config/chains'
+import { useLanguage } from '../context/LanguageContext'
+import { getTranslation } from '../config/translations'
 
 type QuestionItem = {
   id: string
@@ -18,6 +20,7 @@ export default function CreateQuizPage() {
   const { address, isConnected } = useAccount()
   const currentChainId = useChainId()
   const { switchChainAsync } = useSwitchChain()
+  const { language } = useLanguage()
 
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [title, setTitle] = useState('')
@@ -83,21 +86,21 @@ export default function CreateQuizPage() {
   // Validation
   const validateForm = () => {
     if (!title.trim() || !description.trim()) {
-      setError('Lütfen Quiz Başlığı ve Açıklamasını doldurun.')
+      setError(language === 'tr' ? 'Lütfen Quiz Başlığı ve Açıklamasını doldurun.' : 'Please fill in the Quiz Title and Description.')
       return false
     }
     for (let i = 0; i < questions.length; i++) {
       const q = questions[i]
       if (!q.text.trim()) {
-        setError(`${i + 1}. sorunun metni boş olamaz.`)
+        setError(language === 'tr' ? `${i + 1}. sorunun metni boş olamaz.` : `Question ${i + 1} text cannot be empty.`)
         return false
       }
       if (q.options.some(opt => !opt.trim())) {
-        setError(`${i + 1}. sorunun tüm 4 şıkkı doldurulmalıdır.`)
+        setError(language === 'tr' ? `${i + 1}. sorunun tüm 4 şıkkı doldurulmalıdır.` : `All 4 options for Question ${i + 1} must be filled.`)
         return false
       }
       if (!q.answer.trim()) {
-        setError(`${i + 1}. soru için doğru cevap seçilmelidir.`)
+        setError(language === 'tr' ? `${i + 1}. soru için doğru cevap seçilmelidir.` : `A correct answer must be selected for Question ${i + 1}.`)
         return false
       }
     }
@@ -114,7 +117,7 @@ export default function CreateQuizPage() {
   // Payment Execution on ARC Network
   const handlePayAndSubmit = async () => {
     if (!isConnected) {
-      alert('Lütfen öncelikle cüzdanınızı bağlayın!')
+      alert(language === 'tr' ? 'Lütfen öncelikle cüzdanınızı bağlayın!' : 'Please connect your wallet first!')
       return
     }
 
@@ -153,14 +156,14 @@ export default function CreateQuizPage() {
 
       const data = await res.json()
       if (!res.ok) {
-        throw new Error(data.error || 'Quiz gönderimi başarısız oldu.')
+        throw new Error(data.error || (language === 'tr' ? 'Quiz gönderimi başarısız oldu.' : 'Quiz submission failed.'))
       }
 
       setSuccessMsg(data.message)
       setStep(3)
     } catch (err: any) {
       console.error(err)
-      setError(err.message || 'İşlem sırasında bir hata oluştu.')
+      setError(err.message || (language === 'tr' ? 'İşlem sırasında bir hata oluştu.' : 'An error occurred during transaction.'))
     } finally {
       setIsSubmitting(false)
     }
@@ -172,10 +175,12 @@ export default function CreateQuizPage() {
       <div className="border-b border-gray-800 pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold bg-gradient-to-r from-amber-400 via-yellow-200 to-white bg-clip-text text-transparent flex items-center gap-2">
-            ⚡ Özel Quiz Oluştur & Yayınla
+            ⚡ {language === 'tr' ? 'Özel Quiz Oluştur & Yayınla' : 'Create & Publish Special Quiz'}
           </h1>
           <p className="text-sm text-gray-400 mt-1">
-            Kendi özel yarışmanızı oluşturun. 100$ USDC ödeme ile onay sürecine gönderin.
+            {language === 'tr'
+              ? 'Kendi özel yarışmanızı oluşturun. 100$ USDC ödeme ile onay sürecine gönderin.'
+              : 'Create your own custom competition. Submit it for review with a $100 USDC payment.'}
           </p>
         </div>
 
@@ -183,7 +188,7 @@ export default function CreateQuizPage() {
           onClick={() => setShowAgentDocs(!showAgentDocs)}
           className="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-950/60 text-indigo-400 border border-indigo-900/60 hover:bg-indigo-900/40 transition-all cursor-pointer flex items-center gap-1.5 w-fit"
         >
-          🤖 AI Agent & Developer API
+          🤖 {language === 'tr' ? 'AI Agent & Geliştirici API' : 'AI Agent & Developer API'}
         </button>
       </div>
 
@@ -192,14 +197,16 @@ export default function CreateQuizPage() {
         <div className="bg-indigo-950/30 border border-indigo-900/60 rounded-2xl p-6 space-y-4 shadow-xl backdrop-blur-md">
           <div className="flex justify-between items-center">
             <h3 className="text-base font-bold text-indigo-300 flex items-center gap-2">
-              🤖 AI Agent & Otonom Sistem Entegrasyon Rehberi
+              🤖 {language === 'tr' ? 'AI Agent & Otonom Sistem Entegrasyon Rehberi' : 'AI Agent & Autonomous System Integration Guide'}
             </h3>
             <span className="text-xs bg-indigo-900/60 text-indigo-200 px-2.5 py-1 rounded-lg font-mono">
               ARC App Kit Enabled
             </span>
           </div>
           <p className="text-xs text-gray-300 leading-relaxed">
-            AI Agent'lar ve geliştiriciler, web arayüzünü kullanmadan programmatic olarak da 100$ USDC ödemesini gönderip kendi quizlerini otomatik olarak yayınlatabilirler.
+            {language === 'tr'
+              ? "AI Agent'lar ve geliştiriciler, web arayüzünü kullanmadan programlı olarak da 100$ USDC ödemesini gönderip kendi quizlerini otomatik olarak yayınlatabilirler."
+              : 'AI Agents and developers can also automatically publish their quizzes programmatically by submitting the $100 USDC payment and sending payload to the API directly.'}
           </p>
 
           <div className="bg-gray-950 rounded-xl p-4 font-mono text-xs text-gray-300 space-y-2 overflow-x-auto border border-gray-800">
@@ -231,15 +238,15 @@ export default function CreateQuizPage() {
       {/* Progress Steps Indicator */}
       <div className="flex items-center justify-between max-w-lg mx-auto bg-gray-950 border border-gray-800/80 rounded-2xl p-2">
         <div className={`flex-1 text-center py-2 text-xs font-bold rounded-xl transition-all ${step === 1 ? 'bg-amber-500 text-gray-950 shadow-md' : 'text-gray-500'}`}>
-          1. Quiz Detayları
+          {language === 'tr' ? '1. Quiz Detayları' : '1. Quiz Details'}
         </div>
         <div className="text-gray-700 font-bold px-2">➔</div>
         <div className={`flex-1 text-center py-2 text-xs font-bold rounded-xl transition-all ${step === 2 ? 'bg-amber-500 text-gray-950 shadow-md' : 'text-gray-500'}`}>
-          2. 100$ Ödeme (ARC)
+          {language === 'tr' ? '2. 100$ Ödeme (ARC)' : '2. $100 Payment (ARC)'}
         </div>
         <div className="text-gray-700 font-bold px-2">➔</div>
         <div className={`flex-1 text-center py-2 text-xs font-bold rounded-xl transition-all ${step === 3 ? 'bg-emerald-500 text-gray-950 shadow-md' : 'text-gray-500'}`}>
-          3. Onay Bekliyor
+          {language === 'tr' ? '3. Onay Bekliyor' : '3. Awaiting Approval'}
         </div>
       </div>
 
@@ -255,15 +262,15 @@ export default function CreateQuizPage() {
         <div className="space-y-6">
           <div className="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-6 space-y-4 shadow-xl backdrop-blur-sm">
             <h2 className="text-lg font-bold text-white border-b border-gray-800 pb-3 flex items-center gap-2">
-              📋 Genel Bilgiler
+              📋 {language === 'tr' ? 'Genel Bilgiler' : 'General Info'}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-gray-400 mb-1.5">Quiz Başlığı *</label>
+                <label className="block text-xs font-bold text-gray-400 mb-1.5">{language === 'tr' ? 'Quiz Başlığı *' : 'Quiz Title *'}</label>
                 <input
                   type="text"
-                  placeholder="Örn: ARC Ecosystem Master Challenge"
+                  placeholder={language === 'tr' ? 'Örn: ARC Ecosystem Master Challenge' : 'e.g. ARC Ecosystem Master Challenge'}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500"
@@ -271,10 +278,10 @@ export default function CreateQuizPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-400 mb-1.5">Ödül Havuzu Etiketi</label>
+                <label className="block text-xs font-bold text-gray-400 mb-1.5">{language === 'tr' ? 'Ödül Havuzu Etiketi' : 'Reward Pool Tag'}</label>
                 <input
                   type="text"
-                  placeholder="Örn: 500 USDC veya NFT Badges"
+                  placeholder={language === 'tr' ? 'Örn: 500 USDC veya NFT Badges' : 'e.g. 500 USDC or NFT Badges'}
                   value={rewardPool}
                   onChange={(e) => setRewardPool(e.target.value)}
                   className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500"
@@ -283,10 +290,10 @@ export default function CreateQuizPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-400 mb-1.5">Quiz Açıklaması *</label>
+              <label className="block text-xs font-bold text-gray-400 mb-1.5">{language === 'tr' ? 'Quiz Açıklaması *' : 'Quiz Description *'}</label>
               <textarea
                 rows={3}
-                placeholder="Katılımcılara yarışma hakkında bilgi verin..."
+                placeholder={language === 'tr' ? 'Katılımcılara yarışma hakkında bilgi verin...' : 'Give participants some information about the competition...'}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500"
@@ -298,13 +305,13 @@ export default function CreateQuizPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                ❓ Quiz Soruları ({questions.length} Soru)
+                ❓ {language === 'tr' ? `Quiz Soruları (${questions.length} Soru)` : `Quiz Questions (${questions.length} Questions)`}
               </h2>
               <button
                 onClick={handleAddQuestion}
                 className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer"
               >
-                + Yeni Soru Ekle
+                + {language === 'tr' ? 'Yeni Soru Ekle' : 'Add New Question'}
               </button>
             </div>
 
@@ -312,23 +319,23 @@ export default function CreateQuizPage() {
               <div key={q.id} className="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-6 space-y-4 shadow-xl backdrop-blur-sm relative">
                 <div className="flex items-center justify-between border-b border-gray-800/80 pb-3">
                   <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                    Soru #{qIdx + 1}
+                    {language === 'tr' ? `Soru #${qIdx + 1}` : `Question #${qIdx + 1}`}
                   </span>
                   {questions.length > 1 && (
                     <button
                       onClick={() => handleRemoveQuestion(qIdx)}
                       className="text-xs font-semibold text-red-400 hover:text-red-300 cursor-pointer"
                     >
-                      Sil
+                      {language === 'tr' ? 'Sil' : 'Delete'}
                     </button>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-1.5">Soru Metni *</label>
+                  <label className="block text-xs font-bold text-gray-400 mb-1.5">{language === 'tr' ? 'Soru Metni *' : 'Question Text *'}</label>
                   <input
                     type="text"
-                    placeholder="Soru metnini girin..."
+                    placeholder={language === 'tr' ? 'Soru metnini girin...' : 'Enter question text...'}
                     value={q.text}
                     onChange={(e) => handleQuestionTextChange(qIdx, e.target.value)}
                     className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500"
@@ -337,7 +344,7 @@ export default function CreateQuizPage() {
 
                 {/* Options Grid */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-2">Şıklar & Doğru Cevap *</label>
+                  <label className="block text-xs font-bold text-gray-400 mb-2">{language === 'tr' ? 'Şıklar & Doğru Cevap *' : 'Options & Correct Answer *'}</label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {['A', 'B', 'C', 'D'].map((letter, optIdx) => (
                       <div key={letter} className="flex items-center gap-2 bg-gray-950 border border-gray-800 rounded-xl p-2">
@@ -346,14 +353,14 @@ export default function CreateQuizPage() {
                         </span>
                         <input
                           type="text"
-                          placeholder={`Şık ${letter}`}
+                          placeholder={language === 'tr' ? `Şık ${letter}` : `Option ${letter}`}
                           value={q.options[optIdx]}
                           onChange={(e) => handleOptionChange(qIdx, optIdx, e.target.value)}
                           className="w-full bg-transparent text-white text-xs focus:outline-none"
                         />
                         <button
                           onClick={() => handleAnswerSelect(qIdx, q.options[optIdx])}
-                          title="Doğru cevap olarak seç"
+                          title={language === 'tr' ? 'Doğru cevap olarak seç' : 'Select as correct answer'}
                           disabled={!q.options[optIdx].trim()}
                           className={`px-2 py-1 rounded-lg text-xs font-bold cursor-pointer transition-all ${
                             q.answer && q.answer === q.options[optIdx]
@@ -361,7 +368,9 @@ export default function CreateQuizPage() {
                               : 'bg-gray-900 text-gray-500 hover:text-white'
                           }`}
                         >
-                          {q.answer && q.answer === q.options[optIdx] ? '✓ Doğru' : 'Seç'}
+                          {q.answer && q.answer === q.options[optIdx] 
+                            ? (language === 'tr' ? '✓ Doğru' : '✓ Correct') 
+                            : (language === 'tr' ? 'Seç' : 'Select')}
                         </button>
                       </div>
                     ))}
@@ -376,7 +385,7 @@ export default function CreateQuizPage() {
               onClick={handleGoToPayment}
               className="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-gray-950 font-black text-sm rounded-xl transition-all cursor-pointer shadow-lg shadow-amber-500/20"
             >
-              Devam Et: Ödeme Adımı ➔
+              {language === 'tr' ? 'Devam Et: Ödeme Adımı ➔' : 'Continue: Payment Step ➔'}
             </button>
           </div>
         </div>
@@ -390,19 +399,21 @@ export default function CreateQuizPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-black text-white">Yayınlama Ücreti Ödemesi</h2>
+            <h2 className="text-2xl font-black text-white">{language === 'tr' ? 'Yayınlama Ücreti Ödemesi' : 'Publishing Fee Payment'}</h2>
             <p className="text-gray-400 text-sm mt-1">
-              Quizinizin platformda yayınlanması ve onay sürecine girmesi için sabit ücret ödenmelidir.
+              {language === 'tr'
+                ? 'Quizinizin platformda yayınlanması ve onay sürecine girmesi için sabit ücret ödenmelidir.'
+                : 'A flat fee must be paid to submit your quiz for approval and publish it on the platform.'}
             </p>
           </div>
 
           <div className="bg-gray-950 border border-gray-800 rounded-2xl p-6 space-y-3">
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-400">Sabit Quiz Yayınlama Ücreti</span>
+              <span className="text-gray-400">{language === 'tr' ? 'Sabit Quiz Yayınlama Ücreti' : 'Flat Quiz Publishing Fee'}</span>
               <span className="font-extrabold text-amber-400 text-lg">100 USDC</span>
             </div>
             <div className="flex justify-between items-center text-sm border-t border-gray-850 pt-3">
-              <span className="text-gray-400">Ödeme Ağı (Network)</span>
+              <span className="text-gray-400">{language === 'tr' ? 'Ödeme Ağı' : 'Payment Network'}</span>
               <span className="font-bold text-indigo-400 bg-indigo-950/60 border border-indigo-900/60 px-2.5 py-1 rounded-lg text-xs">
                 ARC Network (ChainID: 5042002)
               </span>
@@ -415,7 +426,9 @@ export default function CreateQuizPage() {
               disabled={isSubmitting || isTxPending}
               className="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 disabled:opacity-50 text-gray-950 font-black text-base rounded-xl transition-all cursor-pointer shadow-xl shadow-amber-500/20"
             >
-              {isSubmitting || isTxPending ? '100 USDC Ödemesi Gönderiliyor...' : 'Ödemeyi Yap & Gönder (100 USDC)'}
+              {isSubmitting || isTxPending 
+                ? (language === 'tr' ? '100 USDC Ödemesi Gönderiliyor...' : 'Sending 100 USDC Payment...') 
+                : (language === 'tr' ? 'Ödemeyi Yap & Gönder (100 USDC)' : 'Submit & Pay (100 USDC)')}
             </button>
 
             <button
@@ -423,7 +436,7 @@ export default function CreateQuizPage() {
               disabled={isSubmitting || isTxPending}
               className="text-xs text-gray-500 hover:text-gray-300 cursor-pointer"
             >
-              ← Quiz Bilgilerini Düzenlemeye Dön
+              {language === 'tr' ? '← Quiz Bilgilerini Düzenlemeye Dön' : '← Back to Edit Quiz Details'}
             </button>
           </div>
         </div>
@@ -437,20 +450,24 @@ export default function CreateQuizPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-black text-white">Quiz Başarıyla Alındı!</h2>
+            <h2 className="text-2xl font-black text-white">{language === 'tr' ? 'Quiz Başarıyla Alındı!' : 'Quiz Successfully Received!'}</h2>
             <p className="text-emerald-400/90 text-sm mt-2 leading-relaxed font-semibold">
-              100 USDC ödemeniz onaylandı ve quiziniz yönetici onayına gönderildi.
+              {language === 'tr'
+                ? '100 USDC ödemeniz onaylandı ve quiziniz yönetici onayına gönderildi.'
+                : 'Your 100 USDC payment has been confirmed and your quiz has been submitted for admin approval.'}
             </p>
           </div>
 
           {txHash && (
             <div className="bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs font-mono text-gray-400 truncate">
-              Ödeme İşlem Kodu (TxHash): <span className="text-gray-200">{txHash}</span>
+              {language === 'tr' ? 'Ödeme İşlem Kodu (TxHash):' : 'Payment Transaction Hash (TxHash):'} <span className="text-gray-200">{txHash}</span>
             </div>
           )}
 
           <p className="text-xs text-gray-400 leading-relaxed">
-            Yöneticilerimiz quiz metnini ve şıklarını inceleyerek kısa süre içerisinde onaylayacaktır. Onaylandığı anda etkinliğiniz Knowledge Arena anasayfasında ve özel etkinlikler listesinde canlıya geçecektir!
+            {language === 'tr'
+              ? 'Yöneticilerimiz quiz metnini ve şıklarını inceleyerek kısa süre içerisinde onaylayacaktır. Onaylandığı anda etkinliğiniz Knowledge Arena anasayfasında ve özel etkinlikler listesinde canlıya geçecektir!'
+              : 'Our administrators will review the quiz text and options shortly. Once approved, your competition will go live on the Knowledge Arena homepage and special events list!'}
           </p>
 
           <div className="pt-4">
@@ -458,7 +475,7 @@ export default function CreateQuizPage() {
               href="/leaderboard"
               className="inline-block px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-indigo-600/20"
             >
-              Sıralama Tablosuna Git
+              {language === 'tr' ? 'Sıralama Tablosuna Git' : 'Go to Leaderboard'}
             </a>
           </div>
         </div>
