@@ -32,7 +32,7 @@ function MiniPayAutoConnectHandler() {
   const { connect, connectors } = useConnect()
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window.ethereum as any)?.isMiniPay && !isConnected) {
+    if (typeof window !== 'undefined' && (window as any).ethereum?.isMiniPay && !isConnected) {
       const injectedConnector = connectors.find(c => c.id === 'injected')
       if (injectedConnector) {
         connect({ connector: injectedConnector })
