@@ -1,10 +1,10 @@
 'use client'
 
-import { ReactNode } from 'react'
-import { WagmiProvider, http } from 'wagmi'
+import { ReactNode, useEffect } from 'react'
+import { WagmiProvider, http, useConnect, useAccount } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, getDefaultConfig, darkTheme } from '@rainbow-me/rainbowkit'
-import { rabbyWallet, metaMaskWallet, walletConnectWallet, coinbaseWallet } from '@rainbow-me/rainbowkit/wallets'
+import { rabbyWallet, metaMaskWallet, walletConnectWallet, coinbaseWallet, injectedWallet } from '@rainbow-me/rainbowkit/wallets'
 import { arcTestnet, baseMainnet, celo } from '../config/chains'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -20,12 +20,28 @@ export const wagmiConfig = getDefaultConfig({
   wallets: [
     {
       groupName: 'Recommended',
-      wallets: [rabbyWallet, metaMaskWallet, coinbaseWallet, walletConnectWallet],
+      wallets: [injectedWallet, rabbyWallet, metaMaskWallet, coinbaseWallet, walletConnectWallet],
     },
   ],
 })
 
 const queryClient = new QueryClient()
+
+function MiniPayAutoConnectHandler() {
+  const { isConnected } = useAccount()
+  const { connect, connectors } = useConnect()
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window.ethereum as any)?.isMiniPay && !isConnected) {
+      const injectedConnector = connectors.find(c => c.id === 'injected')
+      if (injectedConnector) {
+        connect({ connector: injectedConnector })
+      }
+    }
+  }, [isConnected, connectors, connect])
+
+  return null
+}
 
 export function Web3Provider({ children }: { children: ReactNode }) {
   return (
@@ -38,6 +54,7 @@ export function Web3Provider({ children }: { children: ReactNode }) {
             borderRadius: 'medium',
           })}
         >
+          <MiniPayAutoConnectHandler />
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>
