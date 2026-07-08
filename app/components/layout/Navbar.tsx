@@ -17,8 +17,6 @@ export function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const networks = [
-    { id: arcTestnet.id, name: 'ARC Testnet', color: 'bg-indigo-500' },
-    { id: baseMainnet.id, name: 'Base', color: 'bg-blue-500' },
     { id: celo.id, name: 'Celo', color: 'bg-amber-500' }
   ]
 

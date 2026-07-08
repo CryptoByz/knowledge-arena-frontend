@@ -199,34 +199,6 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
         </h2>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* ARC Quiz Card */}
-          {(!filterChain || filterChain === 'arc') && (
-            <QuizCard
-              title={getTranslation('arcQuizTitle', language)}
-              description={getTranslation('arcQuizDesc', language)}
-              gradient="from-indigo-950/80 via-purple-900/30 to-gray-950"
-              borderHover="hover:border-indigo-500"
-              bulletColor="bg-indigo-500"
-              bullets={['ARC Testnet', language === 'tr' ? 'Gazsız Token İşlemleri' : 'Native Gas Stablecoins', language === 'tr' ? 'Ekosistem Soruları' : 'Ecosystem Trivia']}
-              buttonText={getTranslation('enterArcArena', language)}
-              onClick={() => handlePlayQuiz('arc', arcTestnet.id)}
-            />
-          )}
- 
-          {/* Base Mainnet Quiz Card */}
-          {(!filterChain || filterChain === 'base') && (
-            <QuizCard
-              title={getTranslation('baseQuizTitle', language)}
-              description={getTranslation('baseQuizDesc', language)}
-              gradient="from-blue-950/80 via-cyan-900/30 to-gray-950"
-              borderHover="hover:border-blue-500"
-              bulletColor="bg-blue-500"
-              bullets={['Base Mainnet', language === 'tr' ? 'Hızlı ve Ucuz L2' : 'Fast, Low-cost L2', language === 'tr' ? 'Ekosistem Soruları' : 'Ecosystem Trivia']}
-              buttonText={getTranslation('enterBaseArena', language)}
-              onClick={() => handlePlayQuiz('base', baseMainnet.id)}
-            />
-          )}
- 
           {/* Celo Network Quiz Card */}
           {(!filterChain || filterChain === 'celo') && (
             <QuizCard
@@ -241,17 +213,17 @@ export default function HomeClient({ filterChain }: { filterChain?: 'arc' | 'bas
             />
           )}
  
-          {/* General Crypto Quiz Card (Shows on Base filter as well) */}
-          {(!filterChain || filterChain === 'base') && (
+          {/* General Crypto Quiz Card (Shows on Celo filter as well) */}
+          {(!filterChain || filterChain === 'celo') && (
             <QuizCard
               title={getTranslation('generalQuizTitle', language)}
               description={getTranslation('generalQuizDesc', language)}
               gradient="from-emerald-950/80 via-teal-900/30 to-gray-950"
               borderHover="hover:border-emerald-500"
               bulletColor="bg-emerald-500"
-              bullets={['Base Mainnet', language === 'tr' ? 'Genel Sektör Soruları' : 'General Industry Trivia', language === 'tr' ? 'Web3 Temelleri' : 'Web3 Fundamentals']}
+              bullets={['Celo Network', language === 'tr' ? 'Genel Sektör Soruları' : 'General Industry Trivia', language === 'tr' ? 'Web3 Temelleri' : 'Web3 Fundamentals']}
               buttonText={getTranslation('enterGeneralArena', language)}
-              onClick={() => handlePlayQuiz('general', baseMainnet.id)}
+              onClick={() => handlePlayQuiz('general', celo.id)}
             />
           )}
         </div>

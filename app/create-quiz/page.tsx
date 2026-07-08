@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useAccount, useChainId, useSwitchChain, useSendTransaction } from 'wagmi'
 import { parseUnits } from 'viem'
-import { API_URL, arcTestnet } from '../config/chains'
+import { API_URL, celo } from '../config/chains'
 import { useLanguage } from '../context/LanguageContext'
 import { getTranslation } from '../config/translations'
 
@@ -125,16 +125,16 @@ export default function CreateQuizPage() {
     setIsSubmitting(true)
 
     try {
-      // 1. Ensure connected to ARC Network
-      if (currentChainId !== arcTestnet.id) {
-        await switchChainAsync({ chainId: arcTestnet.id })
+      // 1. Ensure connected to Celo Network
+      if (currentChainId !== celo.id) {
+        await switchChainAsync({ chainId: celo.id })
       }
 
-      // 2. Execute 100 USDC Payment on ARC Network to Treasury Address
-      // USDC on ARC Testnet has 6 decimals -> 100 * 10^6
+      // 2. Execute 5 CELO Payment on Celo Network to Treasury Address
+      // CELO has 18 decimals -> 5 * 10^18
       const hash = await sendTransactionAsync({
         to: TREASURY_ADDRESS as `0x${string}`,
-        value: parseUnits('100', 6),
+        value: parseUnits('5', 18),
       })
 
       setTxHash(hash)
@@ -147,7 +147,7 @@ export default function CreateQuizPage() {
           title,
           description,
           rewardPool,
-          chainId: arcTestnet.id,
+          chainId: celo.id,
           submittedBy: address,
           paymentTxHash: hash,
           questions,

@@ -4,7 +4,7 @@ import { useAccount, useChainId, useSwitchChain, useWriteContract, useWaitForTra
 import { useReadContract } from 'wagmi'
 import { ACHIEVEMENT_ABI } from '../config/abi'
 import { useState, useEffect } from 'react'
-import { arcTestnet, CONTRACTS } from '../config/chains'
+import { celo, CONTRACTS } from '../config/chains'
 import { useLanguage } from '../context/LanguageContext'
 import { getTranslation } from '../config/translations'
 
@@ -18,7 +18,7 @@ const trAchievements: Record<number, { name: string, description: string }> = {
   3: { name: 'Kusursuz Deha', description: 'Herhangi bir quizde en az 1 kez kusursuz (10/10) skor elde edin.' }
 }
 
-const ARC_ACHIEVEMENT_MANAGER = CONTRACTS[arcTestnet.id].achievementManager as `0x${string}`
+const CELO_ACHIEVEMENT_MANAGER = CONTRACTS[celo.id].achievementManager as `0x${string}`
 
 export default function AchievementsPage() {
   const { address, isConnected } = useAccount()
@@ -26,21 +26,21 @@ export default function AchievementsPage() {
   const { switchChainAsync } = useSwitchChain()
   const { language } = useLanguage()
 
-  // Read achievement list directly from ARC Testnet contract so it is visible on all chains
+  // Read achievement list directly from Celo contract so it is visible on all chains
   const { data: allAchievements } = useReadContract({
-    address: ARC_ACHIEVEMENT_MANAGER,
+    address: CELO_ACHIEVEMENT_MANAGER,
     abi: ACHIEVEMENT_ABI,
     functionName: 'getAllAchievements',
-    chainId: arcTestnet.id,
+    chainId: celo.id,
   })
 
-  // Read player achievements directly from ARC Testnet contract
+  // Read player achievements directly from Celo contract
   const { data: playerData, refetch } = useReadContract({
-    address: ARC_ACHIEVEMENT_MANAGER,
+    address: CELO_ACHIEVEMENT_MANAGER,
     abi: ACHIEVEMENT_ABI,
     functionName: 'getPlayerAchievements',
     args: address ? [address] : undefined,
-    chainId: arcTestnet.id,
+    chainId: celo.id,
     query: { enabled: !!address },
   })
 
@@ -59,22 +59,22 @@ export default function AchievementsPage() {
       return
     }
 
-    // Switch to ARC Testnet if not currently connected
-    if (currentChainId !== arcTestnet.id) {
+    // Switch to Celo if not currently connected
+    if (currentChainId !== celo.id) {
       try {
-        await switchChainAsync({ chainId: arcTestnet.id })
+        await switchChainAsync({ chainId: celo.id })
       } catch (err) {
-        console.error('Failed to switch to ARC Testnet for minting:', err)
+        console.error('Failed to switch to Celo for minting:', err)
         return
       }
     }
 
     writeContract({
-      address: ARC_ACHIEVEMENT_MANAGER,
+      address: CELO_ACHIEVEMENT_MANAGER,
       abi: ACHIEVEMENT_ABI,
       functionName: 'mintAchievementBadge',
       args: [index],
-      chainId: arcTestnet.id,
+      chainId: celo.id,
     })
   }
 

@@ -59,11 +59,7 @@ export default function QuizPage() {
     }
   }, [])
 
-  const targetChainId =
-    tag === 'arc' ? arcTestnet.id :
-    tag === 'base' ? baseMainnet.id :
-    tag === 'celo' ? celo.id :
-    baseMainnet.id // General quiz is fixed to Base Mainnet
+  const targetChainId = celo.id
 
   const isWrongNetwork = chainId !== targetChainId
 
